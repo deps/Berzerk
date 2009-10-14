@@ -15,11 +15,12 @@ class PlayState < Chingu::GameState
     
     self.input = { :escape => :exit }
     
-    @player_pos = Chingu::Text.new(:text => "n/a", :x => 25, :y => 5 )
     
     # Original screenshot, used to compare with my walls
     @background = nil
     #@background = Gosu::Image.new($window, "media/debug.png")
+    
+    @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
     
     @scroll = nil
     @scroll_steps = 0
@@ -140,16 +141,15 @@ class PlayState < Chingu::GameState
     
     super
     
+    
     draw_hud
     
   end
   
   def draw_hud
+
+    @hud_overlay.draw(0,0,0)
     
-    if @player
-      @player_pos.draw
-      
-    end
   end
   
 end
