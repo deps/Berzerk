@@ -7,13 +7,7 @@ def media_path(file)
   File.join($window.root, "media", file)  
 end
 
-
 require_all('models')
-
-
-
-
-
 
 
 class Game < Chingu::Window

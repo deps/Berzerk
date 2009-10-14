@@ -4,8 +4,14 @@ class PlayState < Chingu::GameState
     @pop_at = nil
     @room_x = 0
     @room_y = 0
-        
-    create_player
+    @directions = {:north => :south, :south => :north, :west => :east, :east => :west}
+    
+    @player = Player.create
+    
+    @room.destroy if @room
+    @room = Room.new(:roomx=>0, :roomy => 0, :create_seed => @player.moving_dir)
+    @room.close(@directions[@player.moving_dir])
+
     
     @lives = 3
     
@@ -21,30 +27,6 @@ class PlayState < Chingu::GameState
     @scroll_steps = 0
     
   end
-  
-  
-  def create_player( ex = 50, ey = 292, rx = 0, ry = 0, moving_dir = :none )
-    @entry_x = ex
-    @entry_y = ey
-    
-    @room.destroy if @room
-    @room = Room.new( :roomx=>rx, :roomy => ry, :create_seed => (moving_dir == :none) )
-    
-    case moving_dir
-      when :north
-        @room.close(:south)
-      when :south
-        @room.close(:north)
-      when :west
-        @room.close(:east)
-      when :east
-        @room.close(:west)
-    end
-    
-    @player = Player.create( :x => @entry_x, :y => @entry_y )
-    
-  end
-  
   
   def change_room( dir )
     ex = 50

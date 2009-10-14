@@ -3,10 +3,19 @@ class Player < Chingu::GameObject
   has_trait :collision_detection
   has_trait :timer
   
+  attr_reader :moving_dir
+  
   def initialize( options = {} )
     super 
     
+    @entry_x = options[:ex] || 50
+    @entry_y = options[:ey] || 292
+    @moving_dir = options[:moving_dir] || :none
     
+    @x = @entry_x
+    @y = @entry_y
+
+
     self.input = { 
       :holding_left => :move_left, 
       :holding_right => :move_right, 
@@ -17,8 +26,8 @@ class Player < Chingu::GameObject
       :released_space => :stop_shooting
       }
     
-    @anim_file = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true )
-    @anim_file.retrofy
+    @anim_file = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true ).retrofy
+    #@anim_file.retrofy
     
     @anim = {}
     @anim[:idle] = (0..0)
