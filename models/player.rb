@@ -97,6 +97,7 @@ class Player < Chingu::GameObject
     return if @shooting
     move(-1,0)
     @new_anim = :left
+    @moving_dir = :west
   end
   
   def move_right
@@ -104,18 +105,21 @@ class Player < Chingu::GameObject
     return if @shooting
     move(1,0)
     @new_anim = :right
+    @moving_dir = :east
   end
   
   def move_up
     @movement[:north] = true
     return if @shooting
     move(0,-1)
+    @moving_dir = :north
   end
   
   def move_down
     @movement[:south] = true
     return if @shooting
     move(0,1)
+    @moving_dir = :south
   end
   
   def move( xoff, yoff )

@@ -139,6 +139,8 @@ class Room
       y = 18
     when :west
       y = 18
+    else
+      raise "Unknown direction: '#{direction}'"
     end
 
     create_wall(x,y, dir, tile)
