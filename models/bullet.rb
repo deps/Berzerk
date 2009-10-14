@@ -36,7 +36,6 @@ class Bullet < Chingu::GameObject
   def update
 
     super
-    return if frozen?
     
     case @dir
     when :north

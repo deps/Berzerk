@@ -16,7 +16,7 @@ class Game < Chingu::Window
     
     push_game_state( PlayState )
   end
-  
+
   def update
     super
     close if current_parent == self

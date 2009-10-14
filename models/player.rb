@@ -3,7 +3,7 @@ class Player < Chingu::GameObject
   has_trait :collision_detection
   has_trait :timer
   
-  attr_reader :moving_dir
+  attr_reader :moving_dir, :status
   
   def initialize( options = {} )
     super 
@@ -45,6 +45,7 @@ class Player < Chingu::GameObject
     
     @shooting = false
     @cool_down = 0    # don't fire too often
+    @status = :default
   end
   
   def use_animation( name )
@@ -63,7 +64,7 @@ class Player < Chingu::GameObject
       hide!
       spawn_gibs 
     end.then do
-      after(3000) { destroy }
+      after(3000) { @status = :destroy }
     end
     
   end
@@ -103,7 +104,6 @@ class Player < Chingu::GameObject
   end
   
   def move( xoff, yoff )
-    return if frozen?
     @moving = true
     ox = @x
     oy = @y
@@ -129,13 +129,7 @@ class Player < Chingu::GameObject
   # end
   
   def update
-    return if frozen?
-
-    if @bullet and @bullet.frozen?
-      #puts "I think the bullet is dead now..."
-      @bullet = nil
-    end
-
+    @bullet = nil   if @bullet
 
     @cool_down -= 1 if @cool_down > 0
 
