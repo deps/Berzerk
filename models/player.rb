@@ -46,7 +46,7 @@ class Player < Chingu::GameObject
     self.rotation_center(:top_left)
     
     @shooting = false
-    @bullet = nil # Only one player bullet allowed
+    @cool_down = 0# don't fire too often
   end
   
   def use_animation( anim )
@@ -145,7 +145,9 @@ class Player < Chingu::GameObject
     
     unless frozen?
       
-      if @shooting and !@bullet
+      @cool_down -= 1 if @cool_down > 0
+      
+      if @shooting and @cool_down <= 0
         k = @movement.keys
         dir = k[0]
         
@@ -168,6 +170,7 @@ class Player < Chingu::GameObject
         if dir
           puts "Shooting towards #{dir}"
           @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
+          @cool_down = 25
         end
         
       else

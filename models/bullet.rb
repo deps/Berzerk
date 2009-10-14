@@ -10,7 +10,7 @@ class Bullet < Chingu::GameObject
     @y = options[:y]
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = Gosu::Color.new(255, 255,0,0)
-    @speed = 3.0
+    @speed = 4.0
   end
   
   def move( xoff, yoff )
