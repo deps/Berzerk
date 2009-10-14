@@ -31,6 +31,7 @@ class PlayState < Chingu::GameState
     ey = 255
     rx = @room_x
     ry = @room_y
+
     case dir
       when :north
         ex = 325
