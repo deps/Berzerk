@@ -149,7 +149,7 @@ class PlayState < Chingu::GameState
   
   def draw_hud
 
-    @hud_overlay.draw(0,0,0)
+    @hud_overlay.draw(0,0,200)
     
   end
   
