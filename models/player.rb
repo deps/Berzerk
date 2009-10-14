@@ -8,6 +8,7 @@ class Player < Chingu::GameObject
   def initialize( options = {} )
     super 
     
+    @speed = options[:speed] || 1.5    
     @x = options[:x] || 50
     @y = options[:y] || 292
     @moving_dir = options[:moving_dir] || :none
@@ -76,6 +77,7 @@ class Player < Chingu::GameObject
     return if @shooting
     move(-1,0)
     use_animation(:left)
+    @moving_dir = :west
   end
   
   def move_right
@@ -83,18 +85,21 @@ class Player < Chingu::GameObject
     return if @shooting
     move(1,0)
     use_animation(:right)
+    @moving_dir = :east
   end
   
   def move_up
     @movement[:north] = true
     return if @shooting
     move(0,-1)
+    @moving_dir = :north
   end
   
   def move_down
     @movement[:south] = true
     return if @shooting
     move(0,1)
+    @moving_dir = :south
   end
   
   def move( xoff, yoff )
@@ -102,8 +107,8 @@ class Player < Chingu::GameObject
     @moving = true
     ox = @x
     oy = @y
-    @x+=xoff
-    @y+=yoff
+    @x+=xoff*@speed
+    @y+=yoff*@speed
     each_collision(TileObject) do |player, tile|
       collide_with_wall
       return

@@ -8,18 +8,19 @@ class PlayState < Chingu::GameState
     
     @player = Player.create
     @room.destroy if @room
-    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => @player.moving_dir == :none)
-    @room.close(@opposite_directions[@player.moving_dir])
+    @room = Room.new(:room_x => 0, :room_y => 0, :create_seed => true)
+    #@room.close(@opposite_directions[@player.moving_dir])
         
     @lives = 3
     
     self.input = { :escape => :exit }
     
-    @player_pos = Chingu::Text.new(:text => "n/a", :x => 25, :y => 5 )
     
     # Original screenshot, used to compare with my walls
     @background = nil
     #@background = Gosu::Image.new($window, "media/debug.png")
+    
+    @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
     
     @scroll = nil
     @scroll_steps = 0
@@ -64,7 +65,7 @@ class PlayState < Chingu::GameState
 
     @room.destroy if @room
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
-    @room.close(@opposite_directions[@player.moving_dir])
+    @room.close(@opposite_directions[@player.moving_dir]) if @player
     
     @player = Player.create(:x => @entry_x, :y => @entry_y)    
   end
@@ -122,9 +123,11 @@ class PlayState < Chingu::GameState
     @player = nil if players.count == 0
     if !@player and @lives > 0
       @lives -= 1
+      puts "Player lives left: #{@lives}"
       if @lives != 0
         puts "Player is alive again"
-        create_player
+        #create_player
+        show_new_room
       else
         @pop_at = Time.now + 2
         puts "Game Over at #{@pop_at} (is not #{Time.now})"
@@ -139,16 +142,15 @@ class PlayState < Chingu::GameState
     
     super
     
+    
     draw_hud
     
   end
   
   def draw_hud
+
+    @hud_overlay.draw(0,0,0)
     
-    if @player
-      @player_pos.draw
-      
-    end
   end
   
 end

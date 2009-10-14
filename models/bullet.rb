@@ -12,7 +12,7 @@ class Bullet < Chingu::GameObject
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = Gosu::Color.new(255, 255,0,0)
     @speed = 4.0
-    @bounding_box = Chingu::Rect.new([@x, @y, 4,4])
+    @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
     
   end
   
