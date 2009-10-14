@@ -4,15 +4,13 @@ class PlayState < Chingu::GameState
     @pop_at = nil
     @room_x = 0
     @room_y = 0
-    @directions = {:north => :south, :south => :north, :west => :east, :east => :west}
+    @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
     
     @player = Player.create
-    
     @room.destroy if @room
-    @room = Room.new(:roomx=>0, :roomy => 0, :create_seed => @player.moving_dir)
-    @room.close(@directions[@player.moving_dir])
-
-    
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => @player.moving_dir == :none)
+    @room.close(@opposite_directions[@player.moving_dir])
+        
     @lives = 3
     
     self.input = { :escape => :exit }
@@ -60,10 +58,14 @@ class PlayState < Chingu::GameState
     @entry_y = ey
   end
 
- def show_new_room
-   game_objects.remove_all
-   create_player(@entry_x,@entry_y,@room_x,@room_y, @scroll)   
- end
+  def show_new_room
+    game_objects.remove_all
+    @player = Player.create(:x => @entry_x, :y => @entry_y)
+
+    @room.destroy if @room
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@player.moving_dir == :none))
+    @room.close(@opposite_directions[@player.moving_dir])
+  end
   
   def update
     super

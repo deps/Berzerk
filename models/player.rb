@@ -8,12 +8,12 @@ class Player < Chingu::GameObject
   def initialize( options = {} )
     super 
     
-    @entry_x = options[:ex] || 50
-    @entry_y = options[:ey] || 292
+    @x = options[:x] || 50
+    @y = options[:y] || 292
     @moving_dir = options[:moving_dir] || :none
     
-    @x = @entry_x
-    @y = @entry_y
+    #@x = @entry_x
+    #@y = @entry_y
 
 
     self.input = { 
@@ -27,7 +27,6 @@ class Player < Chingu::GameObject
       }
     
     @anim_file = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true ).retrofy
-    #@anim_file.retrofy
     
     @anim = {}
     @anim[:idle] = (0..0)

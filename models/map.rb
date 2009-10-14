@@ -66,7 +66,7 @@ end
 
 class Room 
 
-  # :roomx and :roomy are used to seed the random number generator
+  # :room_x and :room_y are used to seed the random number generator
   # The room should look the same when the player reenters the room
   def initialize( options = {} )
 
@@ -82,7 +82,7 @@ class Room
       @@room_seed = rand(100).to_s 
     end
 
-    seed = options[:roomx].to_s + @@room_seed + options[:roomy].to_s
+    seed = options[:room_x].to_s + @@room_seed + options[:room_y].to_s
     puts "Using random seed #{seed.to_i}"
     srand( seed.to_i )
 
