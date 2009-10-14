@@ -48,7 +48,7 @@ class Player < Chingu::GameObject
   end
   
   def use_animation( name )
-    return if name == @current_animation    
+    return if name == @current_animation or @current_animation == :die
     @current_animation = name
     @animation = @animations[name]
     @image = @animation.first
