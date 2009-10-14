@@ -17,6 +17,9 @@ class PlayState < Chingu::GameState
     @background = nil
     #@background = Gosu::Image.new($window, "media/debug.png")
     
+    @scroll = nil
+    @scroll_steps = 0
+    
   end
   
   
@@ -65,20 +68,52 @@ class PlayState < Chingu::GameState
         rx+=1
     end
     
-    game_objects.remove_all
-    
-    create_player(ex,ey,rx,ry, dir)
+    @scroll = dir
+    @scroll_steps = 60
+    @player.input = {}
     
     @room_x = rx
     @room_y = ry
     @entry_x = ex
     @entry_y = ey
   end
- 
+
+ def show_new_room
+   game_objects.remove_all
+   create_player(@entry_x,@entry_y,@room_x,@room_y, @scroll)   
+ end
   
   def update
     super
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
+    
+    if @scroll
+      @scroll_steps -= 1
+      if @scroll_steps <= 0
+        show_new_room
+        @scroll = nil
+        return
+      end
+      
+      xo = 0
+      yo = 0
+      case @scroll
+      when :north
+        yo = 10
+      when :south
+        yo = -10
+      when :west
+        xo = 10
+      when :east
+        xo = -10
+      end
+      
+      game_objects.each do |obj|
+        obj.x += xo
+        obj.y += yo
+      end
+      return
+    end
     
     if @player
       #@player_pos.text = "#{@player.x}, #{@player.y}"
