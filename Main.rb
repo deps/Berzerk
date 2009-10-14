@@ -8,7 +8,6 @@ def media_path(file)
 end
 
 
-#require File.join('models','map')
 require_all('models')
 
 
