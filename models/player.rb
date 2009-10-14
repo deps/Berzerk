@@ -11,68 +11,61 @@ class Player < Chingu::GameObject
     @x = options[:x] || 50
     @y = options[:y] || 292
     @moving_dir = options[:moving_dir] || :none
-    
-    #@x = @entry_x
-    #@y = @entry_y
-
 
     self.input = { 
       :holding_left => :move_left, 
       :holding_right => :move_right, 
       :holding_up => :move_up, 
-      :holding_down => :move_down, 
-      
+      :holding_down => :move_down,
       :space => :shoot,
       :released_space => :stop_shooting
-      }
+    }
     
-    @anim_file = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true ).retrofy
+    @full_animation = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true ).retrofy
     
-    @anim = {}
-    @anim[:idle] = (0..0)
-    @anim[:left] = (3..4)
-    @anim[:right] = (1..2)
-    @anim[:die] = (7..8)
+    @animations = {}
+    @animations[:idle] = @full_animation[0..0]
+    @animations[:left] = @full_animation[3..4]
+    @animations[:right] = @full_animation[1..2]
+    @animations[:die] = @full_animation[7..8]
+    @animations[:die].delay = 25
+    
+    @image = @animations[:idle].first
+
+    
     @moving = false
     @movement = {}
     
-    @new_anim = nil
     use_animation(:idle)
-    
-    #@image = Image["player.png"]
-    #@image.retrofy
-    
+        
     @factor_x = 2.5
     @factor_y = 2.5
-    
     @lives = 3
-    
-    @entry_x = x
-    @entry_y = y
-    
+        
     @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
     self.rotation_center(:top_left)
     
     @shooting = false
-    @cool_down = 0# don't fire too often
+    @cool_down = 0    # don't fire too often
   end
   
-  def use_animation( anim )
-    return if anim == @current_animation 
-    @current_animation = anim
-    #puts "Changing animation to #{anim}"
-    new_anim = @anim_file.new_from_frames( @anim[anim] )
-    @animation = new_anim
-    if anim == :die
-      @animation.delay = 25
-    end
-    @image = @animation.image
+  def use_animation( name )
+    return if name == @current_animation
+    
+    @current_animation = name
+    @animation = @animations[name]
+    
+    #@animation = @animations[status]
+    #@current_animation = status
+    #@animation.delay = 25 if status == :die
+    
+    #@image = @animation.next!
   end
   
-  def update_animation
-    return if frozen?
-    @image = @animation.next!
-  end
+  #def update_animation
+  #  return if frozen?
+  #  @image = @animation.next!
+  #end
   
   def collide_with_wall
     return if @current_animation == :die
@@ -96,14 +89,14 @@ class Player < Chingu::GameObject
     @movement[:west] = true
     return if @shooting
     move(-1,0)
-    @new_anim = :left
+    use_animation(:left)
   end
   
   def move_right
     @movement[:east] = true
     return if @shooting
     move(1,0)
-    @new_anim = :right
+    use_animation(:right)
   end
   
   def move_up
@@ -179,14 +172,14 @@ class Player < Chingu::GameObject
           @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
           @cool_down = 25
         end
-        
-      else
-        if @moving
-          if @new_anim and @current_animation != :die
-            use_animation(@new_anim)
-            @new_anim = nil
-          end
-        end
+      
+      #else
+      #  if @moving
+      #    if @new_anim and @current_animation != :die
+      #      use_animation(@new_anim)
+      #      @new_anim = nil
+      #    end
+      #  end
       end
       
     end
@@ -196,7 +189,8 @@ class Player < Chingu::GameObject
     super
     @movement = {} unless frozen?
     
-    update_animation if @moving or @current_animation == :die
+    @image = @animation.next!   if @moving or @current_animation == :die
+    
     @moving = false unless frozen?
     
   end
