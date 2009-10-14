@@ -7,7 +7,15 @@ class Player < Chingu::GameObject
     super 
     
     
-    self.input = { :holding_left => :move_left, :holding_right => :move_right, :holding_up => :move_up, :holding_down => :move_down}
+    self.input = { 
+      :holding_left => :move_left, 
+      :holding_right => :move_right, 
+      :holding_up => :move_up, 
+      :holding_down => :move_down, 
+      
+      :space => :shoot,
+      :released_space => :stop_shooting
+      }
     
     @anim_file = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true )
     @anim_file.retrofy
@@ -18,6 +26,7 @@ class Player < Chingu::GameObject
     @anim[:right] = (1..2)
     @anim[:die] = (7..8)
     @moving = false
+    @movement = {}
     
     @new_anim = nil
     use_animation(:idle)
@@ -36,7 +45,8 @@ class Player < Chingu::GameObject
     @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
     self.rotation_center(:top_left)
     
-    
+    @shooting = false
+    @bullet = nil # Only one player bullet allowed
   end
   
   def use_animation( anim )
@@ -75,20 +85,28 @@ class Player < Chingu::GameObject
   end
     
   def move_left
+    @movement[:west] = true
+    return if @shooting
     move(-1,0)
     @new_anim = :left
   end
   
   def move_right
+    @movement[:east] = true
+    return if @shooting
     move(1,0)
     @new_anim = :right
   end
   
   def move_up
+    @movement[:north] = true
+    return if @shooting
     move(0,-1)
   end
   
   def move_down
+    @movement[:south] = true
+    return if @shooting
     move(0,1)
   end
   
@@ -105,24 +123,68 @@ class Player < Chingu::GameObject
     end
   end
   
+  def shoot
+    @shooting = true
+  end
+  
+  def stop_shooting
+    @shooting = false
+  end
+  
   # def draw
   #   super
   #   $window.fill_rect(@bounding_box, Color.new(128,255,0,0))
   # end
   
   def update
-    unless frozen?
-      if @moving
-        if @new_anim and @current_animation != :die
-          use_animation(@new_anim)
-          @new_anim = nil
-        end
-      #else
-      #  use_animation(:idle) unless @current_animation == :die
-      end
+    
+    if @bullet and @bullet.frozen?
+      #puts "I think the bullet is dead now..."
+      @bullet = nil
     end
+    
+    unless frozen?
+      
+      if @shooting and !@bullet
+        k = @movement.keys
+        dir = k[0]
+        
+        if k.length > 1
+          if @movement[:north] 
+            if @movement[:west]
+              dir = :nw
+            elsif @movement[:east]
+              dir = :ne
+            end
+          elsif @movement[:south]
+            if @movement[:west]
+              dir = :sw
+            elsif @movement[:east]
+              dir = :se
+            end
+          end
+        end
+        
+        if dir
+          puts "Shooting towards #{dir}"
+          @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
+        end
+        
+      else
+        if @moving
+          if @new_anim and @current_animation != :die
+            use_animation(@new_anim)
+            @new_anim = nil
+          end
+        end
+      end
+      
+    end
+    
+    
   
     super
+    @movement = {} unless frozen?
     
     update_animation if @moving or @current_animation == :die
     @moving = false unless frozen?

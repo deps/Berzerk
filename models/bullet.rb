@@ -4,20 +4,22 @@
 class Bullet < Chingu::GameObject
   
   def initialize( options )
+    super
     @owner = options[:owner]
     @x = options[:x]
     @y = options[:y]
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = Gosu::Color.new(255, 255,0,0)
-    
+    @speed = 3.0
   end
   
   def move( xoff, yoff )
-    @x -= xoff
-    @y -= yoff
+    @x += xoff*@speed
+    @y += yoff*@speed
   end
   
   def update
+
     super
     return if frozen?
     
@@ -38,13 +40,19 @@ class Bullet < Chingu::GameObject
       move(-1,0)
     when :nw
       move(-1,-1)
+    else
+      raise "Bullet is moving in an unknown direction"
     end
     
-    destroy if outside_window?
+    if outside_window?
+      puts "Outside window. Bye bye"
+      destroy 
+    end
     
   end
   
   def draw
+
     case @dir
     when :north,:south
       $window.draw_line(@x,@y-5,@c, @x,@y+5,@c)
