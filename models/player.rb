@@ -129,51 +129,52 @@ class Player < Chingu::GameObject
   # end
   
   def update
-    
+    return if frozen?
+
     if @bullet and @bullet.frozen?
       #puts "I think the bullet is dead now..."
       @bullet = nil
     end
-    
-    unless frozen?
-      @cool_down -= 1 if @cool_down > 0
-      
-      if @shooting and @cool_down <= 0
-        k = @movement.keys
-        dir = k[0]
-        
-        if k.length > 1
-          if @movement[:north] 
-            if @movement[:west]
-              dir = :nw
-            elsif @movement[:east]
-              dir = :ne
-            end
-          elsif @movement[:south]
-            if @movement[:west]
-              dir = :sw
-            elsif @movement[:east]
-              dir = :se
-            end
+
+
+    @cool_down -= 1 if @cool_down > 0
+
+    if @shooting and @cool_down <= 0
+      k = @movement.keys
+      dir = k[0]
+
+      if k.length > 1
+        if @movement[:north] 
+          if @movement[:west]
+            dir = :nw
+          elsif @movement[:east]
+            dir = :ne
+          end
+        elsif @movement[:south]
+          if @movement[:west]
+            dir = :sw
+          elsif @movement[:east]
+            dir = :se
           end
         end
-        
-        if dir
-          @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
-          @cool_down = 25
-        end      
       end
-      
+
+      if dir
+        @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
+        @cool_down = 25
+      end      
     end
-    
-    
-  
+
+
+
+
+
     super
-    @movement = {} unless frozen?
-    
+    @movement = {} 
+
     @image = @animation.next!   if @moving or @current_animation == :die
-    
-    @moving = false unless frozen?
+
+    @moving = false 
   end
   
 end
