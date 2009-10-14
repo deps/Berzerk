@@ -29,15 +29,12 @@ class Player < Chingu::GameObject
     @animations[:right] = @full_animation[1..2]
     @animations[:die] = @full_animation[7..8]
     @animations[:die].delay = 25
-    
-    @image = @animations[:idle].first
 
+    use_animation(:idle)
     
     @moving = false
     @movement = {}
     
-    use_animation(:idle)
-        
     @factor_x = 2.5
     @factor_y = 2.5
     @lives = 3
@@ -50,22 +47,11 @@ class Player < Chingu::GameObject
   end
   
   def use_animation( name )
-    return if name == @current_animation
-    
+    return if name == @current_animation    
     @current_animation = name
     @animation = @animations[name]
-    
-    #@animation = @animations[status]
-    #@current_animation = status
-    #@animation.delay = 25 if status == :die
-    
-    #@image = @animation.next!
+    @image = @animation.first
   end
-  
-  #def update_animation
-  #  return if frozen?
-  #  @image = @animation.next!
-  #end
   
   def collide_with_wall
     return if @current_animation == :die
@@ -145,7 +131,6 @@ class Player < Chingu::GameObject
     end
     
     unless frozen?
-      
       @cool_down -= 1 if @cool_down > 0
       
       if @shooting and @cool_down <= 0
@@ -171,15 +156,7 @@ class Player < Chingu::GameObject
         if dir
           @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
           @cool_down = 25
-        end
-      
-      #else
-      #  if @moving
-      #    if @new_anim and @current_animation != :die
-      #      use_animation(@new_anim)
-      #      @new_anim = nil
-      #    end
-      #  end
+        end      
       end
       
     end
@@ -192,7 +169,6 @@ class Player < Chingu::GameObject
     @image = @animation.next!   if @moving or @current_animation == :die
     
     @moving = false unless frozen?
-    
   end
   
 end
