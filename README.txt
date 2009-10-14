@@ -38,6 +38,22 @@ Period 3: Oct 21 to Oct 28 - 8 items (41 in total)
 --- Record the words one by one, and play them together in the game. Words will be needed later when droids are talking
  
 - Talking droid sounds added
+--- Words:
+    coins, detected, in, pocket, intruder, alert, the, humanoid, must, not, escape, chicken, fight, like, a,
+    robot, got, charge, attack, kill, destroy. get. it
+--- Messages:
+    "Coins detected in pocket": During attract mode, specifically while showing the high score list.
+    "Intruder alert! Intruder alert!": Spoken when Evil Otto appears.
+    "The humanoid must not escape": Heard when the player escapes a room after destroying every robot.
+    "Chicken, fight like a robot": Heard when the player escapes a room without destroying every robot.
+    "Got the Humanoid, got the intruder": Heard when the player loses a life. 
+     (The "Got the intruder" part is about a half-octave higher than the "Got the humanoid" part)
+--- Random:
+	"Charge", "Attack", "Kill", "Destroy", or "Get" 
+	followed by "The Humanoid", "The intruder", "it", or "the chicken" 
+	(the last only if the player got the "Chicken, fight like a robot" message from 
+	the previous room), creating sentences such as "Attack it", "Get the Humanoid", "Destroy the intruder", 
+	"Kill the chicken", and so on. The speed and pitch of the phrases vary, from deep and slow, to high and fast.
 - The message spoken is visualized by a scroller at the bottom of the screen.
 - Scores added
 - Change droid color and firing ability based on score:
