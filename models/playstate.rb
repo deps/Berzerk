@@ -60,11 +60,12 @@ class PlayState < Chingu::GameState
 
   def show_new_room
     game_objects.remove_all
-    @player = Player.create(:x => @entry_x, :y => @entry_y)
 
     @room.destroy if @room
-    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@player.moving_dir == :none))
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
     @room.close(@opposite_directions[@player.moving_dir])
+    
+    @player = Player.create(:x => @entry_x, :y => @entry_y)    
   end
   
   def update
