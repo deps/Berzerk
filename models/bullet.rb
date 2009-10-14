@@ -2,6 +2,7 @@
 
 
 class Bullet < Chingu::GameObject
+  has_trait :collision_detection
   
   def initialize( options )
     super
@@ -11,11 +12,25 @@ class Bullet < Chingu::GameObject
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = Gosu::Color.new(255, 255,0,0)
     @speed = 4.0
+    @bounding_box = Chingu::Rect.new([@x, @y, 4,4])
+    
   end
   
   def move( xoff, yoff )
     @x += xoff*@speed
     @y += yoff*@speed
+    
+    each_collision(TileObject) do |bullet, tile|
+      collide_with_wall
+      return
+    end
+    
+  end
+  
+  
+  def collide_with_wall
+    # Spawn some sparks here
+    destroy
   end
   
   def update
@@ -45,7 +60,6 @@ class Bullet < Chingu::GameObject
     end
     
     if outside_window?
-      puts "Outside window. Bye bye"
       destroy 
     end
     

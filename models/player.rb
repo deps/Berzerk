@@ -61,7 +61,7 @@ class Player < Chingu::GameObject
   def use_animation( anim )
     return if anim == @current_animation 
     @current_animation = anim
-    puts "Changing animation to #{anim}"
+    #puts "Changing animation to #{anim}"
     new_anim = @anim_file.new_from_frames( @anim[anim] )
     @animation = new_anim
     if anim == :die
@@ -177,7 +177,6 @@ class Player < Chingu::GameObject
         end
         
         if dir
-          puts "Shooting towards #{dir}"
           @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => dir, :owner => self )
           @cool_down = 25
         end
