@@ -11,6 +11,7 @@ class Player < Chingu::GameObject
     @x = options[:x] || 50
     @y = options[:y] || 292
     @moving_dir = options[:moving_dir] || :none
+    @speed = options[:speed] || 1.5
     
     #@x = @entry_x
     #@y = @entry_y
@@ -127,8 +128,8 @@ class Player < Chingu::GameObject
     @moving = true
     ox = @x
     oy = @y
-    @x+=xoff
-    @y+=yoff
+    @x+=xoff*@speed
+    @y+=yoff*@speed
     each_collision(TileObject) do |player, tile|
       collide_with_wall
       return
