@@ -10,8 +10,9 @@ Period 1: Oct 7 to Oct 14 - 11 items (41 in total)
 --- floor (code added but not used)
 
 - Player can shoot
---- Press the fire button and select direction
+--- Press the fire button and direction
 --- Player cannot move while shooting
+--- Bullets are removed if touching a wall or is outside the room
 
 - Refactor!
  
@@ -26,7 +27,6 @@ Period 2: Oct 14 to Oct 21 - 14 items (41 in total)
 - Droids can shoot
 --- Just a placeholder until score is added (se note on score below in period 3)
  
-- Bullets are removed if touching a wall
 - Bullets kills player and droids
  
 - Draw Evil Otto
