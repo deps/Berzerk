@@ -21,9 +21,16 @@ class PlayState < Chingu::GameState
     #@background = Gosu::Image.new($window, "media/debug.png")
     
     @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
+    @messages = []
+    @current_message = nil
+    @message_x = 0
+    @message_img = nil
+    
     
     @scroll = nil
     @scroll_steps = 0
+    
+    show_message("Kill everything, and stay alive.")
     
   end
   
@@ -58,6 +65,10 @@ class PlayState < Chingu::GameState
     @room_y = ry
     @entry_x = ex
     @entry_y = ey
+    
+    # TODO: change message to "chicken, fight like a robot" if there are droids left in room
+    msg = "the humanoid must not escape!"
+    show_message(msg)    
   end
 
   def show_new_room
@@ -70,7 +81,7 @@ class PlayState < Chingu::GameState
     
     if @player
       # Player only switched rooms
-      @room.close(@opposite_directions[@scroll])
+      @room.close(@opposite_directions[@scroll])      
     else
       # Player was dead
       @entry_x = 90
@@ -153,8 +164,27 @@ class PlayState < Chingu::GameState
       else
         @pop_at = Time.now + 2
         puts "Game Over at #{@pop_at} (is not #{Time.now})"
+        show_message("game over")
       end
     end
+  
+    # Update messages
+    if @message_img
+      @message_x -= 10
+      if @message_x <= @message_remove_pos
+        @current_message = nil
+        @message_img = nil
+      end
+    else
+      unless @messages.empty?
+        @current_message = @messages.shift
+        @message_x = 800
+        # media/texasled.ttf does not work on OSX
+        @message_img = Gosu::Image.from_text($window,@current_message,default_font_name(),50) 
+        @message_remove_pos = -@message_img.width
+      end
+    end
+    
         
   end
   
@@ -166,7 +196,15 @@ class PlayState < Chingu::GameState
   
   def draw_hud
     @hud_overlay.draw(0,0,200)
-    
+    if @message_img
+      @message_img.draw( @message_x, 550, 200 )
+    end
+  end
+  
+  def show_message( msg )
+    @messages << msg.upcase
+    #puts "Message '#{msg}' added to message queue"
+    #puts "Messages in queue: #{@messages.length}"
   end
   
 end

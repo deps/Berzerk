@@ -63,6 +63,7 @@ class Player < Chingu::GameObject
     after(1000) do 
       hide!
       spawn_gibs 
+      $window.current_game_state.show_message("got the humanoid! got the intruder!")
     end.then do
       after(3000) { @status = :destroy }
     end
