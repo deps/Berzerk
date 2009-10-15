@@ -1,16 +1,46 @@
 
-
-
-class Bullet < Chingu::GameObject
-  has_trait :collision_detection
+#
+# A simple spark-class
+# Random x/y velocity and a decrementing @alpha (fading out)
+# Kill when almost fully faded
+#
+class Spark < Chingu::GameObject
+  #
+  # Set @velocity_x and @velocity_y and velocity-trait will add them to @x / @y each game iteration
+  # @acceleration_x / @acceleration_y is also available.
+  #
+  has_trait :velocity
   
+  def initialize( options )
+    super
+    @velocity_x = 5 - rand(10)  
+    @velocity_y = 5 - rand(10)
+  end
+  
+  def update
+    @color.alpha -= 10
+    
+    # We check < 10 instead of < 0 since Gosu will throw an error if alpha goes bellow 0
+    destroy if @color.alpha < 10
+  end
+  
+  def draw
+    $window.draw_line(@x, @y, @color, @x + @velocity_x, @y + @velocity_y, @color)
+  end
+end
+  
+class Bullet < Chingu::GameObject
+  @@red = Gosu::Color.new(255, 255, 0, 0)
+  @@white = Gosu::Color.new(255, 255, 255, 255)
+  
+  has_trait :collision_detection
   attr_reader :owner
   
   def initialize( options )
     super
     @owner = options[:owner] || nil    
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
-    @c = Gosu::Color.new(255, 255,0,0)
+    @c = @@red.dup
     @speed = 4.0
     @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
   end
@@ -22,7 +52,10 @@ class Bullet < Chingu::GameObject
   
   
   def on_collision
-    # Spawn some sparks here
+    # Spawn 5 white sparks and 5 red sparks ... maybe we should just go with red?
+    5.times { Spark.create(:x => @x, :y => @y, :color => @@red.dup ) }
+    5.times { Spark.create(:x => @x, :y => @y, :color => @@white.dup ) }
+    
     destroy
   end
   
@@ -51,8 +84,7 @@ class Bullet < Chingu::GameObject
       raise "Bullet is moving in an unknown direction"
     end
     
-    each_collision(Chingu::GameObject) do |me, obj|
-      next if @owner == obj or me == obj # Do not collide with it's own bullets
+    each_collision(TileObject) do |me, obj|
       on_collision
     end
     

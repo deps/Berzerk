@@ -156,8 +156,8 @@ class Player < Chingu::GameObject
       end      
     end
 
-    each_collision(Chingu::GameObject) do |me, obj|
-      next if (obj.respond_to? :owner and obj.owner == self) or me == obj # Do not collide with it's own bullets
+    # each_collision([TileObject, Enemy, Blah]) do |me, obj|  <-- masscolide syntax
+    each_collision(TileObject) do |me, obj|
       on_collision
     end
 
