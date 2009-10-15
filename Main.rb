@@ -11,8 +11,11 @@ require_all('models')
 
 
 class Game < Chingu::Window
+  attr_reader :factor
+  
   def initialize
     super
+    @factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
     
     push_game_state( PlayState )
   end

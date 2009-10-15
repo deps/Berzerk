@@ -80,6 +80,15 @@ class Room
   end
 
   def setup_room(options = {})
+    
+    # Create some droids at random positions
+    5.times do
+      x = rand($window.width/$window.factor)
+      y = rand($window.height/$window.factor)
+      color = Gosu::Color.new(0xFFFF0000)
+      Droid.create(:x => x, :y => y, :color => color)
+    end
+
 
     # create_seed should only be true when the game starts, if the player was dead but now is alive again
     # and so on. It should be false if the player switches rooms.
@@ -122,7 +131,6 @@ class Room
     # close( :east )
     # close( :north )
     # close( :south )
-
   end
 
   # Close an exit with a "forefield"

@@ -26,7 +26,6 @@ class PlayState < Chingu::GameState
     @message_x = 0
     @message_img = nil
     
-    
     @scroll = nil
     @scroll_steps = 0
     
@@ -88,7 +87,7 @@ class PlayState < Chingu::GameState
       @entry_y = 255
     end
     
-    @player = Player.create(:x => @entry_x, :y => @entry_y)    
+    @player = Player.create(:x => @entry_x, :y => @entry_y)
   end
   
   def update
@@ -185,6 +184,19 @@ class PlayState < Chingu::GameState
       end
     end
     
+    if @player
+      #
+      # Let's have some droids walking towards the player
+      # The more droids the lazier
+      #
+      if rand(Droid.size * 10) == 0
+        # Fins first scanning robot and have it walk!
+        scanning_droids = Droid.all.select { |droid| droid.current_animation == :scan }
+        if (droid = scanning_droids.first)
+          droid.walk_towards(@player.x, @player.y)  
+        end
+      end
+    end
         
   end
   
