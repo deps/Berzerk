@@ -4,30 +4,26 @@
 class Bullet < Chingu::GameObject
   has_trait :collision_detection
   
-  attr_reader :status, :owner
+  attr_reader :owner
   
   def initialize( options )
     super
-    @owner = options[:owner] || nil
-    @x = options[:x]
-    @y = options[:y]
+    @owner = options[:owner] || nil    
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = Gosu::Color.new(255, 255,0,0)
     @speed = 4.0
     @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
-    @status = :default
   end
   
   def move( xoff, yoff )
     @x += xoff*@speed
     @y += yoff*@speed
-        
   end
   
   
   def on_collision
     # Spawn some sparks here
-    @status = :destroy
+    destroy
   end
   
   def update

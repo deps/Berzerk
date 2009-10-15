@@ -3,7 +3,7 @@ class Player < Chingu::GameObject
   has_trait :collision_detection
   has_trait :timer
   
-  attr_reader :moving_dir, :status
+  attr_reader :moving_dir
   
   def initialize( options = {} )
     super 
@@ -45,7 +45,6 @@ class Player < Chingu::GameObject
     
     @shooting = false
     @cool_down = 0    # don't fire too often
-    @status = :default
   end
   
   def use_animation( name )
@@ -65,7 +64,7 @@ class Player < Chingu::GameObject
       spawn_gibs 
       $window.current_game_state.show_message("got the humanoid! got the intruder!")
     end.then do
-      after(3000) { @status = :destroy }
+      after(3000) { destroy }
     end
     
   end

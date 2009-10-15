@@ -126,7 +126,7 @@ class PlayState < Chingu::GameState
       obj.x += xo
       obj.y += yo
       # Remove dead objects
-      obj.destroy if obj.respond_to? :status and obj.status == :destroy
+      #obj.destroy if obj.respond_to? :status and obj.status == :destroy
     end
     
     #return if @scroll # Don't 
