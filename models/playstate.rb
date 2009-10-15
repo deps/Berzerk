@@ -197,7 +197,11 @@ class PlayState < Chingu::GameState
         end
       end
     end
-        
+    
+    Bullet.each_bounding_box_collision(Droid) do |bullet, droid|
+      bullet.on_collision
+      droid.on_collision
+    end
   end
   
   def draw
