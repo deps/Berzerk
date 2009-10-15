@@ -70,7 +70,7 @@ class PlayState < Chingu::GameState
     
     if @player
       # Player only switched rooms
-      @room.close(@opposite_directions[@player.moving_dir])
+      @room.close(@opposite_directions[@scroll])
     else
       # Player was dead
       @entry_x = 90
