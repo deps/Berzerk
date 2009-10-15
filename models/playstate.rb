@@ -65,8 +65,10 @@ class PlayState < Chingu::GameState
     @entry_x = ex
     @entry_y = ey
     
-    # TODO: change message to "chicken, fight like a robot" if there are droids left in room
-    msg = "the humanoid must not escape!"
+    msg = "Chicken, fight like a robot!"
+    if game_objects_of_class( Droid ).length == 0
+      msg = "the humanoid must not escape!"
+    end
     show_message(msg)    
   end
 
