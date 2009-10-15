@@ -64,7 +64,8 @@ Move completed ones to DONE below.
 	(the last only if the player got the "Chicken, fight like a robot" message from 
 	the previous room), creating sentences such as "Attack it", "Get the Humanoid", "Destroy the intruder", 
 	"Kill the chicken", and so on. The speed and pitch of the phrases vary, from deep and slow, to high and fast.
-- The message spoken is visualized by a scroller at the bottom of the screen.
+--- When a message is created, play the words, but display it too using the show_message method.
+
 - Scores added
 - Change droid color and firing ability based on score:
 	score			droid color		shots (number allowed in total, from alld roids in room)
@@ -115,3 +116,5 @@ DONE:
 --- Press the fire button and direction
 --- Player cannot move while shooting
 --- Bullets are removed if touching a wall or is outside the room
+
+- Scrolling messages
