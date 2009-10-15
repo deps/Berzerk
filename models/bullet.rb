@@ -4,11 +4,11 @@
 class Bullet < Chingu::GameObject
   has_trait :collision_detection
   
-  attr_reader :status
+  attr_reader :status, :owner
   
   def initialize( options )
     super
-    @owner = options[:owner]
+    @owner = options[:owner] || nil
     @x = options[:x]
     @y = options[:y]
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
@@ -21,16 +21,11 @@ class Bullet < Chingu::GameObject
   def move( xoff, yoff )
     @x += xoff*@speed
     @y += yoff*@speed
-    
-    each_collision(TileObject) do |bullet, tile|
-      collide_with_wall
-      return
-    end
-    
+        
   end
   
   
-  def collide_with_wall
+  def on_collision
     # Spawn some sparks here
     @status = :destroy
   end
@@ -59,6 +54,12 @@ class Bullet < Chingu::GameObject
     else
       raise "Bullet is moving in an unknown direction"
     end
+    
+    each_collision(Chingu::GameObject) do |me, obj|
+      next if @owner == obj or me == obj # Do not collide with it's own bullets
+      on_collision
+    end
+    
     
     if outside_window?
       destroy 

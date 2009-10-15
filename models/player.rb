@@ -55,7 +55,7 @@ class Player < Chingu::GameObject
     @image = @animation.first
   end
   
-  def collide_with_wall
+  def on_collision
     return if @current_animation == :die
     self.input = {}
     use_animation(:die)
@@ -109,10 +109,7 @@ class Player < Chingu::GameObject
     oy = @y
     @x+=xoff*@speed
     @y+=yoff*@speed
-    each_collision(TileObject) do |player, tile|
-      collide_with_wall
-      return
-    end
+    
   end
   
   def shoot
@@ -159,9 +156,10 @@ class Player < Chingu::GameObject
       end      
     end
 
-
-
-
+    each_collision(Chingu::GameObject) do |me, obj|
+      next if (obj.respond_to? :owner and obj.owner == self) or me == obj # Do not collide with it's own bullets
+      on_collision
+    end
 
     super
     @movement = {} 
