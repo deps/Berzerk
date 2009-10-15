@@ -43,6 +43,7 @@ class Bullet < Chingu::GameObject
     @c = @@red.dup
     @speed = 4.0
     @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
+    Sound["laser.wav"].play(0.3)
   end
   
   def move( xoff, yoff )
@@ -55,6 +56,7 @@ class Bullet < Chingu::GameObject
     # Spawn 5 white sparks and 5 red sparks ... maybe we should just go with red?
     5.times { Spark.create(:x => @x, :y => @y, :color => @@red.dup ) }
     5.times { Spark.create(:x => @x, :y => @y, :color => @@white.dup ) }
+    Sound["laser_hits_wall.wav"].play(0.3)
     
     destroy
   end
