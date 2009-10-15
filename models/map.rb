@@ -80,6 +80,10 @@ class Room
 
   def setup_room(options = {})
 
+    # create_seed should only be true when the game starts, if the player was dead but now is alive again
+    # and so on. It should be false if the player switches rooms.
+    # Because if the player walks in a circle (east, north, west, south) the room should look like it did
+    # the first time the player was there. But if the player dies, the maze should look completley different.
     if options[:create_seed]
       puts "Creating new global room seed (#{options[:create_seed]})"
       @@room_seed = rand(100).to_s 

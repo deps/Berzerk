@@ -36,7 +36,7 @@ class PlayState < Chingu::GameState
     case dir
       when :north
         ex = 325
-        ey = 490
+        ey = 480
         ry-=1
       when :south
         ey = 40
@@ -64,6 +64,7 @@ class PlayState < Chingu::GameState
     game_objects.remove_all
 
     @room.destroy if @room
+    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
     @room.close(@opposite_directions[@player.moving_dir]) if @player
     
@@ -74,6 +75,10 @@ class PlayState < Chingu::GameState
     super
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
+    
+    xo = 0
+    yo = 0
+        
     if @scroll
       @scroll_steps -= 1
       if @scroll_steps <= 0
@@ -82,8 +87,6 @@ class PlayState < Chingu::GameState
         return
       end
       
-      xo = 0
-      yo = 0
       case @scroll
       when :north
         yo = 10
@@ -95,14 +98,22 @@ class PlayState < Chingu::GameState
         xo = -10
       end
       
-      game_objects.each do |obj|
-        obj.x += xo
-        obj.y += yo
-      end
-      return
+      #return
     end
     
-    if @player
+    game_objects.each do |obj|
+      # Scrolling?
+      obj.x += xo
+      obj.y += yo
+      # Remove dead objects
+      obj.destroy if obj.respond_to? :status and obj.status == :destroy
+    end
+    
+    #return if @scroll # Don't 
+    
+    
+    # Change room if player walked outside map
+    if @player and !@scroll
       #@player_pos.text = "#{@player.x}, #{@player.y}"
       if @player.x <= 25
         change_room(:west)
@@ -115,10 +126,12 @@ class PlayState < Chingu::GameState
       end
     end
     
+    # Pop this state if the game is over
     if @pop_at
       self.close if Time.now >= @pop_at
     end
     
+    # Is the player alive?
     players = game_objects_of_class( Player )
     @player = nil if players.count == 0
     if !@player and @lives > 0
@@ -133,28 +146,16 @@ class PlayState < Chingu::GameState
         puts "Game Over at #{@pop_at} (is not #{Time.now})"
       end
     end
-    
-    
-    game_objects.each do |obj|
-      obj.destroy if obj.respond_to? :status and obj.status == :destroy
         
-    end
-    
   end
   
   def draw
-    
     @background.draw( 25,25,0, 2.5, 2.5 ) if @background
-    
     super
-    
-    
     draw_hud
-    
   end
   
   def draw_hud
-
     @hud_overlay.draw(0,0,200)
     
   end
