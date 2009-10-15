@@ -46,10 +46,10 @@ class TileObject < Chingu::GameObject
     alpha = 255 # When debugging, I lower this one to see if walls overlap
     @glow = Gosu::Color.new(96,0,0,255)
     case @walltype
-    when 2
+    when 2 # door
       # TODO: door color based on color of the droids
       @c = Gosu::Color.new(alpha,255,0,255)
-    else
+    else # Normal wall
       @c = Gosu::Color.new(alpha,0,0,255)
     end
     @bounding_box = Chingu::Rect.new([@x, @y, @width, @height])
