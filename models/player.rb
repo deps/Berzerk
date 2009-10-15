@@ -9,8 +9,8 @@ class Player < Chingu::GameObject
     super 
     
     @speed = options[:speed] || 1.5    
-    @x = options[:x] || 50
-    @y = options[:y] || 292
+    @x = options[:x] || 90
+    @y = options[:y] || 255
     @moving_dir = options[:moving_dir] || :none
 
     self.input = { 

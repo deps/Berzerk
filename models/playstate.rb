@@ -66,7 +66,16 @@ class PlayState < Chingu::GameState
     @room.destroy if @room
     # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
-    @room.close(@opposite_directions[@player.moving_dir]) if @player
+    
+    
+    if @player
+      # Player only switched rooms
+      @room.close(@opposite_directions[@player.moving_dir])
+    else
+      # Player was dead
+      @entry_x = 90
+      @entry_y = 255
+    end
     
     @player = Player.create(:x => @entry_x, :y => @entry_y)    
   end
