@@ -47,6 +47,7 @@ class TileObject < Chingu::GameObject
     @glow = Gosu::Color.new(96,0,0,255)
     case @walltype
     when 2
+      # TODO: door color based on color of the droids
       @c = Gosu::Color.new(alpha,255,0,255)
     else
       @c = Gosu::Color.new(alpha,0,0,255)
