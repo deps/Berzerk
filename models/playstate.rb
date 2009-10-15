@@ -134,6 +134,12 @@ class PlayState < Chingu::GameState
       end
     end
     
+    
+    game_objects.each do |obj|
+      obj.destroy if obj.respond_to? :status and obj.status == :destroy
+        
+    end
+    
   end
   
   def draw
