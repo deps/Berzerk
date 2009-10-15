@@ -1,17 +1,26 @@
 A Berzerk Remake
 By Deps and ippa
 
+Written in ruby, using Gosu and Chingu
+
+libgosu.org
+github.com/ippa/chingu
+
+
 
 
 TODO:
+Ordered in intended execution order, but feel free to jump to a later one if desired.
+Move completed ones to DONE below.
 
-Period 1: Oct 7 to Oct 14 - 11 items (41 in total)
+*** Period 1: Oct 7 to Oct 14
 - Draw graphics for the maze
 --- floor (code added but not used)
 
 - Refactor!
  
-Period 2: Oct 14 to Oct 21 - 14 items (41 in total)
+
+*** Period 2: Oct 14 to Oct 21 
 - Draw droids
 --- 4 direction animation, 4 frame idle animation with scanning eye
 - Droids added to the room
@@ -20,7 +29,7 @@ Period 2: Oct 14 to Oct 21 - 14 items (41 in total)
 - Droid can bump into walls, or each other, and explode
 - Droid - player collisions
 - Droids can shoot
---- Just a placeholder until score is added (se note on score below in period 3)
+--- Just a placeholder until score is added (see note on score below in period 3)
  
 - Bullets kills player and droids
  
@@ -33,7 +42,8 @@ Period 2: Oct 14 to Oct 21 - 14 items (41 in total)
 - Evil Otto destroys droids and player if he touches them
 - Refactor!
  
-Period 3: Oct 21 to Oct 28 - 8 items (41 in total)
+
+*** Period 3: Oct 21 to Oct 28 
 - Speech added when leaving a room
 --- Record the words one by one, and play them together in the game. Words will be needed later when droids are talking
  
@@ -71,7 +81,8 @@ Period 3: Oct 21 to Oct 28 - 8 items (41 in total)
 --- Only use name entry if score was high enough to be on the list
 - Refactor!
  
-Period 4: Oct 28 to Oct 31 - 8 items (41 in total)
+
+*** Period 4: Oct 28 to Oct 31 
 - Attract mode title screen added
 - Sounds for attract mode added: "Coin detected in pocket". Played when title screen is displayed.
 - Attract mode shows high score list after game play example.
@@ -79,6 +90,8 @@ Period 4: Oct 28 to Oct 31 - 8 items (41 in total)
 - Background "music" added to attract mode. Different from game play music.
 - Refactor!
 - Eat cake
+
+
 
 
 
