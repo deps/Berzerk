@@ -10,11 +10,14 @@ class TileObject < Chingu::GameObject
 
     raise "Wrong dir: '#{@dir}'" unless @dir or ( @dir != :north and @dir != :south and @dir != :west and @dir != :east)
 
+    # This is UGLY! But it works. If cleaning up this mess: swap the comments in setup_room so
+    # it doesn't use random walls, and use the media/debug.png as a background (PlayState#setup)
+    # then make sure it lines up with the yellow walls. (lower alpha to 128 or something here below)
+
     @scale = 2.5
     if @dir == :north or @dir == :south
       @scale = 3.5
     end
-
 
     @width = 48*@scale
     @height = 10
