@@ -171,8 +171,13 @@ class Droid < Chingu::GameObject
     #end
 
     player = $window.current_game_state.player
-    px = player.x
-    py = player.y
+    if player
+      px = player.x
+      py = player.y
+    else
+      stop
+      return
+    end
     dist = distance(@x,@y, px,py)
     angle_deg = Gosu::angle(px, py, @x, @y)+135
     angle_deg -= 360 if angle_deg > 360

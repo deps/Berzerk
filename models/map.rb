@@ -126,12 +126,33 @@ class Room
     
     
     # Create some droids at random positions
-    5.times do
+    num = 3+rand(7)
+    puts "placing #{num} droids"
+    num.times do
       x = 25 + rand(61)*10 #rand($window.width/$window.factor)
       y = 25 + rand(51)*10 #rand($window.height/$window.factor)
       color = Gosu::Color.new(0xFFFF0000)
-      Droid.create(:x => x, :y => y, :color => color)
+      d = Droid.create(:x => x, :y => y, :color => color)
+      # Don't place them on top of other stuff...
+      ok = true
+      begin
+        ok = true
+        d.each_collision( Chingu::GameObject ) do |me,other|
+          next if me == other
+          # Droid collided with something, do not place it here...
+          #puts "droid #{d}, me #{me} - #{other}"
+          ok = false
+        end
+        if not ok
+          x = 25 + rand(61)*10 #rand($window.width/$window.factor)
+          y = 25 + rand(51)*10 #rand($window.height/$window.factor)
+          d.x = x
+          d.y = y
+          d.update_trait
+        end
+      end until ok
     end    
+    puts "Done"
   end
 
   # Close an exit with a "forefield"

@@ -84,11 +84,6 @@ class PlayState < Chingu::GameState
 
   def show_new_room
     game_objects.remove_all
-
-    @room.destroy if @room
-    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
-    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
-    
     
     if @player
       # Player only switched rooms
@@ -100,6 +95,11 @@ class PlayState < Chingu::GameState
     end
     
     @player = Player.create(:x => @entry_x, :y => @entry_y)
+    
+    @room.destroy if @room
+    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
+    
   end
   
   def update
