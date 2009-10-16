@@ -84,10 +84,11 @@ class PlayState < Chingu::GameState
 
   def show_new_room
     game_objects.remove_all
+    close_door = false
     
     if @player
       # Player only switched rooms
-      @room.close(@opposite_directions[@scroll])      
+      close_door = true
     else
       # Player was dead
       @entry_x = 90
@@ -99,6 +100,7 @@ class PlayState < Chingu::GameState
     @room.destroy if @room
     # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
+    @room.close(@opposite_directions[@scroll]) if close_door
     
   end
   
@@ -215,10 +217,10 @@ class PlayState < Chingu::GameState
     #   end
     # end
     
-    Bullet.each_bounding_box_collision(Droid) do |bullet, droid|
-      next if bullet.owner == droid
+    Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
+      next if bullet.owner == target
       bullet.on_collision
-      droid.on_collision
+      target.on_collision
     end
   end
   
