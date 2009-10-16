@@ -78,7 +78,7 @@ end
 class ExplosionOverlay < Chingu::GameObject
   def initialize(options)
     super
-    @destroy_in = 4
+    @destroy_in = 2
     @image = Image["explosion_radius.png"]
     self.rotation_center(:center_center)
 
