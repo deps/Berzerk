@@ -97,6 +97,13 @@ class Droid < Chingu::GameObject
       next if me == obj
       on_collision
     end
+    
+    if @status != :paused and $window.current_game_state.droid_owned_bullets() < 1 # TODO: number of bullets should be increased when player get more scores
+      
+      @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => [:north,:south,:west,:east,:nw,:ne,:sw,:se][rand(8)], :owner => self )
+      
+    end
+    
   end
   
 end

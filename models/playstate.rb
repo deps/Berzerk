@@ -212,6 +212,7 @@ class PlayState < Chingu::GameState
     end
     
     Bullet.each_bounding_box_collision(Droid) do |bullet, droid|
+      next if bullet.owner == droid
       bullet.on_collision
       droid.on_collision
     end
@@ -273,6 +274,12 @@ class PlayState < Chingu::GameState
       end
     end
     
+  end
+  
+  
+  def droid_owned_bullets
+    bullets = Bullet.all.select { |b| b.class == Bullet }
+    bullets.length
   end
   
   
