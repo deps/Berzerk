@@ -21,13 +21,6 @@ Move completed ones to DONE below.
  
 
 *** Period 2: Oct 14 to Oct 21 
-- Draw droids
---- 4 direction animation, 4 frame idle animation with scanning eye
-- Droids added to the room
---- Randomly placed, using the same seed as the walls of the maze
-- Droids can move
-- Droid can bump into walls, or each other, and explode
-- Droid - player collisions
 - Droids can shoot
 --- Just a placeholder until score is added (see note on score below in period 3)
  
@@ -44,27 +37,11 @@ Move completed ones to DONE below.
  
 
 *** Period 3: Oct 21 to Oct 28 
-- Speech added when leaving a room
---- Record the words one by one, and play them together in the game. Words will be needed later when droids are talking
  
 - Talking droid sounds added
---- Words:
-    coins, detected, in, pocket, intruder, alert, the, humanoid, must, not, escape, chicken, fight, like, a,
-    robot, got, charge, attack, kill, destroy. get. it
 --- Messages:
     "Coins detected in pocket": During attract mode, specifically while showing the high score list.
     "Intruder alert! Intruder alert!": Spoken when Evil Otto appears.
-    "The humanoid must not escape": Heard when the player escapes a room after destroying every robot.
-    "Chicken, fight like a robot": Heard when the player escapes a room without destroying every robot.
-    "Got the Humanoid, got the intruder": Heard when the player loses a life. 
-     (The "Got the intruder" part is about a half-octave higher than the "Got the humanoid" part)
---- Random:
-	"Charge", "Attack", "Kill", "Destroy", or "Get" 
-	followed by "The Humanoid", "The intruder", "it", or "the chicken" 
-	(the last only if the player got the "Chicken, fight like a robot" message from 
-	the previous room), creating sentences such as "Attack it", "Get the Humanoid", "Destroy the intruder", 
-	"Kill the chicken", and so on. The speed and pitch of the phrases vary, from deep and slow, to high and fast.
---- When a message is created, play the words, but display it too using the show_message method.
 
 - Scores added
 - Change droid color and firing ability based on score:
@@ -118,3 +95,27 @@ DONE:
 --- Bullets are removed if touching a wall or is outside the room
 
 - Scrolling messages
+
+- Talking droid sounds added
+--- Words:
+    coins, detected, in, pocket, intruder, alert, the, humanoid, must, not, escape, chicken, fight, like, a,
+    robot, got, charge, attack, kill, destroy. get. it
+--- Messages:
+	"The humanoid must not escape": Heard when the player escapes a room after destroying every robot.
+	"Chicken, fight like a robot": Heard when the player escapes a room without destroying every robot.
+	"Got the Humanoid, got the intruder": Heard when the player loses a life. 
+--- Random:
+	"Charge", "Attack", "Kill", "Destroy", or "Get" 
+	followed by "The Humanoid", "The intruder", "it", or "the chicken" 
+	(the last only if the player got the "Chicken, fight like a robot" message from 
+	the previous room), creating sentences such as "Attack it", "Get the Humanoid", "Destroy the intruder", 
+	"Kill the chicken", and so on. The speed and pitch of the phrases vary, from deep and slow, to high and fast.
+--- When a message is created, play the words, but display it too using the show_message method.
+
+- Draw droids
+--- 4 direction animation, 4 frame idle animation with scanning eye
+- Droids added to the room
+--- Randomly placed, using the same seed as the walls of the maze
+- Droids can move
+- Droid can bump into walls, or each other, and explode
+- Droid - player collisions
