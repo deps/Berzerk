@@ -63,3 +63,14 @@ class Smoke < BigSpark
     super
   end
 end
+
+class Blood < BigSpark
+  def initialize(options)
+    super
+    @friction = 0.45 + rand()/2
+  end
+  def update    
+    @velocity_x *= @friction
+    @velocity_y *= @friction
+  end
+end
