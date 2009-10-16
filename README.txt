@@ -14,18 +14,13 @@ Ordered in intended execution order, but feel free to jump to a later one if des
 Move completed ones to DONE below.
 
 *** Period 1: Oct 7 to Oct 14
-- Draw graphics for the maze
---- floor (code added but not used)
-
-- Refactor!
+Over, one item left and moves to period 2
  
 
 *** Period 2: Oct 14 to Oct 21 
 - Droids can shoot
 --- Just a placeholder until score is added (see note on score below in period 3)
- 
-- Bullets kills player and droids
- 
+  
 - Draw Evil Otto
 --- needs only one frame. Might add another for the bounce
 - Evil Otto appears after a time limit
@@ -33,6 +28,9 @@ Move completed ones to DONE below.
 - Evil Otto moves towards the player
 - Bullets are removed if touching Evil Otto
 - Evil Otto destroys droids and player if he touches them
+- Draw graphics for the maze
+--- floor (code added but not used)
+
 - Refactor!
  
 
@@ -54,7 +52,7 @@ Move completed ones to DONE below.
 	6,000-8,000		Yellow			5
 	8,000-10,000	White			1 fast shot (2x speed)
 	10,000-12,000+	Light Blue		Two fast shots
-- Player death added
+
 - High score list added and name entry
 --- Only use name entry if score was high enough to be on the list
 - Refactor!
@@ -119,3 +117,5 @@ DONE:
 - Droids can move
 - Droid can bump into walls, or each other, and explode
 - Droid - player collisions
+- Bullets kills player and droids
+- Player death added
