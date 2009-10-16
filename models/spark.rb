@@ -74,3 +74,17 @@ class Blood < BigSpark
     @velocity_y *= @friction
   end
 end
+
+class ExplosionOverlay < Chingu::GameObject
+  def initialize(options)
+    super
+    @destroy_in = 4
+    @image = Image["explosion_radius.png"]
+    self.rotation_center(:center_center)
+
+  end
+  def update
+    @destroy_in-=1
+    destroy if @destroy_in <= 0
+  end
+end

@@ -59,7 +59,16 @@ class Droid < Chingu::GameObject
         Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
       end.then do
         Sound["explosion.wav"].play(0.3)
+        ExplosionOverlay.create(:x => @x+11, :y => @y+16)
         50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) } 
+        # Kill nearby droids, bullets or the player
+        Chingu::GameObject.all.each do |obj|
+          next if obj == self or obj.class == TileObject or obj.kind_of? Spark or obj.class == ExplosionOverlay
+          dist = Gosu::distance(@x+11,@y+16, obj.x,obj.y)
+          if dist < 64
+            obj.on_collision
+          end
+        end
         destroy 
         # TODO: kill other droids, laser shots or the player in a explosion if they are too close to this one.
       end
@@ -143,7 +152,8 @@ class Droid < Chingu::GameObject
   
   def update    
     @image = @animation.next!
-    return if @status == :paused
+    player = $window.current_game_state.player
+    return if @status == :paused or !player
     
     
     update_feelers
@@ -170,14 +180,8 @@ class Droid < Chingu::GameObject
     #  @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => [:north,:south,:west,:east,:nw,:ne,:sw,:se][rand(8)], :owner => self )
     #end
 
-    player = $window.current_game_state.player
-    if player
-      px = player.x
-      py = player.y
-    else
-      stop
-      return
-    end
+    px = player.x
+    py = player.y
     dist = distance(@x,@y, px,py)
     angle_deg = Gosu::angle(px, py, @x, @y)+135
     angle_deg -= 360 if angle_deg > 360
