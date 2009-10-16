@@ -11,7 +11,8 @@ class Droid < Chingu::GameObject
   @@blue = Gosu::Color.new(255, 0, 255, 0)
   @@green = Gosu::Color.new(255, 0, 0, 255)
   @@white = Gosu::Color.new(255, 255, 255, 255)
-  
+  @@grey = Gosu::Color.new(255, 127, 127, 127)
+  @@yellow = Gosu::Color.new(255, 255, 255, 0)
   
   def initialize( options )
     super
@@ -41,7 +42,16 @@ class Droid < Chingu::GameObject
     stop
     use_animation(:die)
     die_colors = [@@red, @@blue, @@green]
-    during(1000) { @color = die_colors[rand(die_colors.size)] }.then { destroy }
+    explosion_colors = [@@red, @@yellow, @@grey]
+    during(1000) do
+        @color = die_colors[rand(die_colors.size)] 
+      end.then do
+        Sound["explosion.wav"].play(0.3)
+        50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) } 
+        destroy 
+        # TODO: kill other droids, laser shots or the player in a explosion if they are too close to this one.
+      end
+        
   end
   
   def stop
