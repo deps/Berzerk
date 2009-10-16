@@ -87,12 +87,12 @@ class Room
     # Because if the player walks in a circle (east, north, west, south) the room should look like it did
     # the first time the player was there. But if the player dies, the maze should look completley different.
     if options[:create_seed]
-      puts "Creating new global room seed (#{options[:create_seed]})"
-      @@room_seed = rand(100).to_s 
+      @@room_seed = (1+rand(100))
+      puts "Creating new global room seed (#{@@room_seed})"
     end
-
-    seed = options[:room_x].to_s + @@room_seed + options[:room_y].to_s
-    puts "Using random seed #{seed.to_i}"
+    seed = options[:room_x].to_s + @@room_seed.to_s + options[:room_y].abs.to_s
+    
+    puts "Using random seed #{seed}"
     srand( seed.to_i )
 
     destroy
