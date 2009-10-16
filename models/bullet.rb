@@ -55,7 +55,7 @@ class Bullet < Chingu::GameObject
     when :nw
       move(-1,-1)
     else
-      raise "Bullet is moving in an unknown direction"
+      raise "Bullet is moving in an unknown direction '#{@dir}'"
     end
     
     each_collision(TileObject) do |me, obj|

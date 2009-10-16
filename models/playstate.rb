@@ -1,5 +1,7 @@
 class PlayState < Chingu::GameState
   
+  attr_reader :player, :debugfont
+  
   def setup
     @pop_at = nil
     @room_x = 0
@@ -14,6 +16,8 @@ class PlayState < Chingu::GameState
     @lives = 3
     
     self.input = { :escape => :exit }
+    
+    @debugfont = Gosu::Font.new($window, default_font_name, 20)
     
     
     # Original screenshot, used to compare with my walls
@@ -197,19 +201,19 @@ class PlayState < Chingu::GameState
       end
     end
     
-    if @player
-      #
-      # Let's have some droids walking towards the player
-      # The more droids the lazier
-      #
-      if rand(Droid.size * 10) == 0
-        # Fins first scanning robot and have it walk!
-        scanning_droids = Droid.all.select { |droid| droid.current_animation == :scan }
-        if (droid = scanning_droids.first)
-          droid.walk_towards(@player.x, @player.y)  
-        end
-      end
-    end
+    # if @player
+    #   #
+    #   # Let's have some droids walking towards the player
+    #   # The more droids the lazier
+    #   #
+    #   if rand(Droid.size * 10) == 0
+    #     # Fins first scanning robot and have it walk!
+    #     scanning_droids = Droid.all.select { |droid| droid.current_animation == :scan }
+    #     if (droid = scanning_droids.first)
+    #       droid.walk_towards(@player.x, @player.y)  
+    #     end
+    #   end
+    # end
     
     Bullet.each_bounding_box_collision(Droid) do |bullet, droid|
       next if bullet.owner == droid

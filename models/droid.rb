@@ -35,13 +35,22 @@ class Droid < Chingu::GameObject
     self.factor = $window.factor
     @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.factor, @height*$window.factor)
   
-    @max_speed = 1
+    @max_speed = 0.25
+    
+    # "feelers" for the droid to see if there is a wall nearby
+    # The rects are small, so it is possible for the droid to be wrong, and therefore walk into it.
+    @feel_left = Chingu::Rect.new(@x-16,@y+16, 2,2)
+    @feel_right = Chingu::Rect.new(@x+40,@y+16, 2,2)
+    @feel_up = Chingu::Rect.new(@x+11,y-16, 2,2)
+    @feel_down = Chingu::Rect.new(@x+11,@y+50,2,2)
+    @wall = {} # :left, :right, :up, :down. true or false if a wall is nearby
   end
   
   def on_collision
     return if @current_animation == :die
-    @status = :paused
     stop
+    @status = :paused
+    #puts "Droid dying, status: #{@status}"
     use_animation(:die)
     die_colors = [@@red, @@blue, @@green]
     explosion_colors = [@@red, @@yellow, @@grey]
@@ -58,20 +67,34 @@ class Droid < Chingu::GameObject
   end
   
   def stop
+    #puts "Stopping"
     @velocity_x = 0
     @velocity_y = 0
+    return if @status == :paused
+    
+    #puts "Scan"
     use_animation(:scan)
+    @status = :scan
   end
   
   def walk_towards(x, y)
     return if @current_animation == :die or @status == :paused
     
     # Set correct velocity so droid walks towards x, y (well, somewhat towards it)
-    @velocity_x  = (self.x > x) ? -@max_speed : @max_speed
-    @velocity_y  = (self.y > y) ? -@max_speed : @max_speed
+    dx = self.x - x
+    dy = self.y - y
     
-    @velocity_x  = 0 if (self.x - x).abs < 40
-    @velocity_y  = 0 if (self.y - y).abs < 40
+    if rand(2) == 0
+      @velocity_x  = ((self.x > x) ? -@max_speed : @max_speed) if dx != 0
+    else
+      @velocity_y  = ((self.y > y) ? -@max_speed : @max_speed) if dy != 0
+    end
+    #@velocity_x  = 0 if (self.x - x).abs < 40
+    #@velocity_y  = 0 if (self.y - y).abs < 40
+    
+    @velocity_x = 0 if (@wall[:left] and @velocity_x < 0) or (@wall[:right] and @velocity_x > 0)
+    @velocity_y = 0 if (@wall[:up] and @velocity_y < 0) or (@wall[:down] and @velocity_y > 0)
+    
     
     after(1000 + rand(2000)) { stop }
   end
@@ -83,25 +106,117 @@ class Droid < Chingu::GameObject
     @image = @animation.first
   end
   
+  def update_feelers
+    # Reposition the feelers
+    @feel_left.x = @x-16
+    @feel_left.y = @y+16
+
+    @feel_right.x = @x+40
+    @feel_right.y = @y+16
+
+    @feel_up.x = @x+11
+    @feel_up.y = @y-16
+
+    @feel_down.x = @x+11
+    @feel_down.y = @y+50
+    
+    # Reset past knowledge of walls
+    @wall[:left] = false
+    @wall[:right] = false
+    @wall[:up]= false
+    @wall[:down]= false
+    # Find walls
+    TileObject.all.each do |tile|
+      bb = tile.bounding_box
+      @wall[:left] ||= bb.collide_rect? @feel_left
+      @wall[:right] ||= bb.collide_rect? @feel_right
+      @wall[:up] ||= bb.collide_rect? @feel_up
+      @wall[:down] ||= bb.collide_rect? @feel_down
+    end
+    
+    
+    #@feel_right = Chingu::Rect.new(@x+40,@y+16, 2,2)
+    #@feel_up = Chingu::Rect.new(@x+11,y-16, 2,2)
+    #@feel_down = Chingu::Rect.new(@x+11,@y+50,2,2)
+    
+  end
+  
   def update    
     @image = @animation.next!
+    return if @status == :paused
     
-    use_animation(:left)  if @velocity_x < 0 and @velocity_y == 0
-    use_animation(:right) if @velocity_x > 0 and @velocity_y == 0
-    use_animation(:down)  if @velocity_y > 0
-    use_animation(:up)    if @velocity_y < 0
+    
+    update_feelers
+        
+    if @wall.values.include? true
+      # Almost bumped into a wall there...      
+      @velocity_x = 0 if (@wall[:left] and @velocity_x < 0) or (@wall[:right] and @velocity_x > 0)
+      @velocity_y = 0 if (@wall[:up] and @velocity_y < 0) or (@wall[:down] and @velocity_y > 0)
+      
+      #stop
+    end
 
-    #return if @status == :paused
-    
     each_collision([TileObject, Droid]) do |me, obj|
       next if me == obj
       on_collision
     end
     
-    if @status != :paused and $window.current_game_state.droid_owned_bullets() < 1 # TODO: number of bullets should be increased when player get more scores
+    use_animation(:left)  if @velocity_x < 0 and @velocity_y == 0
+    use_animation(:right) if @velocity_x > 0 and @velocity_y == 0
+    use_animation(:down)  if @velocity_y > 0
+    use_animation(:up)    if @velocity_y < 0
+    
+    #if @status != :paused and $window.current_game_state.droid_owned_bullets() < 1 # TODO: number of bullets should be increased when player get more scores      
+    #  @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => [:north,:south,:west,:east,:nw,:ne,:sw,:se][rand(8)], :owner => self )
+    #end
+
+    player = $window.current_game_state.player
+    px = player.x
+    py = player.y
+    dist = distance(@x,@y, px,py)
+    angle_deg = Gosu::angle(px, py, @x, @y)+135
+    angle_deg -= 360 if angle_deg > 360
+    angle_deg += 360 if angle_deg < 0
+    angle = [:east,:se,:south,:sw,:west,:nw,:north,:ne][(angle_deg/360)*8]
+    dx = (@x-px).abs
+    dy = (@y-py).abs
+    
+    case @status
+    when :scan
+      if rand(10) == 5
+        #puts "#{angle_deg}, #{angle}"
+        @status = :shoot
+      elsif dist < 300 and rand(4) == 0
+        walk_towards(px,py)
+        @status = :walk
+        #puts "Walking"
+      end
       
-      @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => [:north,:south,:west,:east,:nw,:ne,:sw,:se][rand(8)], :owner => self )
       
+      
+    when :shoot
+      if  $window.current_game_state.droid_owned_bullets < 1
+        @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self )
+        #puts "Shooting"
+      end
+      @status = :idle
+      after(500+rand(1500)) { @status = :scan }
+    end
+    
+  end
+  
+  def draw
+    super
+    #$window.current_game_state.debugfont.draw("Status: #{@status}", @x,@y,300)
+    
+    wc = Gosu::Color.new(255,255,0,0)
+    nwc = Gosu::Color.new(255,0,255,0)
+    
+    [[@feel_left,:left],[@feel_right,:right],[@feel_up,:up],[@feel_down,:down]].each do |pair|
+      r = pair[0]
+      hit = @wall[pair[1]]
+      c = (hit ? wc : nwc)
+      $window.draw_quad( r.x,r.y,c, r.x+r.w,r.y,c, r.x+r.w,r.y+r.h,c, r.x,r.y+r.h,c )
     end
     
   end
