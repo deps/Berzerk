@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'opengl'
-require 'Chingu'
+require 'chingu'
+#require '../chingu/lib/chingu'
 include Gosu
 
 def media_path(file)
