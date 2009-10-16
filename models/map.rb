@@ -83,8 +83,8 @@ class Room
     
     # Create some droids at random positions
     5.times do
-      x = rand($window.width/$window.factor)
-      y = rand($window.height/$window.factor)
+      x = 25 + rand(61)*10 #rand($window.width/$window.factor)
+      y = 25 + rand(51)*10 #rand($window.height/$window.factor)
       color = Gosu::Color.new(0xFFFF0000)
       Droid.create(:x => x, :y => y, :color => color)
     end

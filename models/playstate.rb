@@ -29,7 +29,6 @@ class PlayState < Chingu::GameState
     @scroll = nil
     @scroll_steps = 0
     
-    show_message("Kill everything, and stay alive.")
     
   end
   

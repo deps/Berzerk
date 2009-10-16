@@ -40,10 +40,26 @@ class BigSpark < Spark
     
     super
     
-    @size = rand(4)
+    @size = 1+rand(3)
   end
   
   def draw
     $window.draw_quad(@x-@size, @y-@size, @color, @x+@size, @y-@size, @color, @x+@size, @y+@size, @color, @x-@size, @y+@size, @color)
+  end
+end
+
+class Smoke < BigSpark
+  def initialize(options)
+    super
+    @max_size = 2+rand(4)
+    @size = 0
+    @velocity_y = -0.1
+  end
+  
+  def update
+    @size += 0.25 if @size < @max_size
+    @velocity_x *= 0.85
+    @velocity_y *= 1.25
+    super
   end
 end

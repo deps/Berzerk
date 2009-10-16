@@ -58,20 +58,21 @@ class Player < Chingu::GameObject
     return if @current_animation == :die
     self.input = {}
     use_animation(:die)
+    @die_sound = Sound["electrocute.wav"].play(0.3,1,true)
     
     after(1000) do 
+      @die_sound.stop()
+      Sound["explosion.wav"].play(0.3)
       hide!
-      spawn_gibs 
+      color = Gosu::Color.new(255,255,0,0)
+      50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => color.dup ) } 
       $window.current_game_state.show_message("got the humanoid! got the intruder!")
     end.then do
       after(3000) { destroy }
     end
     
   end
-  
-  def spawn_gibs
-    puts "Pretend that blood and gore is everywhere. And some smoke"
-  end
+
     
   def move_left
     @movement[:west] = true
@@ -157,7 +158,7 @@ class Player < Chingu::GameObject
     end
 
     # each_collision([TileObject, Enemy, Blah]) do |me, obj|  <-- masscolide syntax
-    each_collision(TileObject) do |me, obj|
+    each_collision([TileObject, Droid]) do |me, obj|
       on_collision
     end
 

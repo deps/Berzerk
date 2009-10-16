@@ -39,12 +39,15 @@ class Droid < Chingu::GameObject
   end
   
   def on_collision
+    return if @current_animation == :die
+    @status = :paused
     stop
     use_animation(:die)
     die_colors = [@@red, @@blue, @@green]
     explosion_colors = [@@red, @@yellow, @@grey]
     during(1000) do
         @color = die_colors[rand(die_colors.size)] 
+        Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
       end.then do
         Sound["explosion.wav"].play(0.3)
         50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) } 
@@ -61,7 +64,7 @@ class Droid < Chingu::GameObject
   end
   
   def walk_towards(x, y)
-    return if @current_animation == :die
+    return if @current_animation == :die or @status == :paused
     
     # Set correct velocity so droid walks towards x, y (well, somewhat towards it)
     @velocity_x  = (self.x > x) ? -@max_speed : @max_speed
@@ -81,12 +84,19 @@ class Droid < Chingu::GameObject
   end
   
   def update    
-    use_animation(:left)  if @velocity_x < 0
-    use_animation(:right) if @velocity_x > 0
+    @image = @animation.next!
+    
+    use_animation(:left)  if @velocity_x < 0 and @velocity_y == 0
+    use_animation(:right) if @velocity_x > 0 and @velocity_y == 0
     use_animation(:down)  if @velocity_y > 0
     use_animation(:up)    if @velocity_y < 0
+
+    #return if @status == :paused
     
-    @image = @animation.next!
+    each_collision([TileObject, Droid]) do |me, obj|
+      next if me == obj
+      on_collision
+    end
   end
   
 end
