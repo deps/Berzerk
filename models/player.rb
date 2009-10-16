@@ -66,7 +66,7 @@ class Player < Chingu::GameObject
       hide!
       color = Gosu::Color.new(255,255,0,0)
       50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => color.dup ) } 
-      $window.current_game_state.show_message("got the humanoid! got the intruder!")
+      $window.current_game_state.droid_speech("got the humanoid got the intruder")
     end.then do
       after(3000) { destroy }
     end

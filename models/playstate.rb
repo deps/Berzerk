@@ -21,10 +21,17 @@ class PlayState < Chingu::GameState
     #@background = Gosu::Image.new($window, "media/debug.png")
     
     @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
+    
     @messages = []
     @current_message = nil
     @message_x = 0
     @message_img = nil
+    
+    @sample_queue = []
+    @current_samples = []
+    @current_word = nil
+    @sample_speed = 1.0
+    @chatter_time = Time.now+5+rand(10)
     
     @scroll = nil
     @scroll_steps = 0
@@ -64,11 +71,11 @@ class PlayState < Chingu::GameState
     @entry_x = ex
     @entry_y = ey
     
-    msg = "Chicken, fight like a robot!"
+    msg = "chicken fight like a robot"
     if game_objects_of_class( Droid ).length == 0
-      msg = "the humanoid must not escape!"
+      msg = "the humanoid must not escape"
     end
-    show_message(msg)    
+    droid_speech(msg)    
   end
 
   def show_new_room
@@ -168,7 +175,12 @@ class PlayState < Chingu::GameState
       end
     end
   
-    # Update messages
+    # Update messages    
+    if Time.now >= @chatter_time
+      random_droid_chatter
+      @chatter_time = Time.now + 5+rand(20)
+    end
+    update_speak
     if @message_img
       @message_x -= 10
       if @message_x <= @message_remove_pos
@@ -223,5 +235,45 @@ class PlayState < Chingu::GameState
     #puts "Message '#{msg}' added to message queue"
     #puts "Messages in queue: #{@messages.length}"
   end
+  
+  def droid_speech( message )
+    show_message message
+    
+    words = message.split(" ")
+    samples = []
+    words.each do |w|
+      samples << "word_#{w}.wav"
+    end
+    
+    speak samples
+  end
+  
+  def speak( samples )
+    @sample_queue << samples
+  end
+  
+  def random_droid_chatter
+    first = ["charge", "attack", "kill", "destroy", "get"]
+    second = ["the humanoid", "the intruder", "it", "the chicken"]
+    droid_speech( first[rand(first.length)]+" "+second[rand(second.length)] )
+  end
+  
+  def update_speak
+    if @current_samples.empty? and @current_word == nil
+      return if @sample_queue.length == 0
+      @current_samples = @sample_queue.shift
+      @sample_speed = 0.75 + rand(0.5)
+    end
+    
+    if @current_word == nil
+      @current_word = Sound[@current_samples.shift].play(0.3, @sample_speed)
+    else
+      unless @current_word.playing?
+        @current_word = nil
+      end
+    end
+    
+  end
+  
   
 end
