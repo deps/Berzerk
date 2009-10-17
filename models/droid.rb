@@ -214,20 +214,20 @@ class Droid < Chingu::GameObject
     
   end
   
-  def draw
-    super
-    #$window.current_game_state.debugfont.draw("Status: #{@status}", @x,@y,300)
-    
-    wc = Gosu::Color.new(255,255,0,0)
-    nwc = Gosu::Color.new(255,0,255,0)
-    
-    [[@feel_left,:left],[@feel_right,:right],[@feel_up,:up],[@feel_down,:down]].each do |pair|
-      r = pair[0]
-      hit = @wall[pair[1]]
-      c = (hit ? wc : nwc)
-      $window.draw_quad( r.x,r.y,c, r.x+r.w,r.y,c, r.x+r.w,r.y+r.h,c, r.x,r.y+r.h,c )
-    end
-    
-  end
+  # def draw
+  #   super
+  #   #$window.current_game_state.debugfont.draw("Status: #{@status}", @x,@y,300)
+  #   
+  #   wc = Gosu::Color.new(255,255,0,0)
+  #   nwc = Gosu::Color.new(255,0,255,0)
+  #   
+  #   [[@feel_left,:left],[@feel_right,:right],[@feel_up,:up],[@feel_down,:down]].each do |pair|
+  #     r = pair[0]
+  #     hit = @wall[pair[1]]
+  #     c = (hit ? wc : nwc)
+  #     $window.draw_quad( r.x,r.y,c, r.x+r.w,r.y,c, r.x+r.w,r.y+r.h,c, r.x,r.y+r.h,c )
+  #   end
+  #   
+  # end
   
 end
