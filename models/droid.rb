@@ -157,7 +157,7 @@ class Droid < Chingu::GameObject
       #stop
     end
 
-    each_collision([TileObject, Droid]) do |me, obj|
+    each_collision([TileObject, Droid, Otto]) do |me, obj|
       next if me == obj
       on_collision
     end
