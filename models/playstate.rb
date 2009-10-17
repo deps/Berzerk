@@ -135,8 +135,9 @@ class PlayState < Chingu::GameState
   end
   
   def set_otto_timer( num_droids )
-    @otto_timer = Time.now + ( num_droids * 2 )
-    puts "Otto will appear at #{@otto_timer} (in #{num_droids * 2} seconds, based on #{num_droids} droids)"    
+    delay = num_droids * 3
+    @otto_timer = Time.now + delay
+    puts "Otto will appear at #{@otto_timer} (in #{delay} seconds, based on #{num_droids} droids)"    
   end
   
   def pause_game_objects
