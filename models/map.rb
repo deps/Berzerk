@@ -127,32 +127,24 @@ class Room
     
     # Create some droids at random positions
     num = 3+rand(7)
-    puts "placing #{num} droids"
-    num.times do
-      x = 25 + rand(61)*10 #rand($window.width/$window.factor)
-      y = 25 + rand(51)*10 #rand($window.height/$window.factor)
-      color = Gosu::Color.new(0xFFFF0000)
+    
+    spawnpos = [
+      [6,6],[18,6],[42,6],[54,6],
+      [18,19],[30,19],[42,6],
+      [6,32],[18,32],[42,32],[54,32]
+      ]
+    
+    color = Gosu::Color.new(0xFFFF0000)
+    
+    num.times do |i|
+      pos = spawnpos.delete_at(rand(spawnpos.length))
+      puts "Droid #{i} at #{pos.join(',')}"
+      x = 25+(pos[0] + Gosu::random(-4,4))*10
+      y = 25+(pos[1] + Gosu::random(-4,4))*10
+      puts "real pos #{x},#{y}"
       d = Droid.create(:x => x, :y => y, :color => color)
-      # Don't place them on top of other stuff...
-      ok = true
-      begin
-        ok = true
-        d.each_collision( Chingu::GameObject ) do |me,other|
-          next if me == other
-          # Droid collided with something, do not place it here...
-          #puts "droid #{d}, me #{me} - #{other}"
-          ok = false
-        end
-        if not ok
-          x = 25 + rand(61)*10 #rand($window.width/$window.factor)
-          y = 25 + rand(51)*10 #rand($window.height/$window.factor)
-          d.x = x
-          d.y = y
-          d.update_trait
-        end
-      end until ok
-    end    
-    puts "Done"
+    end
+
   end
 
   # Close an exit with a "forefield"
