@@ -65,7 +65,6 @@ class TileObject < Chingu::GameObject
     #$window.fill_rect(@bounding_box, Color.new(128,255,0,0))
   end
 
-
 end
 
 class Room 

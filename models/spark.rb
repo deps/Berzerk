@@ -43,6 +43,9 @@ class BigSpark < Spark
     @size = 1+rand(3)
   end
   
+  def on_collision
+  end
+  
   def draw
     $window.draw_quad(@x-@size, @y-@size, @color, @x+@size, @y-@size, @color, @x+@size, @y+@size, @color, @x-@size, @y+@size, @color)
   end
@@ -75,16 +78,22 @@ class Blood < BigSpark
   end
 end
 
-class ExplosionOverlay < Chingu::GameObject
+class Explosion < Chingu::GameObject
+  has_trait :timer
+  
   def initialize(options)
     super
-    @destroy_in = 2
-    @image = Image["explosion_radius.png"]
     self.rotation_center(:center_center)
-
-  end
-  def update
-    @destroy_in-=1
-    destroy if @destroy_in <= 0
-  end
+    
+    @image = Image["explosion_radius.png"]
+    Sound["explosion.wav"].play(0.3)
+    
+    Chingu::GameObject.all.each do |obj|
+      if Gosu::distance(@x+11,@y+16, obj.x,obj.y) < 65
+        obj.on_collision  if obj.respond_to?(:on_collision)
+      end
+    end
+    
+    after(50) { destroy }
+  end  
 end
