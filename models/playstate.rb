@@ -8,9 +8,9 @@ class PlayState < Chingu::GameState
     @room_y = 0
     @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
     
-    @player = Player.create
-    @room.destroy if @room
-    @room = Room.new(:room_x => 0, :room_y => 0, :create_seed => true)
+    # @player = Player.create
+    # @room.destroy if @room
+    # @room = Room.new(:room_x => 0, :room_y => 0, :create_seed => true)
     #@room.close(@opposite_directions[@player.moving_dir])
         
     @lives = 3
@@ -18,8 +18,7 @@ class PlayState < Chingu::GameState
     self.input = { :escape => :exit }
     
     @debugfont = Gosu::Font.new($window, default_font_name, 20)
-    
-    
+        
     # Original screenshot, used to compare with my walls
     @background = nil
     #@background = Gosu::Image.new($window, "media/debug.png")
@@ -41,7 +40,9 @@ class PlayState < Chingu::GameState
     @scroll = nil
     @scroll_steps = 0
     
-    set_otto_timer
+    #set_otto_timer
+    
+    show_new_room
     
     
   end
@@ -108,13 +109,32 @@ class PlayState < Chingu::GameState
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
     @room.close(@opposite_directions[@scroll]) if close_door
     
-    set_otto_timer
+    # Create some droids at random positions
+    num = 3+rand(7)
+    
+    spawnpos = [
+      [6,9],[18,9],[42,9],[54,9],
+      [18,24],[30,24],[42,24],
+      [6,40],[18,40],[42,40],[54,40]
+      ]
+    
+    color = Gosu::Color.new(0xFFFF0000)
+    
+    num.times do |i|
+      pos = spawnpos.delete_at(rand(spawnpos.length))
+      pos[0] += Gosu::random(-3,3)
+      pos[1] += Gosu::random(-3,3)
+      x = 25+(pos[0])*10
+      y = 25+(pos[1])*10
+      d = Droid.create(:x => x, :y => y, :color => color)
+    end
+        
+    set_otto_timer( num )
   end
   
-  def set_otto_timer
-    droids = Droid.all.length
-    @otto_timer = Time.now + ( droids * 2 )
-    puts "Otto will appear at #{@otto_timer} (in #{droids * 2} seconds, based on #{droids} droids)"    
+  def set_otto_timer( num_droids )
+    @otto_timer = Time.now + ( num_droids * 2 )
+    puts "Otto will appear at #{@otto_timer} (in #{num_droids * 2} seconds, based on #{num_droids} droids)"    
   end
   
   def update
