@@ -169,52 +169,66 @@ class PlayState < Chingu::GameState
     when (4501..6000)
       color = Gosu::Color.new(0xFFFF00FF)
       bullets = 4
+      speed = 0.5
     when (6001..8000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 5
+      speed = 0.5
     when (8001..10000)
       color = Gosu::Color.new(0xFFFFFFFF)
       bullets = 1
       supershot = true
+      speed = 0.5
     when (10001..12000)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 2
       supershot = true
+      speed = 0.5
       
     # Color cycle repeats
     when (12001..13000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 2
       supershot = true
+      speed = 0.75
     when (13001..14000)
       color = Gosu::Color.new(0xFFFF0000)
       bullets = 2
       supershot = true
+      speed = 0.75
     when (14001..15000)
       color = Gosu::Color.new(0xFF7777FF)      
       bullets = 2
       supershot = true
+      speed = 0.75
     when (15001..16000)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 2
       supershot = true
+      speed = 1
     when (16001..17000)
       color = Gosu::Color.new(0xFFFF00FF)
       bullets = 2
       supershot = true
+      speed = 1.25
     when (17001..18000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 2
       supershot = true
+      speed = 1.5
     when (18001..19000)
       color = Gosu::Color.new(0xFFFFFFFF)
       bullets = 2
       supershot = true
+      speed = 1.75
     else
       color = Gosu::Color.new(0xFF77FF00)      
       bullets = 2
       supershot = true
+      speed = 2.0
     end
+    
+    puts "Droid attributes - Bullets: #{bullets}, supershot: #{supershot}, speed: #{speed}"
     
     @droids_in_room.times do |i|
       pos = spawnpos.delete_at(rand(spawnpos.length))
