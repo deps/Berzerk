@@ -14,8 +14,16 @@ class MainMenuState < Chingu::GameState
       :enter => :go,
     }
     
+    @amount_of_falling_droids = 8
+    @amount_of_falling_droids.times do |nr|
+      MenuDroid.create(:x => rand($window.width), :y => nr * 150 - 150)
+    end
   end
 
+  def spawn_menu_droid
+    MenuDroid.create(:x => rand($window.width), :y => 1)
+  end
+  
   def move_up
     @current -= 1
     @current = @options.length-1 if @current < 0
@@ -31,7 +39,15 @@ class MainMenuState < Chingu::GameState
     self.send(met)
   end
 
+  def update
+    super
+    if MenuDroid.size < @amount_of_falling_droids
+      MenuDroid.create(:x => rand($window.width), :y => -200)
+    end
+  end
+  
   def draw
+    super
     @options.each_with_index do |option, i|
       y = 300+(i*50)
       if i == @current
@@ -52,4 +68,31 @@ class MainMenuState < Chingu::GameState
     self.close
   end
   
+end
+
+
+class MenuDroid < Chingu::GameObject
+  has_trait :velocity
+  
+  def initialize(options)
+    super
+    
+    colors = [0xFFFFFF00, 0xFFFF0000, 0xFF7777FF, 0xFF77FF00]
+    @color = Gosu::Color.new(colors[rand(colors.size)])
+    @color.alpha = 30
+    
+    @full_animation = Chingu::Animation.new(:file => media_path("droid.bmp"), :size => [11,16], :delay => 300).retrofy
+    @animation = @full_animation[0..5]  # Pick out the scanning-frames
+    self.factor = $window.factor * 8
+    @rotation_rate = 0.2
+    self.velocity_y = 1
+    update
+  end
+  
+  def update
+    @image = @animation.next!
+    @angle += @rotation_rate
+    
+    destroy if @y > $window.height + 200
+  end
 end
