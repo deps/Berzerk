@@ -154,7 +154,7 @@ class Droid < Chingu::GameObject
   def update    
     @image = @animation.next!
     player = $window.current_game_state.player
-    return if @status == :paused or !player
+    return if @status == :paused or !player or @current_animation == :die
     
     
     update_feelers
