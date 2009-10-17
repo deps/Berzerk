@@ -129,9 +129,9 @@ class Room
     num = 3+rand(7)
     
     spawnpos = [
-      [6,6],[18,6],[42,6],[54,6],
-      [18,19],[30,19],[42,6],
-      [6,32],[18,32],[42,32],[54,32]
+      [6,9],[18,9],[42,9],[54,9],
+      [18,24],[30,24],[42,24],
+      [6,40],[18,40],[42,40],[54,40]
       ]
     
     color = Gosu::Color.new(0xFFFF0000)
@@ -139,8 +139,10 @@ class Room
     num.times do |i|
       pos = spawnpos.delete_at(rand(spawnpos.length))
       puts "Droid #{i} at #{pos.join(',')}"
-      x = 25+(pos[0] + Gosu::random(-4,4))*10
-      y = 25+(pos[1] + Gosu::random(-4,4))*10
+      pos[0] += Gosu::random(-4,4)
+      pos[1] += Gosu::random(-4,4)
+      x = 25+(pos[0])*10
+      y = 25+(pos[1])*10
       puts "real pos #{x},#{y}"
       d = Droid.create(:x => x, :y => y, :color => color)
     end
