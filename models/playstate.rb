@@ -26,6 +26,8 @@ class PlayState < Chingu::GameState
     
     @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
     
+    @life_icon = Image["life_icon.png"]
+    
     @messages = []
     @current_message = nil
     @message_x = 0
@@ -237,8 +239,7 @@ class PlayState < Chingu::GameState
         #create_player
         show_new_room
       else
-        @pop_at = Time.now + 2
-        puts "Game Over at #{@pop_at} (is not #{Time.now})"
+        @pop_at = Time.now + 3
         show_message("game over")
       end
     end
@@ -251,7 +252,7 @@ class PlayState < Chingu::GameState
     update_speak
     
     if @message_img
-      @message_x -= 10
+      @message_x -= 15
       if @message_x <= @message_remove_pos
         @current_message = nil
         @message_img = nil
@@ -302,6 +303,9 @@ class PlayState < Chingu::GameState
     # Score
     @font.draw("#{@score}",660,80,210)
     # Lifes
+    @lives.times do |i|
+      @life_icon.draw(660+(i*32), 30, 210)
+    end
   end
   
   def show_message( msg )
