@@ -123,27 +123,6 @@ class Room
     # close( :north )
     # close( :south )
     
-    
-    # Create some droids at random positions
-    num = 3+rand(7)
-    
-    spawnpos = [
-      [6,9],[18,9],[42,9],[54,9],
-      [18,24],[30,24],[42,24],
-      [6,40],[18,40],[42,40],[54,40]
-      ]
-    
-    color = Gosu::Color.new(0xFFFF0000)
-    
-    num.times do |i|
-      pos = spawnpos.delete_at(rand(spawnpos.length))
-      pos[0] += Gosu::random(-3,3)
-      pos[1] += Gosu::random(-3,3)
-      x = 25+(pos[0])*10
-      y = 25+(pos[1])*10
-      d = Droid.create(:x => x, :y => y, :color => color)
-    end
-
   end
 
   # Close an exit with a "forefield"
