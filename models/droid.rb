@@ -52,23 +52,29 @@ class Droid < Chingu::GameObject
   end
   
   def on_collision
-    return if @current_animation == :die
+    if @current_animation == :die
+      explode
+      return
+    end
+    
     stop
     @status = :paused
     #puts "Droid dying, status: #{@status}"
     use_animation(:die)
     die_colors = [@@red, @@blue, @@green]
-    explosion_colors = [@@red, @@yellow, @@grey]
-    during(1000) do
+    during(3000) do
         @color = die_colors[rand(die_colors.size)] 
         Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
     end.then do
-      $window.current_game_state.get_score 50
-      Explosion.create(:x => @x+11, :y => @y+16)        
-      50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) }         
-      destroy 
-      # TODO: kill other droids, laser shots or the player in a explosion if they are too close to this one.
+      explode
     end
+  end
+  
+  def explode
+    $window.current_game_state.get_score 50
+    Explosion.create(:x => @x+11, :y => @y+16, :owner => self )        
+    50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => [@@red, @@yellow, @@grey] ) }         
+    destroy     
   end
   
   def stop

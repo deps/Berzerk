@@ -83,12 +83,14 @@ class Explosion < Chingu::GameObject
   
   def initialize(options)
     super
+    @owner = options[:owner]
     self.rotation_center(:center_center)
     
     @image = Image["explosion_radius.png"]
     Sound["explosion.wav"].play(0.3)
     
     Chingu::GameObject.all.each do |obj|
+      next if obj == @owner
       if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 65
         obj.on_collision  if obj.respond_to?(:on_collision)
       end
