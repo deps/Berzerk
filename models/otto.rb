@@ -19,7 +19,7 @@ class Otto < Chingu::GameObject
     @height = 12
 
     @image = Image["otto.png"]
-    #self.rotation_center(:center_center)    
+    self.rotation_center(:top_left)   
     self.factor = $window.factor
     
     @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.factor, @height*$window.factor)

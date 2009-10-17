@@ -14,7 +14,7 @@ class Bullet < Chingu::GameObject
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = @@red.dup
     @speed = options[:supershot] ? 8.0 : 4.0
-    @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
+    @bounding_box = Chingu::Rect.new([@x, @y, 3,3])
     Sound["laser.wav"].play(0.3)
   end
   
@@ -58,7 +58,8 @@ class Bullet < Chingu::GameObject
       raise "Bullet is moving in an unknown direction '#{@dir}'"
     end
     
-    each_collision([TileObject, Otto]) do |me, obj|
+    each_collision([TileObject, Otto, Bullet]) do |me, obj|
+      next if me == obj
       on_collision
     end
     
