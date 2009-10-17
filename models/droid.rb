@@ -72,8 +72,7 @@ class Droid < Chingu::GameObject
   
   def explode
     $window.current_game_state.get_score 50
-    Explosion.create(:x => @x+11, :y => @y+16, :owner => self )        
-    50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => [@@red, @@yellow, @@grey] ) }         
+    Explosion.create(:x => @x+11, :y => @y+16, :owner => self )
     destroy     
   end
   

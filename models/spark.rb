@@ -82,6 +82,10 @@ class Explosion < Chingu::GameObject
   has_trait :timer
   
   def initialize(options)
+    @@red ||= Gosu::Color.new(255, 255, 0, 0)
+    @@grey ||= Gosu::Color.new(255, 127, 127, 127)
+    @@yellow ||= Gosu::Color.new(255, 255, 255, 0)
+    
     super
     @owner = options[:owner]
     self.rotation_center(:center_center)
@@ -96,6 +100,8 @@ class Explosion < Chingu::GameObject
       end
     end
     
+    50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => [@@red, @@yellow, @@grey] ) }         
+        
     after(50) { destroy }
   end  
 end
