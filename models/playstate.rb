@@ -87,6 +87,8 @@ class PlayState < Chingu::GameState
       @chicken_taunt_used = true
     end
     droid_speech(msg)    
+    
+    pause_game_objects
   end
 
   def show_new_room
@@ -135,6 +137,12 @@ class PlayState < Chingu::GameState
   def set_otto_timer( num_droids )
     @otto_timer = Time.now + ( num_droids * 2 )
     puts "Otto will appear at #{@otto_timer} (in #{num_droids * 2} seconds, based on #{num_droids} droids)"    
+  end
+  
+  def pause_game_objects
+    game_objects.each do |obj|
+      obj.pause!
+    end
   end
   
   def update
