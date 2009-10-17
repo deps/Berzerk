@@ -44,7 +44,6 @@ class TileObject < Chingu::GameObject
     end
 
     alpha = 255 # When debugging, I lower this one to see if walls overlap
-    @glow = Gosu::Color.new(96,0,0,255)
     case @walltype
     when 2 # door
       # TODO: door color based on color of the droids
@@ -57,12 +56,7 @@ class TileObject < Chingu::GameObject
   end
 
   def draw
-    #super
-
-    #$window.draw_quad(@x-5, @y-5, @glow, @x+@width+5, @y-5, @glow, @x+@width+5, @y+@height+5, @glow, @x-5, @y+@height+5, @glow)
     $window.draw_quad(@x, @y, @c, @x+@width, @y, @c, @x+@width, @y+@height, @c, @x, @y+@height, @c)
-
-    #$window.fill_rect(@bounding_box, Color.new(128,255,0,0))
   end
 
 end
@@ -72,9 +66,7 @@ class Room
   # :room_x and :room_y are used to seed the random number generator
   # The room should look the same when the player reenters the room
   def initialize( options = {} )
-
     @tiles = []
-
     setup_room(options)      
   end
 
@@ -152,14 +144,8 @@ class Room
     end
 
     create_wall(x,y, dir, tile)
-
   end    
 
-  # Returns false if there isn't a wall on this tile
-  # If it is, it returns the tile number
-  def wall?(x,y)
-    @tilemap[x][y]
-  end
 
   def destroy
     @tiles.each do |t|
@@ -172,7 +158,6 @@ class Room
   private    
 
   def create_border()
-
     create_wall(0,0,   :east)
     create_wall(12,0,  :east)
     create_wall(37,0,  :east)
@@ -187,7 +172,6 @@ class Room
     create_wall( 0,34, :south )
     create_wall( 61,1 ,:south )
     create_wall( 61,34,:south )
-
   end
 
   def create_wall( x,y, angle, type=1 )
@@ -198,11 +182,8 @@ class Room
   end
 
   def randomize_wall( x,y )
-
     create_wall( x,y, [:north,:south,:west,:east][rand(4)] )
-
   end
-
 
 end
 
