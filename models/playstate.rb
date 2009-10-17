@@ -133,8 +133,7 @@ class PlayState < Chingu::GameState
       [18,24],[30,24],[42,24],
       [6,40],[18,40],[42,40],[54,40]
       ]
-    
-    
+        
     
     color = nil
     bullets = 0
