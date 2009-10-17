@@ -20,6 +20,9 @@ class Droid < Chingu::GameObject
     @height = 16
     @full_animation = Chingu::Animation.new(:file => media_path("droid.bmp"), :size => [@width,@height]).retrofy
     
+    @max_bullets = options[:max_bullets] || 0
+    @supershot = options[:supershot] || false
+    
     @animations = {}
     @animations[:scan] = @full_animation[0..5]
     @animations[:up] = @full_animation[6..7]
@@ -35,7 +38,7 @@ class Droid < Chingu::GameObject
     self.factor = $window.factor
     @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.factor, @height*$window.factor)
   
-    @max_speed = 0.25
+    @max_speed = options[:speed] || 0.25
     
     # "feelers" for the droid to see if there is a wall nearby
     # The rects are small, so it is possible for the droid to be wrong, and therefore walk into it.
@@ -195,8 +198,8 @@ class Droid < Chingu::GameObject
       
       
     when :shoot
-      if  $window.current_game_state.droid_owned_bullets < 1
-        @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self )
+      if  $window.current_game_state.droid_owned_bullets < @max_bullets
+        @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self, :supershot => @supershot )
         #puts "Shooting"
       end
       @status = :idle
