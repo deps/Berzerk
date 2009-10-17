@@ -157,7 +157,7 @@ class Player < Chingu::GameObject
     end
 
     # each_collision([TileObject, Enemy, Blah]) do |me, obj|  <-- masscolide syntax
-    each_collision([TileObject, Droid]) do |me, obj|
+    each_collision([TileObject, Droid, Otto]) do |me, obj|
       on_collision
     end
 

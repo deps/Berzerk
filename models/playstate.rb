@@ -41,6 +41,8 @@ class PlayState < Chingu::GameState
     @scroll = nil
     @scroll_steps = 0
     
+    set_otto_timer
+    
     
   end
   
@@ -106,10 +108,16 @@ class PlayState < Chingu::GameState
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
     @room.close(@opposite_directions[@scroll]) if close_door
     
+    set_otto_timer
+  end
+  
+  def set_otto_timer
+    droids = Droid.all.length
+    @otto_timer = Time.now + ( droids * 2 )
+    puts "Otto will appear at #{@otto_timer} (in #{droids * 2} seconds, based on #{droids} droids)"    
   end
   
   def update
-    super
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
     
@@ -136,6 +144,15 @@ class PlayState < Chingu::GameState
       end
       
       #return
+    end
+    
+    super
+    
+    if @otto_timer != 0 and Time.now >= @otto_timer
+      droid_speech( "intruder alert intruder alert" )
+      @otto_timer = 0
+      Otto.create( :x => @entry_x, :y => @entry_y )
+      puts "Otto spawned"
     end
     
     game_objects.each do |obj|
@@ -191,6 +208,7 @@ class PlayState < Chingu::GameState
       @chatter_time = Time.now + 5+rand(20)
     end
     update_speak
+    
     if @message_img
       @message_x -= 10
       if @message_x <= @message_remove_pos

@@ -21,13 +21,6 @@ Over, one item left and moves to period 2
 - Droids can shoot
 --- Just a placeholder until score is added (see note on score below in period 3)
   
-- Draw Evil Otto
---- needs only one frame. Might add another for the bounce
-- Evil Otto appears after a time limit
---- Spawns where player started in the room
-- Evil Otto moves towards the player
-- Bullets are removed if touching Evil Otto
-- Evil Otto destroys droids and player if he touches them
 - Draw graphics for the maze
 --- floor (code added but not used)
 
@@ -39,7 +32,6 @@ Over, one item left and moves to period 2
 - Talking droid sounds added
 --- Messages:
     "Coins detected in pocket": During attract mode, specifically while showing the high score list.
-    "Intruder alert! Intruder alert!": Spoken when Evil Otto appears.
 
 - Scores added
 - Change droid color and firing ability based on score:
@@ -102,6 +94,8 @@ DONE:
 	"The humanoid must not escape": Heard when the player escapes a room after destroying every robot.
 	"Chicken, fight like a robot": Heard when the player escapes a room without destroying every robot.
 	"Got the Humanoid, got the intruder": Heard when the player loses a life. 
+	"Intruder alert! Intruder alert!": Spoken when Evil Otto appears.
+    
 --- Random:
 	"Charge", "Attack", "Kill", "Destroy", or "Get" 
 	followed by "The Humanoid", "The intruder", "it", or "the chicken" 
@@ -119,3 +113,11 @@ DONE:
 - Droid - player collisions
 - Bullets kills player and droids
 - Player death added
+
+- Draw Evil Otto
+--- needs only one frame. Might add another for the bounce
+- Evil Otto appears after a time limit
+--- Spawns where player started in the room
+- Evil Otto moves towards the player
+- Bullets are removed if touching Evil Otto
+- Evil Otto destroys droids and player if he touches them

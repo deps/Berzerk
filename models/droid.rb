@@ -66,7 +66,7 @@ class Droid < Chingu::GameObject
           next if obj == self or obj.class == TileObject or obj.kind_of? Spark or obj.class == ExplosionOverlay
           dist = Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16)
           if dist < 64
-            obj.on_collision
+            obj.on_collision if obj.respond_to? :on_collision
           end
         end
         destroy 
@@ -166,7 +166,7 @@ class Droid < Chingu::GameObject
       #stop
     end
 
-    each_collision([TileObject, Droid]) do |me, obj|
+    each_collision([TileObject, Droid, Otto]) do |me, obj|
       next if me == obj
       on_collision
     end

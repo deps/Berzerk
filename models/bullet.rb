@@ -58,7 +58,7 @@ class Bullet < Chingu::GameObject
       raise "Bullet is moving in an unknown direction '#{@dir}'"
     end
     
-    each_collision(TileObject) do |me, obj|
+    each_collision([TileObject, Otto]) do |me, obj|
       on_collision
     end
     
