@@ -32,6 +32,8 @@ class Droid < Chingu::GameObject
     @animations[:die] = @full_animation[0..1]     # TODO, make some real exploding frames?
     @animations[:die].delay = 25    
     stop
+    @status = :paused
+    after(1000) { @status = :scan }
     
     self.rotation_center(:top_left)
     
