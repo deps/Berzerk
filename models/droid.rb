@@ -64,7 +64,7 @@ class Droid < Chingu::GameObject
         # Kill nearby droids, bullets or the player
         Chingu::GameObject.all.each do |obj|
           next if obj == self or obj.class == TileObject or obj.kind_of? Spark or obj.class == ExplosionOverlay
-          dist = Gosu::distance(@x+11,@y+16, obj.x,obj.y)
+          dist = Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16)
           if dist < 64
             obj.on_collision
           end
