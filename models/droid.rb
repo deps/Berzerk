@@ -57,22 +57,12 @@ class Droid < Chingu::GameObject
     during(1000) do
         @color = die_colors[rand(die_colors.size)] 
         Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
-      end.then do
-        Sound["explosion.wav"].play(0.3)
-        ExplosionOverlay.create(:x => @x+11, :y => @y+16)
-        50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) } 
-        # Kill nearby droids, bullets or the player
-        Chingu::GameObject.all.each do |obj|
-          next if obj == self or obj.class == TileObject or obj.kind_of? Spark or obj.class == ExplosionOverlay
-          dist = Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16)
-          if dist < 64
-            obj.on_collision if obj.respond_to? :on_collision
-          end
-        end
-        destroy 
-        # TODO: kill other droids, laser shots or the player in a explosion if they are too close to this one.
-      end
-        
+    end.then do
+      Explosion.create(:x => @x+11, :y => @y+16)        
+      50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) }         
+      destroy 
+      # TODO: kill other droids, laser shots or the player in a explosion if they are too close to this one.
+    end
   end
   
   def stop
@@ -166,7 +156,7 @@ class Droid < Chingu::GameObject
       #stop
     end
 
-    each_collision([TileObject, Droid, Otto]) do |me, obj|
+    each_collision([TileObject, Droid]) do |me, obj|
       next if me == obj
       on_collision
     end
