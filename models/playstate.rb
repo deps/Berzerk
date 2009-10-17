@@ -36,6 +36,7 @@ class PlayState < Chingu::GameState
     @current_word = nil
     @sample_speed = 1.0
     @chatter_time = Time.now+5+rand(10)
+    @chicken_taunt_used = false
     
     @scroll = nil
     @scroll_steps = 0
@@ -75,9 +76,12 @@ class PlayState < Chingu::GameState
     @entry_x = ex
     @entry_y = ey
     
-    msg = "chicken fight like a robot"
-    if game_objects_of_class( Droid ).length == 0
-      msg = "the humanoid must not escape"
+    
+    msg = "the humanoid must not escape"
+    @chicken_taunt_used = false
+    if game_objects_of_class( Droid ).length > 0
+      msg = "chicken fight like a robot"
+      @chicken_taunt_used = true
     end
     droid_speech(msg)    
   end
@@ -261,7 +265,8 @@ class PlayState < Chingu::GameState
   
   def random_droid_chatter
     first = ["charge", "attack", "kill", "destroy", "get"]
-    second = ["the humanoid", "the intruder", "it", "the chicken"]
+    second = ["the humanoid", "the intruder", "it"] 
+    second << "the chicken" if @chicken_taunt_used
     droid_speech( first[rand(first.length)]+" "+second[rand(second.length)] )
   end
   
@@ -269,7 +274,7 @@ class PlayState < Chingu::GameState
     if @current_samples.empty? and @current_word == nil
       return if @sample_queue.length == 0
       @current_samples = @sample_queue.shift
-      @sample_speed = 0.75 + rand(0.5)
+      @sample_speed = 0.85 + rand(0.25)
     end
     
     if @current_word == nil
