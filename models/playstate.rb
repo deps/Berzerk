@@ -134,44 +134,25 @@ class PlayState < Chingu::GameState
       [6,40],[18,40],[42,40],[54,40]
       ]
     
-    color = nil
-    
-    
-    case @score
-    when (0..260)
-      color = Gosu::Color.new(0xFFFFFF00)
-    when (261..1200)
-      color = Gosu::Color.new(0xFFFF0000)
-    when (1201..3000)
-      color = Gosu::Color.new(0xFF7777FF)      
-    when (3001..4500)
-      color = Gosu::Color.new(0xFF77FF00)
-    when (4501..6000)
-      color = Gosu::Color.new(0xFFFF00FF)
-    when (6001..8000)
-      color = Gosu::Color.new(0xFFFFFF00)
-    when (8001..10000)
-      color = Gosu::Color.new(0xFFFFFFFF)
-    when (10001..12000)
-      color = Gosu::Color.new(0xFF77FF00)
-      
-    # Color cycle repeats
-    when (12001..13000)
-      color = Gosu::Color.new(0xFFFFFF00)
-    when (13001..14000)
-      color = Gosu::Color.new(0xFFFF0000)
-    when (14001..15000)
-      color = Gosu::Color.new(0xFF7777FF)      
-    when (15001..16000)
-      color = Gosu::Color.new(0xFF77FF00)
-    when (16001..17000)
-      color = Gosu::Color.new(0xFFFF00FF)
-    when (17001..18000)
-      color = Gosu::Color.new(0xFFFFFF00)
-    when (18001..19000)
-      color = Gosu::Color.new(0xFFFFFFFF)
-    else
-      color = Gosu::Color.new(0xFF77FF00)      
+    color_code = nil
+    color_code = case @score
+      when (0..260)       then  0xFFFFFF00
+      when (261..1200)    then  0xFFFF0000
+      when (1201..3000)   then  0xFF7777FF
+      when (3001..4500)   then  0xFF77FF00
+      when (4501..6000)   then  0xFFFF00FF
+      when (6001..8000)   then  0xFFFFFF00
+      when (8001..10000)  then  0xFFFFFFFF
+      when (10001..12000) then  0xFF77FF00
+      when (12001..13000) then  0xFFFFFF00
+      when (13001..14000) then  0xFFFF0000
+      when (14001..15000) then  0xFF7777FF
+      when (15001..16000) then  0xFF77FF00
+      when (16001..17000) then  0xFFFF00FF
+      when (17001..18000) then  0xFFFFFF00
+      when (18001..19000) then  0xFFFFFFFF
+    else              
+      0xFF77FF00
     end
     
     @droids_in_room.times do |i|
@@ -180,7 +161,7 @@ class PlayState < Chingu::GameState
       pos[1] += Gosu::random(-3,3)
       x = 25+(pos[0])*10
       y = 25+(pos[1])*10
-      d = Droid.create(:x => x, :y => y, :color => color)
+      d = Droid.create(:x => x, :y => y, :color => color_code)  # BasicObjects eats BigNums in :color
     end
         
     set_otto_timer( @droids_in_room )
