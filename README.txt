@@ -32,11 +32,13 @@ Over, one item left and moves to period 2
  
 
 *** Period 4: Oct 28 to Oct 31 
-- Attract mode title screen added
-- Sounds for attract mode added: "Coin detected in pocket". Played when title screen is displayed.
-- Attract mode shows high score list after game play example.
-- Credit screen added to attract mode. Shown after high score list. Returns to title screen.
-- Background "music" added to attract mode. Different from game play music.
+- Main menu
+--- "Coin detected in pocket" played at random intervals
+- Highscore menu
+- Credits menu
+- Settings menu
+- Backgrounds music for the menus.
+
 - Refactor!
 - Eat cake
 
