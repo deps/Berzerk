@@ -3,13 +3,9 @@ require 'opengl'
 require 'chingu'
 #require '../chingu/lib/chingu'
 include Gosu
-
-def media_path(file)
-  File.join($window.root, "media", file)  
-end
+include Chingu
 
 require_all('models')
-
 
 class Game < Chingu::Window
   attr_reader :factor
