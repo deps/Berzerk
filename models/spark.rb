@@ -89,7 +89,7 @@ class Explosion < Chingu::GameObject
     Sound["explosion.wav"].play(0.3)
     
     Chingu::GameObject.all.each do |obj|
-      if Gosu::distance(@x+11,@y+16, obj.x,obj.y) < 65
+      if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 65
         obj.on_collision  if obj.respond_to?(:on_collision)
       end
     end
