@@ -138,12 +138,10 @@ class Room
     
     num.times do |i|
       pos = spawnpos.delete_at(rand(spawnpos.length))
-      puts "Droid #{i} at #{pos.join(',')}"
-      pos[0] += Gosu::random(-4,4)
-      pos[1] += Gosu::random(-4,4)
+      pos[0] += Gosu::random(-3,3)
+      pos[1] += Gosu::random(-3,3)
       x = 25+(pos[0])*10
       y = 25+(pos[1])*10
-      puts "real pos #{x},#{y}"
       d = Droid.create(:x => x, :y => y, :color => color)
     end
 
