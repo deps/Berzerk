@@ -228,7 +228,7 @@ class PlayState < Chingu::GameState
       speed = 2.0
     end
     
-    puts "Droid attributes - Bullets: #{bullets}, supershot: #{supershot}, speed: #{speed}"
+    #puts "Droid attributes - Bullets: #{bullets}, supershot: #{supershot}, speed: #{speed}"
     
     @droids_in_room.times do |i|
       pos = spawnpos.delete_at(rand(spawnpos.length))
@@ -245,7 +245,7 @@ class PlayState < Chingu::GameState
   def set_otto_timer( num_droids )
     delay = num_droids * 3
     @otto_timer = Time.now + delay
-    puts "Otto will appear at #{@otto_timer} (in #{delay} seconds, based on #{num_droids} droids)"    
+    #puts "Otto will appear at #{@otto_timer} (in #{delay} seconds, based on #{num_droids} droids)"    
   end
   
   def pause_game_objects
@@ -289,7 +289,7 @@ class PlayState < Chingu::GameState
       droid_speech( "intruder alert intruder alert" )
       @otto_timer = 0
       Otto.create( :x => @entry_x, :y => @entry_y )
-      puts "Otto spawned"
+      #puts "Otto spawned"
     end
     
     game_objects.each do |obj|
@@ -327,9 +327,9 @@ class PlayState < Chingu::GameState
     @player = nil if players.count == 0
     if !@player and @lives > 0
       @lives -= 1
-      puts "Player lives left: #{@lives}"
+      #puts "Player lives left: #{@lives}"
       if @lives != 0
-        puts "Player is alive again"
+        #puts "Player is alive again"
         #create_player
         show_new_room
       else
