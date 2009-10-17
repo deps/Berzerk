@@ -107,7 +107,7 @@ DONE:
 
 - Scores added
 - Change droid color and firing ability based on score:
-	score			droid color		shots (number allowed in total, from alld roids in room)
+	score			droid color		shots (number allowed in total, from all droids in room)
 	0-260			Yellow			No bullets
 	260-1,200		Red				1
 	1,200-3,000		Light Blue		2
@@ -118,4 +118,20 @@ DONE:
 	10,000-12,000+	Light Blue		Two fast shots
 
 - Droids are frozen for a while when the room is created.
-- Bullets can collide with eachother
+- Bullets can collide with each other
+
+
+
+
+
+--- ideas for achievements ---
+- Killed <X> droids (10, 50, 100, 200, 500, 1000?)
+- Visited <X> rooms (10, 50, 100?)
+- Never been called a chicken
+- <X>% accuracy (50, 75 and 100?)
+- Mr Bomb Man (never shot a droid twice just to make it go boom)
+- Kamikaze (lost all lives to running into droids)
+- I pee on electric fences (lost all lives by running into walls)
+- Hug the smiley (lost all lives by running into Evil Otto)
+- 
+
