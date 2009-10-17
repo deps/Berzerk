@@ -13,7 +13,7 @@ class Bullet < Chingu::GameObject
     @owner = options[:owner] || nil    
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = @@red.dup
-    @speed = options[:supershot] ? 6.0 : 4.0
+    @speed = options[:supershot] ? 8.0 : 4.0
     @bounding_box = Chingu::Rect.new([@x, @y, 1,1])
     Sound["laser.wav"].play(0.3)
   end

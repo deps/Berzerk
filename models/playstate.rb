@@ -15,6 +15,8 @@ class PlayState < Chingu::GameState
         
     @lives = 3
     @score = 0
+    @award_5k = false
+    @award_10k = false
     
     self.input = { :escape => :exit }
     
@@ -52,7 +54,19 @@ class PlayState < Chingu::GameState
   
   def get_score( value )
     @score += value
-    puts "#{value} points added, total score is #{@score}"
+    
+    if @score >= 5000 and !@award_5k
+      @award_5k = true
+      @lives += 1 if @lives < 4
+      show_message("1UP")
+    end
+
+    if @score >= 10000 and !@award_10k
+      @award_10k = true
+      @lives += 1 if @lives < 4
+      show_message("1UP")
+    end
+    
   end
   
   def change_room( dir )
@@ -352,6 +366,8 @@ class PlayState < Chingu::GameState
       bullet.on_collision
       target.on_collision
     end
+    
+    
   end
   
   def draw
@@ -370,7 +386,7 @@ class PlayState < Chingu::GameState
     @font.draw("#{@score}",660,80,210)
     # Lifes
     @lives.times do |i|
-      @life_icon.draw(660+(i*32), 30, 210)
+      @life_icon.draw(657+(i*30), 30, 210)
     end
   end
   

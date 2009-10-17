@@ -20,8 +20,8 @@ Over, one item left and moves to period 2
 *** Period 2: Oct 14 to Oct 21   
 - Draw graphics for the maze
 --- floor (code added but not used)
-- Droids are frozen for a while when the room is created.
 - Droids moves faster when score increases.
+- Bullets can collide with eachother
 - Game play background music. Ambient sounds, mostly. Something like that.
 - Refactor!
  
@@ -115,3 +115,5 @@ DONE:
 	6,000-8,000		Yellow			5
 	8,000-10,000	White			1 fast shot (2x speed)
 	10,000-12,000+	Light Blue		Two fast shots
+
+- Droids are frozen for a while when the room is created.
