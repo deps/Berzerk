@@ -58,6 +58,7 @@ class Droid < Chingu::GameObject
         @color = die_colors[rand(die_colors.size)] 
         Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
     end.then do
+      $window.current_game_state.get_score 50
       Explosion.create(:x => @x+11, :y => @y+16)        
       50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => explosion_colors ) }         
       destroy 

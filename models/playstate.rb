@@ -14,10 +14,11 @@ class PlayState < Chingu::GameState
     #@room.close(@opposite_directions[@player.moving_dir])
         
     @lives = 3
+    @score = 0
     
     self.input = { :escape => :exit }
     
-    @debugfont = Gosu::Font.new($window, default_font_name, 20)
+    @font = Gosu::Font.new($window, default_font_name, 20)
         
     # Original screenshot, used to compare with my walls
     @background = nil
@@ -45,6 +46,11 @@ class PlayState < Chingu::GameState
     show_new_room
     
     
+  end
+  
+  def get_score( value )
+    @score += value
+    puts "#{value} points added, total score is #{@score}"
   end
   
   def change_room( dir )
@@ -85,6 +91,12 @@ class PlayState < Chingu::GameState
     if game_objects_of_class( Droid ).length > 0
       msg = "chicken fight like a robot"
       @chicken_taunt_used = true
+    else
+      # Bonus time! :D
+      # All droids was killed, or killed themselves.
+      bonus = @droids_in_room*10
+      get_score bonus
+      show_message("#{bonus} points for clearing room")
     end
     droid_speech(msg)    
     
@@ -112,7 +124,7 @@ class PlayState < Chingu::GameState
     @room.close(@opposite_directions[@scroll]) if close_door
     
     # Create some droids at random positions
-    num = 3+rand(7)
+    @droids_in_room = 3+rand(7)
     
     spawnpos = [
       [6,9],[18,9],[42,9],[54,9],
@@ -122,7 +134,7 @@ class PlayState < Chingu::GameState
     
     color = Gosu::Color.new(0xFFFF0000)
     
-    num.times do |i|
+    @droids_in_room.times do |i|
       pos = spawnpos.delete_at(rand(spawnpos.length))
       pos[0] += Gosu::random(-3,3)
       pos[1] += Gosu::random(-3,3)
@@ -131,7 +143,7 @@ class PlayState < Chingu::GameState
       d = Droid.create(:x => x, :y => y, :color => color)
     end
         
-    set_otto_timer( num )
+    set_otto_timer( @droids_in_room )
   end
   
   def set_otto_timer( num_droids )
@@ -283,9 +295,13 @@ class PlayState < Chingu::GameState
   
   def draw_hud
     @hud_overlay.draw(0,0,200)
+    # Scrolling messages
     if @message_img
       @message_img.draw( @message_x, 550, 200 )
     end
+    # Score
+    @font.draw("#{@score}",660,80,210)
+    # Lifes
   end
   
   def show_message( msg )
