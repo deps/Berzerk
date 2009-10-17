@@ -14,7 +14,7 @@ class Game < Chingu::Window
     super
     @factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
     
-    push_game_state( PlayState )
+    push_game_state( MainMenuState )
   end
 
   def update

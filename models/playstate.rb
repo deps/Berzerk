@@ -1,6 +1,6 @@
 class PlayState < Chingu::GameState
   
-  attr_reader :player, :debugfont
+  attr_reader :player
   
   def setup
     @pop_at = nil

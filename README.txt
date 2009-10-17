@@ -21,7 +21,6 @@ Over, one item left and moves to period 2
 - Draw graphics for the maze
 --- floor (code added but not used)
 - Droids moves faster when score increases.
-- Bullets can collide with eachother
 - Game play background music. Ambient sounds, mostly. Something like that.
 - Refactor!
  
@@ -117,3 +116,4 @@ DONE:
 	10,000-12,000+	Light Blue		Two fast shots
 
 - Droids are frozen for a while when the room is created.
+- Bullets can collide with eachother
