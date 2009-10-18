@@ -1,6 +1,8 @@
 class MainMenuState < Chingu::GameState
   
-  def setup
+  def initialize
+    super
+
     @font = Font.new($window, default_font_name, 30)
     @options = [ :start, :quit ]
     @current = 0
@@ -26,10 +28,10 @@ class MainMenuState < Chingu::GameState
     
     @max_spoken_messages = 15
     @current_spoken = 0
-    @next_spoken_message_time = Time.now + 30
+    @next_spoken_message_time = 30000
     
   end
-  
+    
   def move_up
     @current -= 1
     @current = @options.length-1 if @current < 0
@@ -60,9 +62,10 @@ class MainMenuState < Chingu::GameState
       @menu_droid.shake
     end
     
-    if Time.now >= @next_spoken_message_time and @current_spoken < @max_spoken_messages
+    @next_spoken_message_time -= $window.milliseconds_since_last_tick
+    if @next_spoken_message_time < 0 and @current_spoken < @max_spoken_messages
       @current_spoken += 1
-      @next_spoken_message_time += 10
+      @next_spoken_message_time += 10000
       file = "menu_#{@current_spoken}.wav"
       Sound[file].play
     end
