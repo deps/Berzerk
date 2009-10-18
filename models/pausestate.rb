@@ -32,7 +32,9 @@ class Pause < Chingu::GameState
         "All work and no play makes Jack a dull boy! O_o",
         "Red ring of death? You either needs a new GPU, or an enema.",
         "I hope you will participate in the next month office party. Each guest will be welcomed with a nice glass of WD-40 and a roll of duct tape!",
-        "Still chilling? Good! Rest your circuits."
+        "Still chilling? Good! Rest your circuits.",
+        "The management would highly appreciate if the droids would try to not walk into each other, or the walls. It's very counter productive!",
+        "Also, shooting your fellow droid is not a good idea!",
       ].join(" "*10)
       
     @msg_x = 900
