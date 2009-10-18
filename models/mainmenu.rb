@@ -141,7 +141,7 @@ class MenuDroidImage < Chingu::GameObject
     
     @color.alpha = 0
     @fade_rate = 4
-    @flash = false
+    @zorder = 400
     
     @white = Color.new(255,255,255,255)
     after(5000) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
@@ -150,7 +150,7 @@ class MenuDroidImage < Chingu::GameObject
   
   def shake(amount=1.0)
     @shake_amount = amount
-    during(100) { @mode = :additive  }.then { @mode = :default }
+    during(50) { @mode = :additive  }.then { @mode = :default }
   end
   
   def update
@@ -164,6 +164,15 @@ class MenuDroidImage < Chingu::GameObject
       @angle = (-5+rand(5))*@shake_amount
     end    
   end
+  
+  def draw
+    if @mode == :additive
+      5.times { super }
+    else
+      super
+    end
+  end
+  
 end
 
 
@@ -177,5 +186,15 @@ class MenuTitleImage < Chingu::GameObject
     @rotation_center = :center_center
     @mode = :additive
     @color = Color.new(255,255,255,255)
+    after(250) { @mode = :default }
+    @zorder = 400
+  end
+  
+  def draw
+    if @mode == :additive
+      5.times { super }
+    else
+      super
+    end
   end
 end
