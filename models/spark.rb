@@ -97,7 +97,7 @@ class Explosion < Chingu::GameObject
     
       Chingu::GameObject.all.each do |obj|
         next if obj == @owner
-        if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 65
+        if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 96
           obj.on_collision  if obj.respond_to?(:on_collision) and obj.respond_to?(:status) and obj.status != :paused
         end
       end
