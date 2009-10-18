@@ -33,16 +33,19 @@ class MainMenuState < Chingu::GameState
   def move_up
     @current -= 1
     @current = @options.length-1 if @current < 0
+    Sound["menu_change.wav"].play(0.3)
   end
   
   def move_down
     @current += 1
     @current = 0 if @current >= @options.length
+    Sound["menu_change.wav"].play(0.3)
   end
 
   def go
     met = "on_" + @options[@current].to_s
     self.send(met)
+    Sound["menu_select.wav"].play(0.3)
   end
 
   def update
