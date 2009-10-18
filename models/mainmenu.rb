@@ -20,7 +20,10 @@ class MainMenuState < Chingu::GameState
     end
     
     @detonation_time = Time.now + (1+rand(3))
-    @detect_time = Time.now + (3+rand(20))
+    
+    @max_spoken_messages = 15
+    @current_spoken = 0
+    @next_spoken_message_time = Time.now + 30
     
   end
 
@@ -54,12 +57,12 @@ class MainMenuState < Chingu::GameState
       Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
     end
     
-    if Time.now > @detect_time
-      $window.speak "coins detected in pocket"
-      @detect_time = Time.now + (3+rand(20))
+    if Time.now >= @next_spoken_message_time and @current_spoken < @max_spoken_messages
+      @current_spoken += 1
+      @next_spoken_message_time += 10
+      file = "menu_#{@current_spoken}.wav"
+      Sound[file].play
     end
-    
-    $window.update_speech
     
   end
   
