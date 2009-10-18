@@ -309,7 +309,11 @@ class PlayState < Chingu::GameState
     
     # Pop this state if the game is over
     if @pop_at
-      self.close if Time.now >= @pop_at
+      if Time.now >= @pop_at
+        $last_score = @score # TODO: check if this is high enough to be added on highscore list
+        self.close
+        push_game_state( GameOver )
+      end
     end
     
     # Is the player alive?
