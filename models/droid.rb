@@ -190,14 +190,14 @@ class Droid < Chingu::GameObject
     angle = nil # [:east,:se,:south,:sw,:west,:nw,:north,:ne][(angle_deg/360)*8]
     
     angle = case angle_deg
-      when (350..360),(0..10): :north
-      when (35..55): :ne
-      when (80..100): :east
-      when (125..145): :se
-      when (170..190): :south
-      when (215..235): :sw
-      when (260..280): :west
-      when (305..325): :nw
+      when (350..360),(0..10) then :north
+      when (35..55) then :ne
+      when (80..100) then :east
+      when (125..145) then :se
+      when (170..190) then :south
+      when (215..235) then :sw
+      when (260..280) then :west
+      when (305..325) then :nw
       else nil
     end
     
