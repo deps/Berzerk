@@ -12,6 +12,7 @@ class MainMenuState < Chingu::GameState
       :down => :move_down,
       :space => :go,
       :enter => :go,
+      :return => :go
     }
     
     @amount_of_falling_droids = 8
@@ -22,10 +23,6 @@ class MainMenuState < Chingu::GameState
     @detonation_time = Time.now + (1+rand(3))
     @detect_time = Time.now + (3+rand(20))
     
-  end
-
-  def spawn_menu_droid
-    MenuDroid.create(:x => rand($window.width), :y => 1)
   end
   
   def move_up
@@ -109,7 +106,7 @@ class MenuDroid < Chingu::GameObject
   end
   
   def update
-    @image = @animation.next!
+    @image = @animation.next
     @angle += @rotation_rate
     
     destroy if @y > $window.height + 200
