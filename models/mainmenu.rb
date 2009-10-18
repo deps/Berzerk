@@ -12,6 +12,7 @@ class MainMenuState < Chingu::GameState
       :down => :move_down,
       :space => :go,
       :enter => :go,
+      :return => :go
     }
     
     @menu_droid = MenuDroidImage.create(:x => 400, :y => 200)
@@ -27,10 +28,6 @@ class MainMenuState < Chingu::GameState
     @current_spoken = 0
     @next_spoken_message_time = Time.now + 30
     
-  end
-
-  def spawn_menu_droid
-    MenuDroid.create(:x => rand($window.width), :y => 1)
   end
   
   def move_up
@@ -66,8 +63,6 @@ class MainMenuState < Chingu::GameState
       file = "menu_#{@current_spoken}.wav"
       Sound[file].play
     end
-    
-
     
   end
   
@@ -121,7 +116,7 @@ class MenuDroid < Chingu::GameObject
   end
   
   def update
-    @image = @animation.next!
+    @image = @animation.next
     @angle += @rotation_rate
     
     destroy if @y > $window.height + 200
@@ -131,6 +126,7 @@ end
 
 class MenuDroidImage < Chingu::GameObject
   has_trait :effect, :timer
+  
   
   def initialize(options)
     super
@@ -145,7 +141,6 @@ class MenuDroidImage < Chingu::GameObject
     
     @white = Color.new(255,255,255,255)
     after(5000) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
-    
   end
   
   def shake(amount=1.0)

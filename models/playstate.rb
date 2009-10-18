@@ -18,7 +18,7 @@ class PlayState < Chingu::GameState
     @award_5k = false
     @award_10k = false
     
-    self.input = { :escape => :exit }
+    self.input = { :escape => :exit, :p => Pause }
     
     @font = Gosu::Font.new($window, default_font_name, 20)
         
