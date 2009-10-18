@@ -81,7 +81,7 @@ class MenuDroid < Chingu::GameObject
     @color = Gosu::Color.new(colors[rand(colors.size)])
     @color.alpha = 30
     
-    @full_animation = Chingu::Animation.new(:file => media_path("droid.bmp"), :size => [11,16], :delay => 300).retrofy
+    @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [11,16], :delay => 300).retrofy
     @animation = @full_animation[0..5]  # Pick out the scanning-frames
     self.factor = $window.factor * 8
     @rotation_rate = 0.2

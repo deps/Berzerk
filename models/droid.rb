@@ -18,7 +18,7 @@ class Droid < Chingu::GameObject
     super
     @width = 11
     @height = 16
-    @full_animation = Chingu::Animation.new(:file => media_path("droid.bmp"), :size => [@width,@height]).retrofy
+    @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [@width,@height]).retrofy
     
     @max_bullets = options[:max_bullets] || 0
     @supershot = options[:supershot] || false
