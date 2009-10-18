@@ -140,11 +140,12 @@ class MenuDroidImage < Chingu::GameObject
     @flash = false
     @mode = :additive
     
-    @color = Color.new(255,255,255,255)
+    @white = Color.new(255,255,255,255)
+    after(5000) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
   end
   
-  def shake
-    @shake_amount = 1.0
+  def shake(amount=1.0)
+    @shake_amount = amount
     during(100) { @mode = :additive  }.then { @mode = :default }
   end
   
@@ -163,5 +164,14 @@ end
 
 
 class MenuTitleImage < Chingu::GameObject
-
+  has_trait :timer
+  
+  def initialize(options)
+    super
+    
+    @image = Image["menu_title.png"]
+    @rotation_center = :center_center
+    @mode = :additive
+    @color = Color.new(255,255,255,255)
+  end
 end
