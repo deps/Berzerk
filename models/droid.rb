@@ -177,18 +177,10 @@ class Droid < Chingu::GameObject
     use_animation(:down)  if @velocity_y > 0
     use_animation(:up)    if @velocity_y < 0
     
-    #if @status != :paused and $window.current_game_state.droid_owned_bullets() < 1 # TODO: number of bullets should be increased when player get more scores      
-    #  @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => [:north,:south,:west,:east,:nw,:ne,:sw,:se][rand(8)], :owner => self )
-    #end
-
     px = player.x
     py = player.y
     dist = distance(@x,@y, px,py)
     angle_deg = Gosu::angle(@x, @y, px, py)
-    #angle_deg -= 360 if angle_deg > 360
-    #angle_deg += 360 if angle_deg < 0
-    angle = nil # [:east,:se,:south,:sw,:west,:nw,:north,:ne][(angle_deg/360)*8]
-    
     angle = case angle_deg
       when (350..360),(0..10) then :north
       when (35..55) then :ne
@@ -207,24 +199,15 @@ class Droid < Chingu::GameObject
     case @status
     when :scan
       if angle != nil
-        #puts "#{angle_deg}, #{angle}"
-        @status = :shoot
+        if  $window.current_game_state.droid_owned_bullets < @max_bullets and angle != nil
+          @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self, :supershot => @supershot )
+        end
+        @status = :idle
+        after(500+rand(500)) { @status = :scan }
       elsif dist < 300 and rand(4) == 0
         walk_towards(px,py)
         @status = :walk
-        #puts "Walking"
       end
-      
-      
-      
-    when :shoot
-      if  $window.current_game_state.droid_owned_bullets < @max_bullets and angle != nil
-        puts "Angle_deg #{angle_deg}, angle #{angle}"
-        @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self, :supershot => @supershot )
-        #puts "Shooting"
-      end
-      @status = :idle
-      after(500+rand(500)) { @status = :scan }
     end
     
   end
