@@ -3,7 +3,7 @@ class Player < Chingu::GameObject
   has_trait :collision_detection
   has_trait :timer
   
-  attr_reader :moving_dir
+  attr_reader :moving_dir, :status
   
   def initialize( options = {} )
     super 
