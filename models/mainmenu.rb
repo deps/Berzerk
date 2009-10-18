@@ -1,6 +1,6 @@
 class MainMenuState < Chingu::GameState
   
-  def initialize
+  def initialize(options = {})
     super
 
     @font = Font.new($window, default_font_name, 30)
@@ -16,20 +16,27 @@ class MainMenuState < Chingu::GameState
       :enter => :go,
       :return => :go
     }
+        
     
-    @menu_droid = MenuDroidImage.create(:x => 400, :y => 200)
-    
+    @detonation_time = Time.now + (1+rand(3))
+        
+  end
+  
+  def setup
+    puts "Setup"
+    @menu_droid = nil
+    @game_objects.destroy_all
+
     @amount_of_falling_droids = 8
     @amount_of_falling_droids.times do |nr|
       MenuDroid.create(:x => rand($window.width), :y => nr * 150 - 150)
     end
     
-    @detonation_time = Time.now + (1+rand(3))
-    
+    @menu_droid = MenuDroidImage.create(:x => 400, :y => 200)
+
     @max_spoken_messages = 15
     @current_spoken = 0
-    @next_spoken_message_time = 30000
-    
+    @next_spoken_message_time = 30000    
   end
     
   def move_up
@@ -60,6 +67,7 @@ class MainMenuState < Chingu::GameState
       @detonation_time = Time.now + (1+rand(3))
       Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
       @menu_droid.shake
+      Sound["small_explosion.wav"].play(0.3)
     end
     
     @next_spoken_message_time -= $window.dt
@@ -74,6 +82,8 @@ class MainMenuState < Chingu::GameState
   
   def draw
     super
+    
+    @font.draw("#{@game_objects.size}", 0,0,0)
     
     #@menu_droid.draw_rot(400,200,300, (-5+rand(5))*@shake_amount )
     #@menu_title.draw_rot(400,300,300, 0)
@@ -137,6 +147,8 @@ class MenuDroidImage < Chingu::GameObject
   def initialize(options)
     super
     
+    Sound["droid_appear.wav"].play(0.3)
+    
     @image = Image["menu_droid.png"]
     @shake_amount = 0
     @rotation_center = :center_center
@@ -145,7 +157,6 @@ class MenuDroidImage < Chingu::GameObject
     @fade_rate = 4
     @zorder = 400
     
-    @white = Color.new(255,255,255,255)
     after(5000) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
   end
   
@@ -189,6 +200,7 @@ class MenuTitleImage < Chingu::GameObject
     @color = Color.new(255,255,255,255)
     after(250) { @mode = :default }
     @zorder = 400
+    Sound["explosion.wav"].play(0.3) 
   end
   
   def draw

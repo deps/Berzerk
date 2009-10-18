@@ -2,7 +2,8 @@ class PlayState < Chingu::GameState
   
   attr_reader :player
   
-  def setup
+  def initialize(options = {})
+    super
     @pop_at = nil
     @room_x = 0
     @room_y = 0
@@ -312,7 +313,7 @@ class PlayState < Chingu::GameState
     if @pop_at
       if Time.now >= @pop_at
         $last_score = @score # TODO: check if this is high enough to be added on highscore list
-        self.close
+        pop_game_state( :setup => false )
         push_game_state( GameOver )
       end
     end
