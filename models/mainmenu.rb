@@ -18,6 +18,10 @@ class MainMenuState < Chingu::GameState
     @amount_of_falling_droids.times do |nr|
       MenuDroid.create(:x => rand($window.width), :y => nr * 150 - 150)
     end
+    
+    @detonation_time = Time.now + (1+rand(3))
+    @detect_time = Time.now + (3+rand(20))
+    
   end
 
   def spawn_menu_droid
@@ -44,6 +48,19 @@ class MainMenuState < Chingu::GameState
     if MenuDroid.size < @amount_of_falling_droids
       MenuDroid.create(:x => rand($window.width), :y => -200)
     end
+    
+    if Time.now > @detonation_time
+      @detonation_time = Time.now + (1+rand(3))
+      Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
+    end
+    
+    if Time.now > @detect_time
+      $window.speak "coins detected in pocket"
+      @detect_time = Time.now + (3+rand(20))
+    end
+    
+    $window.update_speech
+    
   end
   
   def draw
@@ -83,9 +100,11 @@ class MenuDroid < Chingu::GameObject
     
     @full_animation = Chingu::Animation.new(:file => media_path("droid.bmp"), :size => [11,16], :delay => 300).retrofy
     @animation = @full_animation[0..5]  # Pick out the scanning-frames
-    self.factor = $window.factor * 8
-    @rotation_rate = 0.2
-    self.velocity_y = 1
+    self.factor = $window.factor * 2
+    @rotation_rate = (rand-0.5)/2
+    self.velocity_y = 0.5 + rand*2
+    self.factor += self.velocity_y*2
+
     update
   end
   

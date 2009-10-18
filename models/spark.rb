@@ -82,21 +82,24 @@ class Explosion < Chingu::GameObject
   has_trait :timer
   
   def initialize(options)
-    @@red ||= Gosu::Color.new(255, 255, 0, 0)
-    @@grey ||= Gosu::Color.new(255, 127, 127, 127)
-    @@yellow ||= Gosu::Color.new(255, 255, 255, 0)
+    @alpha = options[:alpha] || 255 
+    @@red ||= Gosu::Color.new(@alpha, 255, 0, 0)
+    @@grey ||= Gosu::Color.new(@alpha, 127, 127, 127)
+    @@yellow ||= Gosu::Color.new(@alpha, 255, 255, 0)
     
     super
     @owner = options[:owner]
     self.rotation_center(:center_center)
     
     @image = Image["explosion_radius.png"]
-    Sound["explosion.wav"].play(0.3)
+    unless options[:silent]
+      Sound["explosion.wav"].play(0.3) 
     
-    Chingu::GameObject.all.each do |obj|
-      next if obj == @owner
-      if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 65
-        obj.on_collision  if obj.respond_to?(:on_collision) and obj.respond_to?(:status) and obj.status != :paused
+      Chingu::GameObject.all.each do |obj|
+        next if obj == @owner
+        if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 65
+          obj.on_collision  if obj.respond_to?(:on_collision) and obj.respond_to?(:status) and obj.status != :paused
+        end
       end
     end
     

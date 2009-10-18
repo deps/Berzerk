@@ -35,10 +35,6 @@ class PlayState < Chingu::GameState
     @message_x = 0
     @message_img = nil
     
-    @sample_queue = []
-    @current_samples = []
-    @current_word = nil
-    @sample_speed = 1.0
     @chatter_time = Time.now+5+rand(10)
     @chicken_taunt_used = false
     
@@ -343,7 +339,7 @@ class PlayState < Chingu::GameState
       random_droid_chatter
       @chatter_time = Time.now + 5+rand(20)
     end
-    update_speak
+    $window.update_speech
     
     if @message_img
       @message_x -= 15
@@ -413,41 +409,14 @@ class PlayState < Chingu::GameState
   def droid_speech( message )
     show_message message
     
-    words = message.split(" ")
-    samples = []
-    words.each do |w|
-      samples << "word_#{w}.wav"
-    end
+    $window.speak( message )
+  end
     
-    speak samples
-  end
-  
-  def speak( samples )
-    @sample_queue << samples
-  end
-  
   def random_droid_chatter
     first = ["charge", "attack", "kill", "destroy", "get"]
     second = ["the humanoid", "the intruder", "it"] 
     second << "the chicken" if @chicken_taunt_used
     droid_speech( first[rand(first.length)]+" "+second[rand(second.length)] )
-  end
-  
-  def update_speak
-    if @current_samples.empty? and @current_word == nil
-      return if @sample_queue.length == 0
-      @current_samples = @sample_queue.shift
-      @sample_speed = 0.85 + rand(0.25)
-    end
-    
-    if @current_word == nil
-      @current_word = Sound[@current_samples.shift].play(0.3, @sample_speed)
-    else
-      unless @current_word.playing?
-        @current_word = nil
-      end
-    end
-    
   end
   
   
