@@ -240,7 +240,7 @@ class PlayState < Chingu::GameState
   
   def set_otto_timer( num_droids )
     delay = num_droids * 3
-    @otto_timer = Time.now + delay
+    @otto_timer = delay*1000
     #puts "Otto will appear at #{@otto_timer} (in #{delay} seconds, based on #{num_droids} droids)"    
   end
   
@@ -275,11 +275,15 @@ class PlayState < Chingu::GameState
     
     super
     
-    if @otto_timer != 0 and Time.now >= @otto_timer
-      droid_speech( "intruder alert intruder alert" )
-      @otto_timer = 0
-      Otto.create( :x => @entry_x, :y => @entry_y )
-      #puts "Otto spawned"
+    if @otto_timer 
+      if @otto_timer <= 0 
+        droid_speech( "intruder alert intruder alert" )
+        @otto_timer = nil
+        Otto.create( :x => @entry_x, :y => @entry_y )
+        #puts "Otto spawned"
+      elsif @otto_timer > 0
+        @otto_timer -= $window.milliseconds_since_last_tick
+      end
     end
     
     game_objects.each do |obj|
