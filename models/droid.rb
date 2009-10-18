@@ -184,16 +184,29 @@ class Droid < Chingu::GameObject
     px = player.x
     py = player.y
     dist = distance(@x,@y, px,py)
-    angle_deg = Gosu::angle(px, py, @x, @y)+135
-    angle_deg -= 360 if angle_deg > 360
-    angle_deg += 360 if angle_deg < 0
-    angle = [:east,:se,:south,:sw,:west,:nw,:north,:ne][(angle_deg/360)*8]
+    angle_deg = Gosu::angle(@x, @y, px, py)
+    #angle_deg -= 360 if angle_deg > 360
+    #angle_deg += 360 if angle_deg < 0
+    angle = nil # [:east,:se,:south,:sw,:west,:nw,:north,:ne][(angle_deg/360)*8]
+    
+    angle = case angle_deg
+      when (350..360),(0..10): :north
+      when (35..55): :ne
+      when (80..100): :east
+      when (125..145): :se
+      when (170..190): :south
+      when (215..235): :sw
+      when (260..280): :west
+      when (305..325): :nw
+      else nil
+    end
+    
     dx = (@x-px).abs
     dy = (@y-py).abs
     
     case @status
     when :scan
-      if rand(10) == 5
+      if angle != nil
         #puts "#{angle_deg}, #{angle}"
         @status = :shoot
       elsif dist < 300 and rand(4) == 0
@@ -205,12 +218,13 @@ class Droid < Chingu::GameObject
       
       
     when :shoot
-      if  $window.current_game_state.droid_owned_bullets < @max_bullets
+      if  $window.current_game_state.droid_owned_bullets < @max_bullets and angle != nil
+        puts "Angle_deg #{angle_deg}, angle #{angle}"
         @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self, :supershot => @supershot )
         #puts "Shooting"
       end
       @status = :idle
-      after(500+rand(1500)) { @status = :scan }
+      after(500+rand(500)) { @status = :scan }
     end
     
   end
