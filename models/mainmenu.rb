@@ -14,6 +14,8 @@ class MainMenuState < Chingu::GameState
       :enter => :go,
     }
     
+    @menu_droid = MenuDroidImage.create(:x => 400, :y => 200)
+    
     @amount_of_falling_droids = 8
     @amount_of_falling_droids.times do |nr|
       MenuDroid.create(:x => rand($window.width), :y => nr * 150 - 150)
@@ -55,6 +57,7 @@ class MainMenuState < Chingu::GameState
     if Time.now > @detonation_time
       @detonation_time = Time.now + (1+rand(3))
       Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
+      @menu_droid.shake
     end
     
     if Time.now >= @next_spoken_message_time and @current_spoken < @max_spoken_messages
@@ -64,12 +67,18 @@ class MainMenuState < Chingu::GameState
       Sound[file].play
     end
     
+
+    
   end
   
   def draw
     super
+    
+    #@menu_droid.draw_rot(400,200,300, (-5+rand(5))*@shake_amount )
+    #@menu_title.draw_rot(400,300,300, 0)
+    
     @options.each_with_index do |option, i|
-      y = 300+(i*50)
+      y = 400+(i*50)
       if i == @current
         $window.draw_quad( 0,y,@selected, 800,y,@selected, 800,y+30,@selected, 0,y+30,@selected )
       end
@@ -99,7 +108,7 @@ class MenuDroid < Chingu::GameObject
     
     colors = [0xFFFFFF00, 0xFFFF0000, 0xFF7777FF, 0xFF77FF00]
     @color = Gosu::Color.new(colors[rand(colors.size)])
-    @color.alpha = 30
+    @color.alpha = 60
     
     @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [11,16], :delay => 300).retrofy
     @animation = @full_animation[0..5]  # Pick out the scanning-frames
@@ -107,7 +116,7 @@ class MenuDroid < Chingu::GameObject
     @rotation_rate = (rand-0.5)/2
     self.velocity_y = 0.5 + rand*2
     self.factor += self.velocity_y*2
-
+    
     update
   end
   
@@ -117,4 +126,46 @@ class MenuDroid < Chingu::GameObject
     
     destroy if @y > $window.height + 200
   end
+end
+
+
+class MenuDroidImage < Chingu::GameObject
+  has_trait :effect, :timer
+  
+  def initialize(options)
+    super
+    
+    @image = Image["menu_droid.png"]
+    @shake_amount = 0
+    @rotation_center = :center_center
+    
+    @color.alpha = 0
+    @fade_rate = 4
+    @flash = false
+    
+    @white = Color.new(255,255,255,255)
+    
+  end
+  
+  def shake
+    @shake_amount = 1.0
+    during(100) { @mode = :additive  }.then { @mode = :default }
+  end
+  
+  def update
+    super
+    
+    return if @color.alpha < 255
+        
+    if @shake_amount > 0
+      @shake_amount -= 0.025
+      @shake_amount = 0 if @shake_amount < 0
+      @angle = (-5+rand(5))*@shake_amount
+    end    
+  end
+end
+
+
+class MenuTitleImage < Chingu::GameObject
+
 end
