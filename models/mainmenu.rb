@@ -64,8 +64,6 @@ class MainMenuState < Chingu::GameState
       Sound[file].play
     end
     
-
-    
   end
   
   def draw
@@ -129,6 +127,7 @@ end
 class MenuDroidImage < Chingu::GameObject
   has_trait :effect, :timer
   
+  
   def initialize(options)
     super
     
@@ -139,9 +138,9 @@ class MenuDroidImage < Chingu::GameObject
     @color.alpha = 0
     @fade_rate = 4
     @flash = false
+    @mode = :additive
     
-    @white = Color.new(255,255,255,255)
-    
+    @color = Color.new(255,255,255,255)
   end
   
   def shake
