@@ -62,7 +62,7 @@ class MainMenuState < Chingu::GameState
       @menu_droid.shake
     end
     
-    @next_spoken_message_time -= $window.milliseconds_since_last_tick
+    @next_spoken_message_time -= $window.dt
     if @next_spoken_message_time < 0 and @current_spoken < @max_spoken_messages
       @current_spoken += 1
       @next_spoken_message_time += 10000

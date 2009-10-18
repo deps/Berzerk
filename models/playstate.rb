@@ -275,7 +275,7 @@ class PlayState < Chingu::GameState
     
     super
     
-    @otto_timer -= $window.milliseconds_since_last_tick if @otto_timer
+    @otto_timer -= $window.dt if @otto_timer
     if @otto_timer and @otto_timer <= 0
       droid_speech( "intruder alert intruder alert" )
       @otto_timer = nil
