@@ -112,7 +112,7 @@ class PlayState < Chingu::GameState
     end
     droid_speech(msg)    
     
-    pause_game_objects
+    game_objects.pause!
   end
 
   def show_new_room
@@ -242,12 +242,6 @@ class PlayState < Chingu::GameState
     delay = num_droids * 3
     @otto_timer = Time.now + delay
     #puts "Otto will appear at #{@otto_timer} (in #{delay} seconds, based on #{num_droids} droids)"    
-  end
-  
-  def pause_game_objects
-    game_objects.each do |obj|
-      obj.pause!
-    end
   end
   
   def update

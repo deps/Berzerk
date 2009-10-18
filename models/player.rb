@@ -22,7 +22,7 @@ class Player < Chingu::GameObject
       :released_space => :stop_shooting
     }
     
-    @full_animation = Chingu::Animation.new(:file => media_path("player.png"), :width=>8, :height=>16, :bounce => true ).retrofy
+    @full_animation = Chingu::Animation.new(:file => "player.png", :width=>8, :height=>16, :bounce => true ).retrofy
     
     @animations = {}
     @animations[:idle] = @full_animation[0..0]
