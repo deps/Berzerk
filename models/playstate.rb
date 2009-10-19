@@ -33,8 +33,10 @@ class PlayState < Chingu::GameState
     
     @messages = []
     @current_message = nil
+    @typed_message = ""
+    @type_timer = 0
     @message_x = 0
-    @message_img = nil
+    #@message_img = nil
     
     @chatter_time = Time.now+5+rand(10)
     @chicken_taunt_used = false
@@ -109,7 +111,7 @@ class PlayState < Chingu::GameState
       # All droids was killed, or killed themselves.
       bonus = @droids_in_room*10
       get_score bonus
-      show_message("#{bonus} points for clearing room")
+      #show_message("#{bonus} points for clearing room")
     end
     droid_speech(msg)    
     
@@ -342,21 +344,29 @@ class PlayState < Chingu::GameState
     end
     $window.update_speech
     
-    if @message_img
-      @message_x -= 15
-      if @message_x <= @message_remove_pos
-        @current_message = nil
-        @message_img = nil
+    if @current_message
+      @typed_timer -= $window.dt
+      if @typed_timer <= 0
+        if @typed_index < @current_message.length
+          @typed_timer = 50
+          @typed_index+=1
+          @typed_timer = 1000 if @typed_index == @current_message.length
+        else
+          @current_message = nil
+        end
       end
     else
       unless @messages.empty?
         @current_message = @messages.shift
-        @message_x = 800
+        @typed_index = 0
+        @typed_timer = 50
+
         # media/texasled.ttf does not work on OSX
-        @message_img = Gosu::Image.from_text($window,@current_message,default_font_name(),50) 
-        @message_remove_pos = -@message_img.width
+        #@message_img = Gosu::Image.from_text($window,@current_message,default_font_name(),50) 
+        @message_remove_pos = -@current_message.length*32
       end
     end
+    
     
     # if @player
     #   #
@@ -390,10 +400,18 @@ class PlayState < Chingu::GameState
   
   def draw_hud
     @hud_overlay.draw(0,0,200)
+    
     # Scrolling messages
-    if @message_img
-      @message_img.draw( @message_x, 550, 200 )
+    if @current_message
+      #@message_img.draw( @message_x, 550, 200 )
+      @current_message[(0..@typed_index)].split("").each_with_index do |letter,i|
+        letters = ('A'..'Z').to_a
+        letters << " "
+        num = 0 + letters.index(letter)
+        $window.metalfont[num].draw(5+(i*26), 560, 200)
+      end
     end
+    
     # Score
     @score.to_s.rjust(6,"0").split("").each_with_index do |number,i|
       #@font.draw(number, 660, 80+(i*85), 200, 6,6)

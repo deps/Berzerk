@@ -65,7 +65,7 @@ class Player < Chingu::GameObject
       Sound["explosion.wav"].play(0.3)
       hide!
       50.times { Blood.create(:x => @x+5, :y => @y+8, :color => Gosu::Color.new(255,128+rand(127),0,0) ) } 
-      $window.current_game_state.droid_speech("got the humanoid got the intruder")
+      $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])
     end.then do
       after(3000) { destroy }
     end
