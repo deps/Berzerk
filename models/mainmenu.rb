@@ -7,8 +7,8 @@ class ScamState < Chingu::GameState
     super
     
     
-    Chingu::Text.create(:text => "This game is free!", :x => 200, :y => 250, :factor_x => 2, :factor_y => 2)
-    Chingu::Text.create(:text => "If you paid for this game, you have been scammed!", :x => 200, :y => 300, :factor_x => 1.5, :factor_y => 1.5)
+    Chingu::Text.create(:text => "This game is free!", :x => 100, :y => 250, :factor_x => 2, :factor_y => 2)
+    Chingu::Text.create(:text => "If you paid for this game, you have been scammed!", :x => 100, :y => 300, :factor_x => 1.5, :factor_y => 1.5)
     
     @close_state = 5000
     self.input = { :space => :continue }
@@ -187,11 +187,9 @@ class MenuDroidImage < Chingu::GameObject
     @full_animation.step = 2
     @animation = @full_animation[0..10]  # Pick out the scanning-frames
     
-    
     @image = @animation.next
     self.factor = $window.factor * 15
     
-    #@image = Image["menu_droid.png"]
     @shake_amount = 0
     @rotation_center = :center_center
     
@@ -206,7 +204,6 @@ class MenuDroidImage < Chingu::GameObject
   
   def shake(amount=1.0)
     @shake_amount = amount
-    during(50) { @mode = :additive  }.then { @mode = :default }
   end
   
   def update
@@ -224,13 +221,6 @@ class MenuDroidImage < Chingu::GameObject
     end    
   end
   
-  def draw
-    if @mode == :additive
-      10.times { super }
-    else
-      super
-    end
-  end
   
 end
 

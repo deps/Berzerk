@@ -395,8 +395,10 @@ class PlayState < Chingu::GameState
       @message_img.draw( @message_x, 550, 200 )
     end
     # Score
-    @score.to_s.rjust(5,"0").split("").each_with_index do |number,i|
-      @font.draw(number, 660, 80+(i*85), 200, 6,6)
+    @score.to_s.rjust(6,"0").split("").each_with_index do |number,i|
+      #@font.draw(number, 660, 80+(i*85), 200, 6,6)
+      num = 28 + (['0','1','2','3','4','5','6','7','8','9'].index(number))
+      $window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     end
     #@font.draw("#{@score}",660,80,210)
     

@@ -8,7 +8,7 @@ include Chingu
 require_all('models')
 
 class Game < Chingu::Window
-  attr_reader :factor
+  attr_reader :factor, :metalfont
   
   def initialize
     super
@@ -19,10 +19,12 @@ class Game < Chingu::Window
     @current_word = nil
     @sample_speed = 1.0
     
+    @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy
+    
     
     push_game_state( ScamState )
   end
-
+  
   def update
     super
     close if current_parent == self
