@@ -13,6 +13,7 @@ class PlayState < Chingu::GameState
             
     @lives = 3
     @score = 0
+    @score_counter = 0
     @award_5k = false
     @award_10k = false
     
@@ -252,6 +253,8 @@ class PlayState < Chingu::GameState
   def update
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
+    @score_counter += 5 if @score_counter < @score
+    
     if @scroll
       @scroll_steps -= 1
       if @scroll_steps <= 0
@@ -396,7 +399,7 @@ class PlayState < Chingu::GameState
     #$window.string_to_index(@score.to_s.rjust(6,"0")).each_with_index do |num, i|
       #$window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     #end
-    @score.to_s.rjust(6,"0").split("").each_with_index do |num, i|
+    @score_counter.to_s.rjust(6,"0").split("").each_with_index do |num, i|
       @font.draw( num, 680, 80+(i*70),200, 10,5)
     end
     
