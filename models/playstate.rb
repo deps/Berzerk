@@ -371,11 +371,11 @@ class PlayState < Chingu::GameState
     #   end
     # end
     
-    Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
-      next if bullet.owner == target
-      bullet.on_collision
-      target.on_collision
-    end
+    #Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
+    #  next if bullet.owner == target
+    #  bullet.on_collision
+    #  target.on_collision
+    #end
     
     
   end
