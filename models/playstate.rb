@@ -130,12 +130,7 @@ class PlayState < Chingu::GameState
     end
     
     @player = Player.create(:x => @entry_x, :y => @entry_y)
-    
-    @room.destroy if @room
-    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
-    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
-    @room.close(@opposite_directions[@scroll]) if close_door
-    
+        
     # Create some droids at random positions
     @droids_in_room = 3+rand(7)
     
@@ -235,6 +230,12 @@ class PlayState < Chingu::GameState
       y = 25+(pos[1])*10
       d = Droid.create(:x => x, :y => y, :color => color, :max_bullets => bullets, :supershot => supershot, :speed => speed)
     end
+    
+    @room.destroy if @room
+    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
+    @room.close(@opposite_directions[@scroll], color) if close_door
+    
         
     set_otto_timer( @droids_in_room )
   end

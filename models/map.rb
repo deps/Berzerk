@@ -6,7 +6,6 @@ class TileObject < Chingu::GameObject
     super
 
     @dir = options[:dir]
-    @walltype = options[:type] || 1
 
     raise "Wrong dir: '#{@dir}'" unless @dir or ( @dir != :north and @dir != :south and @dir != :west and @dir != :east)
 
@@ -44,10 +43,9 @@ class TileObject < Chingu::GameObject
     end
 
     alpha = 255 # When debugging, I lower this one to see if walls overlap
-    case @walltype
-    when 2 # door
+    if options[:color]
       # TODO: door color based on color of the droids
-      @c = Gosu::Color.new(alpha,255,0,255)
+      @c = options[:color]
     else # Normal wall
       @c = Gosu::Color.new(alpha,0,0,255)
     end
@@ -121,7 +119,7 @@ class Room
   # Used after the player has entered a new room
   # The optional argument "tile" can be set to 1 to make it
   # look like a solid wall, and not a forcefield
-  def close( direction, tile=2 )
+  def close( direction, color )
     dir = :south
     x = 0
     y = 0
@@ -143,7 +141,7 @@ class Room
       raise "Unknown direction: '#{direction}'"
     end
 
-    create_wall(x,y, dir, tile)
+    create_wall(x,y, dir, color)
   end    
 
 
@@ -174,8 +172,8 @@ class Room
     create_wall( 61,34,:south )
   end
 
-  def create_wall( x,y, angle, type=1 )
-    w = TileObject.create(:type => type, :x => 25+x*10.0, :y => 25+y*10.0, :dir => angle )
+  def create_wall( x,y, angle, color=nil )
+    w = TileObject.create(:color => color, :x => 25+x*10.0, :y => 25+y*10.0, :dir => angle )
     #w.angle = angle
     #w.factor_x = factor
     @tiles << w
