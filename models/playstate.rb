@@ -7,7 +7,9 @@ class PlayState < Chingu::GameState
     @pop_at = nil
     @room_x = 0
     @room_y = 0
+    
     @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
+    @direction_to_velocity = { :north => [0, 10], :south => [0, -10], :west => [10, 0], :east => [-10, 0] }
     
     # @player = Player.create
     # @room.destroy if @room
@@ -251,10 +253,6 @@ class PlayState < Chingu::GameState
   def update
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
-    
-    xo = 0
-    yo = 0
-        
     if @scroll
       @scroll_steps -= 1
       if @scroll_steps <= 0
@@ -263,20 +261,13 @@ class PlayState < Chingu::GameState
         return
       end
       
-      case @scroll
-      when :north
-        yo = 10
-      when :south
-        yo = -10
-      when :west
-        xo = 10
-      when :east
-        xo = -10
+      # Depending on direction i @scroll, move all game objects in a certain direction
+      game_objects.each do |game_object| 
+        game_object.x += @direction_to_velocity[@scroll][0]
+        game_object.y += @direction_to_velocity[@scroll][1]
       end
-      
-      #return
     end
-    
+      
     super
     
     @otto_timer -= $window.dt if @otto_timer
@@ -286,15 +277,7 @@ class PlayState < Chingu::GameState
       Otto.create( :x => @entry_x, :y => @entry_y )
       #puts "Otto spawned"
     end
-    
-    game_objects.each do |obj|
-      # Scrolling?
-      obj.x += xo
-      obj.y += yo
-      # Remove dead objects
-      #obj.destroy if obj.respond_to? :status and obj.status == :destroy
-    end
-    
+        
     #return if @scroll # Don't 
     
     
