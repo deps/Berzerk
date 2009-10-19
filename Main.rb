@@ -20,9 +20,25 @@ class Game < Chingu::Window
     @sample_speed = 1.0
     
     @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy
-    
+    @font_letters = ('A'..'Z').to_a + [' ','.'] + ('0'..'9').to_a + ['!','(',')',',','"','?','*','-']
     
     push_game_state( ScamState )
+  end
+  
+  # This method turns a string into an array with the corrensponding index values for the
+  # bitmap font inside @metalfont
+  # See PlayState#draw_hud for an example of how to use it
+  def string_to_index(msg)
+    arr = []
+    msg.split("").each do |l|
+      i = @font_letters.index(l)
+      if i
+        arr << i
+      else
+        arr << 42
+      end
+    end
+    arr
   end
   
   def update

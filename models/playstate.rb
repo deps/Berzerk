@@ -48,8 +48,12 @@ class PlayState < Chingu::GameState
     
     show_new_room
     
-    
   end
+  
+  def setup
+    Song["Diablo.mp3"].play
+  end  
+  
   
   def get_score( value )
     @score += value
@@ -404,18 +408,13 @@ class PlayState < Chingu::GameState
     # Scrolling messages
     if @current_message
       #@message_img.draw( @message_x, 550, 200 )
-      @current_message[(0..@typed_index)].split("").each_with_index do |letter,i|
-        letters = ('A'..'Z').to_a
-        letters << " "
-        num = 0 + letters.index(letter)
+      $window.string_to_index(@current_message[(0..@typed_index)]).each_with_index do |num, i|
         $window.metalfont[num].draw(5+(i*26), 560, 200)
       end
     end
     
     # Score
-    @score.to_s.rjust(6,"0").split("").each_with_index do |number,i|
-      #@font.draw(number, 660, 80+(i*85), 200, 6,6)
-      num = 28 + (['0','1','2','3','4','5','6','7','8','9'].index(number))
+    $window.string_to_index(@score.to_s.rjust(6,"0")).each_with_index do |num, i|
       $window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     end
     #@font.draw("#{@score}",660,80,210)

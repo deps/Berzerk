@@ -54,7 +54,6 @@ class MainMenuState < Chingu::GameState
   end
   
   def setup
-    puts "Setup"
     @menu_droid = nil
     @game_objects.destroy_all
 
@@ -68,7 +67,11 @@ class MainMenuState < Chingu::GameState
     @max_spoken_messages = 15
     @current_spoken = 0
     @next_spoken_message_time = 30000    
+
+
+    @bg_music = Song["sad robot.mp3"].play(true)
   end
+  
     
   def move_up
     @current -= 1
