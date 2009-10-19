@@ -42,8 +42,6 @@ class Otto < Chingu::GameObject
     px = player.x
     py = player.y
     
-    
-    # TODO: it should bounce it's way across the screen
     angle = Gosu::angle(px+11,py+16, @x,@y)+90
     
     @x += Math::cos(angle.to_rad) * @speed

@@ -130,12 +130,7 @@ class PlayState < Chingu::GameState
     end
     
     @player = Player.create(:x => @entry_x, :y => @entry_y)
-    
-    @room.destroy if @room
-    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
-    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
-    @room.close(@opposite_directions[@scroll]) if close_door
-    
+        
     # Create some droids at random positions
     @droids_in_room = 3+rand(7)
     
@@ -235,6 +230,12 @@ class PlayState < Chingu::GameState
       y = 25+(pos[1])*10
       d = Droid.create(:x => x, :y => y, :color => color, :max_bullets => bullets, :supershot => supershot, :speed => speed)
     end
+    
+    @room.destroy if @room
+    # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
+    @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
+    @room.close(@opposite_directions[@scroll], color) if close_door
+    
         
     set_otto_timer( @droids_in_room )
   end
@@ -395,8 +396,10 @@ class PlayState < Chingu::GameState
       @message_img.draw( @message_x, 550, 200 )
     end
     # Score
-    @score.to_s.rjust(5,"0").split("").each_with_index do |number,i|
-      @font.draw(number, 660, 80+(i*85), 200, 6,6)
+    @score.to_s.rjust(6,"0").split("").each_with_index do |number,i|
+      #@font.draw(number, 660, 80+(i*85), 200, 6,6)
+      num = 28 + (['0','1','2','3','4','5','6','7','8','9'].index(number))
+      $window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     end
     #@font.draw("#{@score}",660,80,210)
     
