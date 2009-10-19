@@ -397,7 +397,7 @@ class PlayState < Chingu::GameState
       #$window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     #end
     @score.to_s.rjust(6,"0").split("").each_with_index do |num, i|
-      @font.draw( num, 670, 80+(i*65),200, 6,6)
+      @font.draw( num, 680, 80+(i*70),200, 10,5)
     end
     
     # Lifes
