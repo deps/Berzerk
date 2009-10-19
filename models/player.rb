@@ -87,6 +87,7 @@ class Player < Chingu::GameObject
     
     @shooting = true
     @cooling_down = true
+    
     Bullet.create( :x => @x+8, :y => @y+16, :directions => @movement, :owner => self )
     after(600) { @cooling_down = false }
   end
@@ -108,9 +109,11 @@ class Player < Chingu::GameObject
       x, y = $window.directions_to_xy(@movement)
       @velocity_x = x * @speed
       @velocity_y = y * @speed
-      @image = @animation.next
     end
     
+    @image = @animation.next
+    
+    use_animation(:idle)  if @velocity_x == 0 and @velocity_y == 0
     @movement = {} 
   end
   
