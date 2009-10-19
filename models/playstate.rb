@@ -381,6 +381,7 @@ class PlayState < Chingu::GameState
   end
   
   def draw
+    
     @background.draw( 25,25,0, 2.5, 2.5 ) if @background
     super
     draw_hud
