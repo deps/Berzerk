@@ -85,7 +85,7 @@ class Player < Chingu::GameObject
   end
   
   def shoot
-    return if @cooling_down
+    return if @cooling_down or @movement.length == 0
     
     @shooting = true
     @cooling_down = true

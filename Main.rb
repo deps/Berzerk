@@ -32,10 +32,11 @@ class Game < Chingu::Window
   def directions_to_xy(directions = nil)
     x, y = 0, 0
     return [x,y]  unless directions
-    
-    directions.select { |key, value| value == true }.each do |direction, boolean|
-      x += @directions_to_xy[direction][0]
-      y += @directions_to_xy[direction][1]
+    directions.each do |direction, boolean|
+      if boolean
+        x += @directions_to_xy[direction][0]
+        y += @directions_to_xy[direction][1]
+      end
     end 
     return [x,y]
   end
