@@ -177,22 +177,24 @@ class Droid < Chingu::GameObject
     use_animation(:down)  if @velocity_y > 0
     use_animation(:up)    if @velocity_y < 0
     
+    @velocity = [0, 0]
+    
     px = player.x
     py = player.y
     dist = distance(@x,@y, px,py)
     angle_deg = Gosu::angle(@x, @y, px, py)
     angle = case angle_deg
-      when (350..360),(0..10) then :north
-      when (35..55) then :ne
-      when (80..100) then :east
-      when (125..145) then :se
-      when (170..190) then :south
-      when (215..235) then :sw
-      when (260..280) then :west
-      when (305..325) then :nw
+      when (350..360),(0..10) then :north; @velocity = [0, -1]
+      when (35..55) then :ne; @velocity = [1, -1]
+      when (80..100) then :east; @velocity = [1, 0]
+      when (125..145) then :se; @velocity = [1,1]
+      when (170..190) then :south; @velocity = [0, 1]
+      when (215..235) then :sw; @velocity = [-1,1]
+      when (260..280) then :west; @velocity = [-1, 0]
+      when (305..325) then :nw; @velocity = [-1,1]
       else nil
     end
-    
+        
     dx = (@x-px).abs
     dy = (@y-py).abs
     
@@ -200,7 +202,12 @@ class Droid < Chingu::GameObject
     when :scan
       if angle != nil
         if  $window.current_game_state.droid_owned_bullets < @max_bullets and angle != nil
-          @bullet = Bullet.create( :x => @x+8, :y => @y+16, :dir => angle, :owner => self, :supershot => @supershot )
+          
+          ## ugly hack, create a hash like @movements in Player for the new Bullet.create interface
+          
+      
+
+          @bullet = Bullet.create( :x => @x+8, :y => @y+16, :velocity => @velocity, :owner => self, :supershot => @supershot )
         end
         @status = :idle
         after(500+rand(500)) { @status = :scan }

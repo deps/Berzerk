@@ -9,15 +9,22 @@ class Bullet < Chingu::GameObject
   def initialize( options )
     super
     @owner = options[:owner] || nil    
+    @velocity = options[:velocity]
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = @@red.dup
     @speed = options[:supershot] ? 8.0 : 4.0
+    
     @bounding_box = Chingu::Rect.new([@x, @y, 3,3])
     @length = 5
     Sound["laser.wav"].play(0.3)
     
-    @directions = options[:directions]  # A hash like: {:east => true, :north => true}
-    @velocity_x, @velocity_y = $window.directions_to_xy(@directions)
+    if @velocity
+      @velocity_x, @velocity_y = @velocity
+    else
+      @directions = options[:directions]  # A hash like: {:east => true, :north => true}
+      @velocity_x, @velocity_y = $window.directions_to_xy(@directions)
+    end
+      
     @velocity_x *= @speed
     @velocity_y *= @speed
   end
