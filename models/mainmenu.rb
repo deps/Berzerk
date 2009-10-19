@@ -69,7 +69,9 @@ class MainMenuState < Chingu::GameState
     @next_spoken_message_time = 30000    
 
 
-    @bg_music = Song["sad robot.ogg"].play(true)
+    @bg_music = Song["sad robot.ogg"]
+    @bg_music.volume = 0.1
+    @bg_music.play(true)
   end
   
     
@@ -101,7 +103,7 @@ class MainMenuState < Chingu::GameState
       @detonation_time = Time.now + (1+rand(3))
       Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
       @menu_droid.shake
-      Sound["small_explosion.wav"].play(0.3)
+      #Sound["small_explosion.wav"].play(0.3)
     end
     
     @next_spoken_message_time -= $window.dt
@@ -215,7 +217,7 @@ class MenuDroidImage < Chingu::GameObject
     @image = @animation.next
     
     
-    return if @color.alpha < 255
+    #return if @color.alpha < 255
         
     if @shake_amount > 0
       @shake_amount -= 0.025
@@ -223,6 +225,7 @@ class MenuDroidImage < Chingu::GameObject
       @angle = (-5+rand(5))*@shake_amount
     end    
   end
+  
   
   
 end

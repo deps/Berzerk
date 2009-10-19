@@ -49,8 +49,14 @@ class PlayState < Chingu::GameState
   end
   
   def setup
-    Song["Diablo.ogg"].play
+    s = Song["Diablo.ogg"]
+    s.volume = 0.1
+    s.play
   end  
+  
+  def finalize
+    @player.die_sound.stop if @player and @player.die_sound
+  end
   
   
   def get_score( value )

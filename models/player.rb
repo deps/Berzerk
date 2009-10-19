@@ -1,7 +1,7 @@
 
 class Player < Chingu::GameObject
   has_trait :collision_detection, :timer, :velocity
-  attr_reader :status
+  attr_reader :status, :die_sound
   
   def initialize( options = {} )
     super 
@@ -37,6 +37,8 @@ class Player < Chingu::GameObject
     @shooting = false
     @cooling_down = false
     @movement = {}
+    
+    @die_sound = nil
   end
   
   def use_animation( name )
@@ -87,7 +89,6 @@ class Player < Chingu::GameObject
     
     @shooting = true
     @cooling_down = true
-    
     Bullet.create( :x => @x+8, :y => @y+16, :directions => @movement, :owner => self )
     after(600) { @cooling_down = false }
   end
