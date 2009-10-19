@@ -34,12 +34,10 @@ class Player < Chingu::GameObject
     @moving = false
     @movement = {}
     
-    @factor_x = 2.5
-    @factor_y = 2.5
-    @lives = 3
-        
-    @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    self.factor = $window.factor        
     self.rotation_center(:top_left)
+    @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    @lives = 3
     
     @shooting = false
     @cool_down = 0    # don't fire too often
