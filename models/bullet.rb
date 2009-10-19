@@ -1,11 +1,9 @@
 
-
-  
 class Bullet < Chingu::GameObject
   @@red = Gosu::Color.new(255, 255, 0, 0)
   @@white = Gosu::Color.new(255, 255, 255, 255)
   
-  has_trait :collision_detection
+  has_trait :collision_detection, :velocity
   attr_reader :owner
   
   def initialize( options )
@@ -15,14 +13,14 @@ class Bullet < Chingu::GameObject
     @c = @@red.dup
     @speed = options[:supershot] ? 8.0 : 4.0
     @bounding_box = Chingu::Rect.new([@x, @y, 3,3])
+    @length = 5
     Sound["laser.wav"].play(0.3)
+    
+    @directions = options[:directions]  # A hash like: {:east => true, :north => true}
+    @velocity_x, @velocity_y = $window.directions_to_xy(@directions)
+    @velocity_x *= @speed
+    @velocity_y *= @speed
   end
-  
-  def move( xoff, yoff )
-    @x += xoff*@speed
-    @y += yoff*@speed
-  end
-  
   
   def on_collision
     # Spawn 5 white sparks and 5 red sparks ... maybe we should just go with red?
@@ -33,56 +31,18 @@ class Bullet < Chingu::GameObject
     destroy
   end
   
-  def update
-
-    super
-    
-    case @dir
-    when :north
-      move(0,-1)
-    when :ne
-      move(1,-1)
-    when :east
-      move(1,0)
-    when :se
-      move(1,1)
-    when :south
-      move(0,1)
-    when :sw
-      move(-1,1)
-    when :west
-      move(-1,0)
-    when :nw
-      move(-1,-1)
-    else
-      raise "Bullet is moving in an unknown direction '#{@dir}'"
-    end
-    
+  def update    
     each_collision([TileObject, Otto, Bullet, Droid, Player]) do |me, obj|
       next if me == obj or me.owner == obj
       on_collision
       obj.on_collision if obj.respond_to? :on_collision
     end
     
-    
-    if outside_window?
-      destroy 
-    end
-    
+    destroy   if outside_window?
   end
   
   def draw
-
-    case @dir
-    when :north,:south
-      $window.draw_line(@x,@y-5,@c, @x,@y+5,@c)
-    when :east,:west
-      $window.draw_line(@x-5,@y,@c, @x+5,@y,@c)
-    when :ne,:sw
-      $window.draw_line(@x+5,@y-5,@c, @x-5,@y+5,@c)
-    when :nw,:se
-      $window.draw_line(@x-5,@y-5,@c, @x+5,@y+5,@c)
-    end
+    $window.draw_line(@x, @y, @c, @x + @velocity_x * @length, @y + @velocity_y * @length, @c)
   end
   
 end

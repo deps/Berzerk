@@ -21,8 +21,21 @@ class Game < Chingu::Window
     
     @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy
     
+    @directions_to_xy = { :north => [0, -1], :east => [1, 0], :south => [0, 1], :west => [-1, 0] }
     
     push_game_state( ScamState )
+  end
+  
+  #
+  # Takes a Hash (e.g. :north => true, :east => true } and returns [x, y]
+  #
+  def directions_to_xy(directions = {})
+    x, y = 0, 0
+    directions.select { |key, value| value == true }.each_key do |direction|
+      x += @directions_to_xy[direction][0]
+      y += @directions_to_xy[direction][1]
+    end
+    return [x,y]
   end
   
   def update
