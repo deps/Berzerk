@@ -123,7 +123,7 @@ class MenuDroid < Chingu::GameObject
     
     @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [11,16], :delay => 300).retrofy
     @animation = @full_animation[0..5]  # Pick out the scanning-frames
-    self.factor = $window.factor * 2
+    self.factor = $window.factor * 2 
     @rotation_rate = (rand-0.5)/2
     self.velocity_y = 0.5 + rand*2
     self.factor += self.velocity_y*2
@@ -140,6 +140,12 @@ class MenuDroid < Chingu::GameObject
 end
 
 
+module Chingu
+  class Animation
+    attr_accessor :step
+  end
+end
+
 class MenuDroidImage < Chingu::GameObject
   has_trait :effect, :timer
   
@@ -149,9 +155,21 @@ class MenuDroidImage < Chingu::GameObject
     
     Sound["droid_appear.wav"].play(0.3)
     
-    @image = Image["menu_droid.png"]
+    @color = Gosu::Color.new(0xFF0000FF)
+    
+    @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [11,8], :delay => 300).retrofy
+    @full_animation.step = 2
+    @animation = @full_animation[0..10]  # Pick out the scanning-frames
+    
+    
+    @image = @animation.next
+    self.factor = $window.factor * 15
+    
+    #@image = Image["menu_droid.png"]
     @shake_amount = 0
     @rotation_center = :center_center
+    
+    @factor 
     
     @color.alpha = 0
     @fade_rate = 4
@@ -168,6 +186,9 @@ class MenuDroidImage < Chingu::GameObject
   def update
     super
     
+    @image = @animation.next
+    
+    
     return if @color.alpha < 255
         
     if @shake_amount > 0
@@ -179,7 +200,7 @@ class MenuDroidImage < Chingu::GameObject
   
   def draw
     if @mode == :additive
-      5.times { super }
+      10.times { super }
     else
       super
     end
