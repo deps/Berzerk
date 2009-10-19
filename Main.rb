@@ -20,7 +20,7 @@ class Game < Chingu::Window
     @sample_speed = 1.0
     
     
-    push_game_state( MainMenuState )
+    push_game_state( ScamState )
   end
 
   def update
