@@ -10,12 +10,7 @@ class PlayState < Chingu::GameState
     
     @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
     @direction_to_velocity = { :north => [0, 10], :south => [0, -10], :west => [10, 0], :east => [-10, 0] }
-    
-    # @player = Player.create
-    # @room.destroy if @room
-    # @room = Room.new(:room_x => 0, :room_y => 0, :create_seed => true)
-    #@room.close(@opposite_directions[@player.moving_dir])
-        
+            
     @lives = 3
     @score = 0
     @award_5k = false
