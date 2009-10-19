@@ -7,13 +7,10 @@ class PlayState < Chingu::GameState
     @pop_at = nil
     @room_x = 0
     @room_y = 0
-    @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
     
-    # @player = Player.create
-    # @room.destroy if @room
-    # @room = Room.new(:room_x => 0, :room_y => 0, :create_seed => true)
-    #@room.close(@opposite_directions[@player.moving_dir])
-        
+    @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
+    @direction_to_velocity = { :north => [0, 10], :south => [0, -10], :west => [10, 0], :east => [-10, 0] }
+            
     @lives = 3
     @score = 0
     @award_5k = false
@@ -255,10 +252,6 @@ class PlayState < Chingu::GameState
   def update
     $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
-    
-    xo = 0
-    yo = 0
-        
     if @scroll
       @scroll_steps -= 1
       if @scroll_steps <= 0
@@ -267,20 +260,13 @@ class PlayState < Chingu::GameState
         return
       end
       
-      case @scroll
-      when :north
-        yo = 10
-      when :south
-        yo = -10
-      when :west
-        xo = 10
-      when :east
-        xo = -10
+      # Depending on direction i @scroll, move all game objects in a certain direction
+      game_objects.each do |game_object| 
+        game_object.x += @direction_to_velocity[@scroll][0]
+        game_object.y += @direction_to_velocity[@scroll][1]
       end
-      
-      #return
     end
-    
+      
     super
     
     @otto_timer -= $window.dt if @otto_timer
@@ -290,15 +276,7 @@ class PlayState < Chingu::GameState
       Otto.create( :x => @entry_x, :y => @entry_y )
       #puts "Otto spawned"
     end
-    
-    game_objects.each do |obj|
-      # Scrolling?
-      obj.x += xo
-      obj.y += yo
-      # Remove dead objects
-      #obj.destroy if obj.respond_to? :status and obj.status == :destroy
-    end
-    
+        
     #return if @scroll # Don't 
     
     
@@ -320,7 +298,8 @@ class PlayState < Chingu::GameState
     if @pop_at
       if Time.now >= @pop_at
         $last_score = @score # TODO: check if this is high enough to be added on highscore list
-        pop_game_state( :setup => false )
+        #pop_game_state( :setup => false )
+        pop_game_state
         push_game_state( GameOver )
       end
     end

@@ -3,8 +3,6 @@ class Player < Chingu::GameObject
   has_trait :collision_detection
   has_trait :timer
   
-  attr_reader :moving_dir, :status
-  
   def initialize( options = {} )
     super 
     
@@ -36,12 +34,10 @@ class Player < Chingu::GameObject
     @moving = false
     @movement = {}
     
-    @factor_x = 2.5
-    @factor_y = 2.5
-    @lives = 3
-        
-    @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    self.factor = $window.factor        
     self.rotation_center(:top_left)
+    @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    @lives = 3
     
     @shooting = false
     @cool_down = 0    # don't fire too often
@@ -78,7 +74,6 @@ class Player < Chingu::GameObject
     return if @shooting
     move(-1,0)
     use_animation(:left)
-    @moving_dir = :west
   end
   
   def move_right
@@ -86,21 +81,18 @@ class Player < Chingu::GameObject
     return if @shooting
     move(1,0)
     use_animation(:right)
-    @moving_dir = :east
   end
   
   def move_up
     @movement[:north] = true
     return if @shooting
     move(0,-1)
-    @moving_dir = :north
   end
   
   def move_down
     @movement[:south] = true
     return if @shooting
     move(0,1)
-    @moving_dir = :south
   end
   
   def move( xoff, yoff )
