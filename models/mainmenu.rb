@@ -69,7 +69,7 @@ class MainMenuState < Chingu::GameState
     @next_spoken_message_time = 30000    
 
 
-    @bg_music = Song["sad robot.mp3"].play(true)
+    @bg_music = Song["sad robot.ogg"].play(true)
   end
   
     

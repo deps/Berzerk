@@ -48,7 +48,7 @@ class PlayState < Chingu::GameState
   end
   
   def setup
-    Song["Diablo.mp3"].play
+    Song["Diablo.ogg"].play
   end  
   
   
@@ -299,7 +299,7 @@ class PlayState < Chingu::GameState
       if Time.now >= @pop_at
         $last_score = @score # TODO: check if this is high enough to be added on highscore list
         #pop_game_state( :setup => false )
-        pop_game_state
+        pop_game_state( :setup => false )
         push_game_state( GameOver )
       end
     end
@@ -393,10 +393,12 @@ class PlayState < Chingu::GameState
     end
     
     # Score
-    $window.string_to_index(@score.to_s.rjust(6,"0")).each_with_index do |num, i|
-      $window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
+    #$window.string_to_index(@score.to_s.rjust(6,"0")).each_with_index do |num, i|
+      #$window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
+    #end
+    @score.to_s.rjust(6,"0").split("").each_with_index do |num, i|
+      @font.draw( num, 670, 80+(i*65),200, 6,6)
     end
-    #@font.draw("#{@score}",660,80,210)
     
     # Lifes
     @lives.times do |i|
