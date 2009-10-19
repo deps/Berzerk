@@ -16,9 +16,10 @@ class Otto < Chingu::GameObject
   def initialize( options )
     super
     @width = 12
-    @height = 12
+    @height = 24
 
-    @image = Image["otto.png"]
+    @animation = Chingu::Animation.new(:file => "otto.png", :size => [12,24], :delay => 300).retrofy
+    @image = @animation.next
     self.rotation_center(:top_left)   
     self.factor = $window.factor
     
@@ -31,11 +32,14 @@ class Otto < Chingu::GameObject
 
 
   def update
+    @image = @animation.next
     player = $window.current_game_state.player
     return if @status == :paused or !player
     
-    @speed = 2 if Droid.all.length == 0
-    
+    if Droid.all.length == 0
+      @speed = 2 
+      @animation.delay = 150
+    end
     px = player.x
     py = player.y
     
