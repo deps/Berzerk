@@ -82,12 +82,7 @@ class MainMenuState < Chingu::GameState
   
   def draw
     super
-    
-    @font.draw("#{@game_objects.size}", 0,0,0)
-    
-    #@menu_droid.draw_rot(400,200,300, (-5+rand(5))*@shake_amount )
-    #@menu_title.draw_rot(400,300,300, 0)
-    
+        
     @options.each_with_index do |option, i|
       y = 400+(i*50)
       if i == @current
@@ -175,7 +170,7 @@ class MenuDroidImage < Chingu::GameObject
     @fade_rate = 4
     @zorder = 400
     
-    after(5000) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
+    after(2500) { shake(3) ; MenuTitleImage.create(:x => 400, :y => 300) }
   end
   
   def shake(amount=1.0)

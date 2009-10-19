@@ -58,9 +58,10 @@ class Bullet < Chingu::GameObject
       raise "Bullet is moving in an unknown direction '#{@dir}'"
     end
     
-    each_collision([TileObject, Otto, Bullet]) do |me, obj|
-      next if me == obj
+    each_collision([TileObject, Otto, Bullet, Droid, Player]) do |me, obj|
+      next if me == obj or me.owner == obj
       on_collision
+      obj.on_collision if obj.respond_to? :on_collision
     end
     
     

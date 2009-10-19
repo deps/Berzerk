@@ -372,16 +372,17 @@ class PlayState < Chingu::GameState
     #   end
     # end
     
-    Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
-      next if bullet.owner == target
-      bullet.on_collision
-      target.on_collision
-    end
+    #Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
+    #  next if bullet.owner == target
+    #  bullet.on_collision
+    #  target.on_collision
+    #end
     
     
   end
   
   def draw
+    
     @background.draw( 25,25,0, 2.5, 2.5 ) if @background
     super
     draw_hud

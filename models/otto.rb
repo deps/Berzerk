@@ -25,7 +25,6 @@ class Otto < Chingu::GameObject
     
     @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.factor, @height*$window.factor)
     
-
     @speed = 1
 
   end
