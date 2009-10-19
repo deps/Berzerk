@@ -313,7 +313,8 @@ class PlayState < Chingu::GameState
     if @pop_at
       if Time.now >= @pop_at
         $last_score = @score # TODO: check if this is high enough to be added on highscore list
-        pop_game_state( :setup => false )
+        #pop_game_state( :setup => false )
+        pop_game_state
         push_game_state( GameOver )
       end
     end
