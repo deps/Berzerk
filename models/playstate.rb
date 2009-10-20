@@ -314,7 +314,7 @@ class PlayState < Chingu::GameState
     end
     
 
-    @player = nil if @player.dead?  # if player is dead, remove the last reference to it.    
+    @player = nil if @player and @player.dead?  # if player is dead, remove the last reference to it.    
     if !@player and @lives > 0
       @lives -= 1
       #puts "Player lives left: #{@lives}"
