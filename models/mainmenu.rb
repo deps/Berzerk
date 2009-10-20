@@ -69,7 +69,7 @@ class MainMenuState < Chingu::GameState
 
 
     @bg_music = Song["sad robot.ogg"]
-    @bg_music.volume = 0.1
+    @bg_music.volume = $settings['music']
     @bg_music.play(true)
   end
   
