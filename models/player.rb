@@ -90,7 +90,7 @@ class Player < Chingu::GameObject
     @shooting = true
     @cooling_down = true
     Bullet.create( :x => @x+8, :y => @y+16, :directions => @movement, :owner => self )
-    after(600) { @cooling_down = false }
+    after(400) { @cooling_down = false }
   end
   
   def stop_shooting

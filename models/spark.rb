@@ -99,7 +99,7 @@ class Explosion < Chingu::GameObject
         next unless obj.class == Droid or obj.class == Player 
         next if obj == @owner
         
-        if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 40*$window.factor
+        if Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16) < 35*$window.factor
           obj.on_collision if obj.status != :paused
         end
       end
