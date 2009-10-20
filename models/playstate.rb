@@ -50,8 +50,8 @@ class PlayState < Chingu::GameState
   
   def setup
     s = Song["Diablo.ogg"]
-    s.volume = 0.1
-    s.play
+    s.volume = $settings['music']
+    s.play(true)
   end  
   
   def finalize

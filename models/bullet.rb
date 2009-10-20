@@ -16,7 +16,7 @@ class Bullet < Chingu::GameObject
         
     @bounding_box = Chingu::Rect.new([@x, @y, 3,3])
     @length = 5
-    Sound["laser.wav"].play(0.3)
+    Sound["laser.wav"].play($settings['sound'])
     
     if @velocity
       @velocity_x, @velocity_y = @velocity
@@ -39,7 +39,7 @@ class Bullet < Chingu::GameObject
     # Spawn 5 white sparks and 5 red sparks ... maybe we should just go with red?
     5.times { Spark.create(:x => @x, :y => @y, :color => @@red.dup ) }
     5.times { Spark.create(:x => @x, :y => @y, :color => @@white.dup ) }
-    Sound["laser_hits_wall.wav"].play(0.3)
+    Sound["laser_hits_wall.wav"].play($settings['sound'])
     
     destroy
   end

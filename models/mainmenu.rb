@@ -34,7 +34,7 @@ class MainMenuState < Chingu::GameState
   def initialize(options = {})
     super
 
-    @options = [ :start, :credits, :quit ]
+    @options = [ :start, :credits, :options, :quit ]
     @current = 0
     @selected = Color.new(255,0,0,128)
     
@@ -77,19 +77,19 @@ class MainMenuState < Chingu::GameState
   def move_up
     @current -= 1
     @current = @options.length-1 if @current < 0
-    Sound["menu_change.wav"].play(0.3)
+    Sound["menu_change.wav"].play($settings['sound'])
   end
   
   def move_down
     @current += 1
     @current = 0 if @current >= @options.length
-    Sound["menu_change.wav"].play(0.3)
+    Sound["menu_change.wav"].play($settings['sound'])
   end
 
   def go
     met = "on_" + @options[@current].to_s
     self.send(met)
-    Sound["menu_select.wav"].play(0.3)
+    Sound["menu_select.wav"].play($settings['sound'])
   end
 
   def update
@@ -102,7 +102,6 @@ class MainMenuState < Chingu::GameState
       @detonation_time = Time.now + (1+rand(3))
       Explosion.create( :x => rand(800), :y => rand(600), :silent => true)
       @menu_droid.shake
-      #Sound["small_explosion.wav"].play(0.3)
     end
     
     @next_spoken_message_time -= $window.dt
@@ -110,7 +109,7 @@ class MainMenuState < Chingu::GameState
       @current_spoken += 1
       @next_spoken_message_time += 10000
       file = "menu_#{@current_spoken}.wav"
-      Sound[file].play
+      Sound[file].play($settings['sound'])
     end
     
   end
@@ -119,7 +118,7 @@ class MainMenuState < Chingu::GameState
     super
         
     @options.each_with_index do |option, i|
-      y = 400+(i*50)
+      y = 380+(i*50)
       if i == @current
         $window.draw_quad( 0,y,@selected, 800,y,@selected, 800,y+30,@selected, 0,y+30,@selected )
       end
@@ -140,6 +139,10 @@ class MainMenuState < Chingu::GameState
   
   def on_credits
     push_game_state( CreditState )
+  end
+  
+  def on_options
+    push_game_state( OptionState)
   end
   
 end
@@ -187,7 +190,7 @@ class MenuDroidImage < Chingu::GameObject
   def initialize(options)
     super
     
-    Sample["droid_appear.wav"].play(0.3)
+    Sample["droid_appear.wav"].play($settings['sound'])
     
     @color = Gosu::Color.new(0xFF0000FF)
     
@@ -242,11 +245,11 @@ class MenuTitleImage < Chingu::GameObject
     
     @image = Image["menu_title.png"]
     @rotation_center = :center_center
-    @mode = :additive
+    @mode = :additive unless options[:silent]
     @color = Color.new(255,255,255,255)
     after(250) { @mode = :default }
     @zorder = 400
-    Sound["explosion.wav"].play(0.3) unless options[:silent]
+    Sound["explosion.wav"].play($settings['sound']) unless options[:silent]
   end
   
   def draw

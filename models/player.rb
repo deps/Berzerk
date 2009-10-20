@@ -53,11 +53,11 @@ class Player < Chingu::GameObject
     return if @current_animation == :die
     self.input = {}
     use_animation(:die)
-    @die_sound = Sound["electrocute.wav"].play(0.3,1,true)
+    @die_sound = Sound["electrocute.wav"].play($settings['sound'],1,true)
     
     after(1000) do 
       @die_sound.stop()
-      Sound["explosion.wav"].play(0.3)
+      Sound["explosion.wav"].play($settings['sound'])
       hide!
       50.times { Blood.create(:x => @x+5, :y => @y+8, :color => Gosu::Color.new(255,128+rand(127),0,0) ) } 
       $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])

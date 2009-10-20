@@ -17,7 +17,7 @@ class Otto < Chingu::GameObject
     super
     @width = 12
     @height = 24
-
+    
     @animation = Chingu::Animation.new(:file => "otto.png", :size => [12,24], :delay => 300).retrofy
     @image = @animation.next
     self.rotation_center(:top_left)   
@@ -28,7 +28,6 @@ class Otto < Chingu::GameObject
     @speed = 1
 
   end
-
 
   def update
     @image = @animation.next
