@@ -6,14 +6,10 @@ class OptionState < Chingu::GameState
     
     @widgets = []
     
-    @widgets << WToggle.create( :x => 100, :y => 50, :text => "Delayed droid explosion", :default => $settings['delayed_droid'], :key => 'delayed_droid' )
-    @widgets << WToggle.create( :x => 100, :y => 80, :text => "Not so evil Otto", :default => $settings['mortal_otto'], :key => 'mortal_otto' )
+    @widgets << WSlider.create( :x => 100, :y => 200, :text => "Sound effects", :key => 'sound' )
+    @widgets << WSlider.create( :x => 100, :y => 300, :text => "Music", :key => 'music' )
 
-
-
-
-    @widgets << WButton.create( :x => 100, :y => 500, :text => "Confirm", :action => :save_and_quit)
-    @widgets << WButton.create( :x => 100, :y => 530, :text => "Cancel", :action => :close)
+    @widgets << WButton.create( :x => 100, :y => 500, :text => "Return", :action => :save_and_quit)
     
     @selected = 0
     @widgets[0].select
@@ -22,8 +18,9 @@ class OptionState < Chingu::GameState
       :escape => :close,
       :up => :move_up,
       :down => :move_down,
-      :left => :activate_left,
-      :right => :activate_right,
+      :left => :dec_volume,
+      :right => :inc_volume,
+      :space => :activate
     }
     
   end
@@ -42,21 +39,42 @@ class OptionState < Chingu::GameState
     @widgets[@selected].select
   end
   
-  def activate_left
+  def dec_volume
     @widgets[@selected].activate(:left => true)
   end
   
-  def activate_right
+  def inc_volume
     @widgets[@selected].activate(:right => true)
   end
   
+  def activate
+    @widgets[@selected].activate
+  end
+  
+  
   def save_and_quit
     # Save settings
+    # Collect them
     @widgets.each do |w|
       $settings[w.key] = w.get_setting if w.key
     end
-    puts $settings.to_yaml
+    
+    # TODO: save to file
+    
     close
+  end
+  
+  
+  def preview_sound
+    Sound["laser.wav"].play( $settings['sound'] )
+  end
+  
+  def preview_music
+    s = Song::current_song
+    return unless s
+    #s.pause
+    s.volume = $settings['music']
+    #s.play
   end
   
   
@@ -101,32 +119,6 @@ class Option < Chingu::GameObject
 end
 
 
-class WToggle < Option
-  
-  def initialize( options = {} )
-    super
-    @value = options[:default] || false
-    @states = Chingu::Animation.new( :file => "onoff.png", :size => [16,8])
-    @image = @states[ @value ? 1 : 0 ]
-  end
-
-  def activate( options = {} )
-    @value = !@value
-    @image = @states[ @value ? 1 : 0 ]
-  end
-  
-  def draw
-    super
-    $window.font.draw( @text, @x + 20*@factor_x , @y-5, 0)
-  end
-  
-  def get_setting
-    @value
-  end
-  
-end
-
-
 class WButton < Option
   def initialize( options = {} )
     super
@@ -143,3 +135,32 @@ class WButton < Option
   end
   
 end
+
+
+class WSlider < Option
+  def initialize( options = {} )
+    super
+    @value = $settings[@key]
+  end
+  
+  def get_setting
+    @value
+  end
+
+  def activate( options = {} )
+    return if options.length == 0
+    @value -= 0.1 if options[:left]
+    @value += 0.1 if options[:right]
+    @value = 0 if @value < 0.0
+    @value = 1.0 if @value > 1.0
+    $settings[@key] = @value
+    @parent.send("preview_#{@key}")
+  end
+  
+  def draw
+    super
+    $window.font.draw( "#{@text}: #{(@value*100).to_i}%", @x, @y-5, 0)    
+  end
+  
+end
+

@@ -17,6 +17,8 @@ class Otto < Chingu::GameObject
     super
     @width = 12
     @height = 24
+    
+    @hp = 5 # Used when he is mortal
 
     @animation = Chingu::Animation.new(:file => "otto.png", :size => [12,24], :delay => 300).retrofy
     @image = @animation.next
@@ -27,6 +29,16 @@ class Otto < Chingu::GameObject
     
     @speed = 1
 
+  end
+  
+  def on_collision
+    return unless $settings['mortal_otto']
+    
+    @hp -= 1
+    return unless @hp <= 0
+    
+    Explosion.create(:x => @x+11, :y => @y+16, :owner => self )
+    destroy    
   end
 
 

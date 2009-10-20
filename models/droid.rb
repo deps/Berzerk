@@ -52,7 +52,7 @@ class Droid < Chingu::GameObject
   end
   
   def on_collision
-    if @current_animation == :die
+    if @current_animation == :die and $settings['delayed_droid']
       explode
       return
     end
@@ -62,7 +62,7 @@ class Droid < Chingu::GameObject
     #puts "Droid dying, status: #{@status}"
     use_animation(:die)
     die_colors = [@@red, @@blue, @@green]
-    during(3000) do
+    during( $settings['delayed_droid'] ? 3000 : 500 ) do
         @color = die_colors[rand(die_colors.size)] 
         Smoke.create(:x => @x+5, :y => @y+8, :color => @@grey.dup ) 
     end.then do

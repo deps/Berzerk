@@ -93,7 +93,7 @@ class Explosion < Chingu::GameObject
     
     @image = Image["explosion_radius.png"]
     unless options[:silent]
-      Sound["explosion.wav"].play(0.3) 
+      Sound["explosion.wav"].play($settings['sound']) 
     
       Chingu::GameObject.all.each do |obj|
         next unless obj.class == Droid or obj.class == Player 

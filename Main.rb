@@ -72,8 +72,8 @@ class Game < Chingu::Window
   def load_settings
     # Default
     $settings = {}
-    $settings['mortal_otto'] = false
-    $settings['delayed_droid'] = true
+    $settings['sound'] = 0.3
+    $settings['music'] = 0.1
   end
   
   def update
@@ -99,7 +99,7 @@ class Game < Chingu::Window
     end
     
     if @current_word == nil
-      @current_word = Sound[@current_samples.shift].play(0.3, @sample_speed)
+      @current_word = Sound[@current_samples.shift].play($settings['sound'], @sample_speed)
     else
       unless @current_word.playing?
         @current_word = nil
