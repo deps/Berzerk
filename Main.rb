@@ -8,7 +8,7 @@ include Chingu
 require_all('models')
 
 class Game < Chingu::Window
-  attr_reader :factor, :metalfont
+  attr_reader :factor, :font, :metalfont
   
   def initialize
     super
@@ -22,6 +22,10 @@ class Game < Chingu::Window
     @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy  
     @directions_to_xy = { :north => [0, -1], :east => [1, 0], :south => [0, 1], :west => [-1, 0] }
     @font_letters = ('A'..'Z').to_a + [' ','.'] + ('0'..'9').to_a + ['!','(',')',',','"','?','*','-']
+
+    # Normal font used elsewhere
+    @font = Font.new($window, default_font_name, 30)
+
 
     push_game_state( ScamState )
   end

@@ -34,8 +34,7 @@ class MainMenuState < Chingu::GameState
   def initialize(options = {})
     super
 
-    @font = Font.new($window, default_font_name, 30)
-    @options = [ :start, :quit ]
+    @options = [ :start, :credits, :quit ]
     @current = 0
     @selected = Color.new(255,0,0,128)
     
@@ -124,7 +123,7 @@ class MainMenuState < Chingu::GameState
       if i == @current
         $window.draw_quad( 0,y,@selected, 800,y,@selected, 800,y+30,@selected, 0,y+30,@selected )
       end
-      @font.draw(option.to_s.capitalize, 200, y,0)
+      $window.font.draw(option.to_s.capitalize, 200, y,0)
     end
   end
   
@@ -137,6 +136,10 @@ class MainMenuState < Chingu::GameState
   
   def on_quit
     self.close
+  end
+  
+  def on_credits
+    push_game_state( CreditState )
   end
   
 end
@@ -243,7 +246,7 @@ class MenuTitleImage < Chingu::GameObject
     @color = Color.new(255,255,255,255)
     after(250) { @mode = :default }
     @zorder = 400
-    Sound["explosion.wav"].play(0.3) 
+    Sound["explosion.wav"].play(0.3) unless options[:silent]
   end
   
   def draw

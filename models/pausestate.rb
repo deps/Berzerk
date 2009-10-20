@@ -43,7 +43,7 @@ class Pause < Chingu::GameState
           
   def unpause
     Song["pause_music.ogg"].stop
-    pop_game_state(:setup => false)
+    pop_game_state
   end  
   
   def draw
