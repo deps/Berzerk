@@ -7,7 +7,7 @@ class CreditState < Chingu::GameState
     @ippa = Chingu::GameObject.create( :image => "dev_ippa.png", :x => 674, :y => 419, :rotation_center => :center_center)
     MenuTitleImage.create(:x => 400, :y => 50, :factor => 0.5, :silent => true)
     
-    self.input = { :escape => :close }
+    self.input = { :space => :close, :escape => :close }
     @ticks = 0
     
     @credits = [
