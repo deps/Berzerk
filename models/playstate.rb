@@ -17,16 +17,14 @@ class PlayState < Chingu::GameState
     @award_5k = false
     @award_10k = false
     
-    self.input = { :escape => :close, :p => Pause, :g => GameOver }
+    self.input = { :escape => :close, :p => Pause }
     
     @font = Gosu::Font.new($window, default_font_name, 20)
         
     # Original screenshot, used to compare with my walls
     @background = nil
-    #@background = Gosu::Image.new($window, "media/debug.png")
     
-    @hud_overlay = Gosu::Image.new($window, File.join("media","overlay.png") )
-    
+    @hud_overlay = Image["overlay.png"]
     @life_icon = Image["life_icon.png"]
     
     @messages = []
