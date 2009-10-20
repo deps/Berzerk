@@ -82,7 +82,8 @@ class Game < Chingu::Window
     close if current_parent == self
   end
   
-  def speak( message )
+  def speak( message, pitch = 1.0 )
+    @sample_speed = pitch
     words = message.split(" ")
     samples = []
     words.each do |w|
@@ -96,7 +97,7 @@ class Game < Chingu::Window
     if @current_samples.empty? and @current_word == nil
       return if @sample_queue.length == 0
       @current_samples = @sample_queue.shift
-      @sample_speed = 0.90 + rand(0.20)
+      #@sample_speed = 0.90 + rand(0.20)
     end
     
     if @current_word == nil

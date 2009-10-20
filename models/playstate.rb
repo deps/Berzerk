@@ -36,6 +36,7 @@ class PlayState < Chingu::GameState
     
     @chatter_time = Time.now+5+rand(10)
     @chicken_taunt_used = false
+    @pitch = 0.8
     
     @scroll = nil
     @scroll_steps = 0
@@ -159,33 +160,41 @@ class PlayState < Chingu::GameState
     case @score
     when (0..260)
       color = Gosu::Color.new(0xFFFFFF00)
+      @pitch = 0.8
     when (261..1200)
       color = Gosu::Color.new(0xFFFF0000)
       bullets = 1
+      @pitch = 0.9
     when (1201..3000)
       color = Gosu::Color.new(0xFF7777FF)      
       bullets = 2
+      @pitch = 1.0
     when (3001..4500)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 3
+      @pitch = 1.1
     when (4501..6000)
       color = Gosu::Color.new(0xFFFF00FF)
       bullets = 4
       speed = 0.5
+      @pitch = 1.2
     when (6001..8000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 5
       speed = 0.5
+      @pitch = 1.3
     when (8001..10000)
       color = Gosu::Color.new(0xFFFFFFFF)
       bullets = 1
       supershot = true
       speed = 0.5
+      @pitch = 1.4
     when (10001..12000)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 2
       supershot = true
       speed = 0.5
+      @pitch = 1.5
       
     # Color cycle repeats
     when (12001..13000)
@@ -193,41 +202,49 @@ class PlayState < Chingu::GameState
       bullets = 2
       supershot = true
       speed = 0.75
+      @pitch = 1.5
     when (13001..14000)
       color = Gosu::Color.new(0xFFFF0000)
       bullets = 2
       supershot = true
       speed = 0.75
+      @pitch = 1.5
     when (14001..15000)
       color = Gosu::Color.new(0xFF7777FF)      
       bullets = 2
       supershot = true
       speed = 0.75
+      @pitch = 1.5
     when (15001..16000)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 2
       supershot = true
       speed = 1
+      @pitch = 1.5
     when (16001..17000)
       color = Gosu::Color.new(0xFFFF00FF)
       bullets = 2
       supershot = true
       speed = 1.25
+      @pitch = 1.5
     when (17001..18000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 2
       supershot = true
       speed = 1.5
+      @pitch = 1.5
     when (18001..19000)
       color = Gosu::Color.new(0xFFFFFFFF)
       bullets = 2
       supershot = true
       speed = 1.75
+      @pitch = 1.5
     else
       color = Gosu::Color.new(0xFF77FF00)      
       bullets = 2
       supershot = true
       speed = 2.0
+      @pitch = 1.5
     end
     
     #puts "Droid attributes - Bullets: #{bullets}, supershot: #{supershot}, speed: #{speed}"
@@ -422,7 +439,7 @@ class PlayState < Chingu::GameState
   def droid_speech( message )
     show_message message
     
-    $window.speak( message )
+    $window.speak( message, @pitch )
   end
     
   def random_droid_chatter
