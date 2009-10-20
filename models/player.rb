@@ -10,14 +10,14 @@ class Player < Chingu::GameObject
     @x = options[:x] || 90
     @y = options[:y] || 255
 
-    self.input = { 
-      :holding_left => :move_left, 
-      :holding_right => :move_right, 
-      :holding_up => :move_up, 
-      :holding_down => :move_down,
-      :holding_space => :shoot,
-      :released_space => :stop_shooting
-    }
+    # self.input = { 
+    #   :holding_left => :move_left, 
+    #   :holding_right => :move_right, 
+    #   :holding_up => :move_up, 
+    #   :holding_down => :move_down,
+    #   :holding_space => :shoot,
+    #   :released_space => :stop_shooting
+    # }
     
     @full_animation = Chingu::Animation.new(:file => "player.png", :width=>8, :height=>16, :bounce => true ).retrofy
     
@@ -49,11 +49,15 @@ class Player < Chingu::GameObject
     @image = @animation.first
   end
   
+    
+  
   def on_collision
-    return if @current_animation == :die
+    return if dying?
     self.input = {}
     use_animation(:die)
     @die_sound = Sound["electrocute.wav"].play($settings['sound'],1,true)
+    
+    @velocity_x, @velocity_y = 0, 0
     
     after(1000) do 
       @die_sound.stop()
@@ -65,6 +69,10 @@ class Player < Chingu::GameObject
       after(3000) { @status = :dead; destroy;  }
     end
     
+  end
+  
+  def dying?
+    @current_animation == :die
   end
   
   def dead?
@@ -108,7 +116,22 @@ class Player < Chingu::GameObject
   # end
   
   def update
+    
+    @image = @animation.next
+    return if dying?
+    
+    move_left if $window.button_down?(KbLeft)
+    move_right if $window.button_down?(KbRight)
+    move_up if $window.button_down?(KbUp)
+    move_down if $window.button_down?(KbDown)
+    if $window.button_down?(KbSpace)
+      shoot
+    else
+      stop_shooting
+    end
+    
     each_collision([TileObject, Droid, Otto]) { |me, obj| on_collision }
+    return if dying?
 
     @velocity_x, @velocity_y = 0, 0
     unless @shooting
@@ -116,9 +139,7 @@ class Player < Chingu::GameObject
       @velocity_x = x * @speed
       @velocity_y = y * @speed
     end
-    
-    @image = @animation.next
-    
+        
     use_animation(:idle)  if @velocity_x == 0 and @velocity_y == 0
     @movement = {} 
   end
