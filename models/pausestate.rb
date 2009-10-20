@@ -6,7 +6,9 @@ class Pause < Chingu::GameState
     Text.create(:text => "PAUSED - Press Space to continue!", 
                 :x => 150, :y => 400, :size => 20, :zorder => 999, :font => media_path("texasled.ttf") )
     PauseDroid.create(:x => $window.width/2, :y => 200, :zorder => 999)
-    Song["pause_music.ogg"].play(true)
+    s = Song["pause_music.ogg"]
+    s.volume = $settings['music']
+    s.play(true)
     
     @font = Font.new($window, default_font_name, 40)
     
