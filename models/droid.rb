@@ -33,7 +33,7 @@ class Droid < Chingu::GameObject
     @animations[:die].delay = 25    
     stop
     @status = :paused
-    after(1000) { @status = :scan }
+    after(2000) { @status = :scan }
     
     self.rotation_center(:top_left)
     
