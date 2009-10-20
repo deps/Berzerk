@@ -13,7 +13,7 @@ class Bullet < Chingu::GameObject
     @dir = options[:dir] # :west, :east, :north, :south, :ne, :nw, :se, :sw
     @c = @@red.dup
     @speed = options[:supershot] ? 8.0 : 4.0
-    
+        
     @bounding_box = Chingu::Rect.new([@x, @y, 3,3])
     @length = 5
     Sound["laser.wav"].play(0.3)
@@ -27,6 +27,12 @@ class Bullet < Chingu::GameObject
       
     @velocity_x *= @speed
     @velocity_y *= @speed
+    
+    @anim = Chingu::Animation.new( :file => "laser.png", :size=>[3,8]).retrofy
+    @image = @anim.next!
+    self.factor = $window.factor
+    
+    @angle = Gosu::angle(0,0,@velocity_x,@velocity_y)
   end
   
   def on_collision
@@ -39,6 +45,7 @@ class Bullet < Chingu::GameObject
   end
   
   def update    
+    @image = @anim.next!
     each_collision([TileObject, Otto, Bullet, Droid, Player]) do |me, obj|
       next if me == obj or me.owner == obj
       on_collision
@@ -48,8 +55,8 @@ class Bullet < Chingu::GameObject
     destroy   if outside_window?
   end
   
-  def draw
-    $window.draw_line(@x, @y, @c, @x + @velocity_x * @length, @y + @velocity_y * @length, @c)
-  end
+  # def draw
+  #   $window.draw_line(@x, @y, @c, @x + @velocity_x * @length, @y + @velocity_y * @length, @c)
+  # end
   
 end
