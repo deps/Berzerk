@@ -8,6 +8,7 @@ class OptionState < Chingu::GameState
     
     @widgets << WSlider.create( :x => 100, :y => 200, :text => "Sound effects", :key => 'sound' )
     @widgets << WSlider.create( :x => 100, :y => 300, :text => "Music", :key => 'music' )
+    @widgets << WSlider.create( :x => 100, :y => 400, :text => "Robot speech", :key => 'robot' )
 
     @widgets << WButton.create( :x => 100, :y => 500, :text => "Return", :action => :save_and_quit)
     

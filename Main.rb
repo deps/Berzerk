@@ -74,6 +74,7 @@ class Game < Chingu::Window
     $settings = {}
     $settings['sound'] = 0.3
     $settings['music'] = 0.1
+    $settings['robot'] = 0.7
   end
   
   def update
@@ -99,7 +100,7 @@ class Game < Chingu::Window
     end
     
     if @current_word == nil
-      @current_word = Sound[@current_samples.shift].play($settings['sound'], @sample_speed)
+      @current_word = Sound[@current_samples.shift].play($settings['robot'], @sample_speed)
     else
       unless @current_word.playing?
         @current_word = nil
