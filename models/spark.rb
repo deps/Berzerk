@@ -105,7 +105,7 @@ class Explosion < Chingu::GameObject
       end
     end
     
-    50.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => [@@red, @@yellow, @@grey] ) }         
+    10.times { BigSpark.create(:x => @x+5, :y => @y+8, :color => [@@red, @@yellow, @@grey] ) }         
         
     after(50) { destroy }
   end  
