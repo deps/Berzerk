@@ -12,6 +12,9 @@ class Game < Chingu::Window
   
   def initialize
     super
+    
+    load_settings
+    
     @factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
     
     @sample_queue = []
@@ -61,6 +64,15 @@ class Game < Chingu::Window
     arr
   end
   
+  
+  # Load saved settings, or use default ones
+  def load_settings
+    # Default
+    $settings = {}
+    $settings['mortal_otto'] = false
+    $settings['delayed_droid'] = true
+  end
+  
   def update
     super
     close if current_parent == self
@@ -94,7 +106,6 @@ class Game < Chingu::Window
   end  
   
 end
-
 
 g = Game.new
 g.show
