@@ -46,6 +46,8 @@ class PlayState < Chingu::GameState
     
     show_new_room
     
+    droid_speech("humanoid detected")
+    
   end
   
   def setup
