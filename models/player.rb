@@ -37,6 +37,7 @@ class Player < Chingu::GameObject
     @shooting = false
     @cooling_down = false
     @movement = {}
+    @status = :default
     
     @die_sound = nil
   end
@@ -61,9 +62,13 @@ class Player < Chingu::GameObject
       10.times { Blood.create(:x => @x+5, :y => @y+8, :color => Gosu::Color.new(255,128+rand(127),0,0) ) } 
       $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])
     end.then do
-      after(3000) { destroy }
+      after(3000) { @status = :dead; destroy;  }
     end
     
+  end
+  
+  def dead?
+    @status == :dead
   end
   
   def move_left
