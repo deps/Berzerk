@@ -11,7 +11,7 @@ class ScamState < Chingu::GameState
     Chingu::Text.create(:text => "If you paid for this game, you have been scammed!", :x => 100, :y => 300, :factor_x => 1.5, :factor_y => 1.5)
     
     @close_state = 5000
-    self.input = { :space => :continue }
+    self.input = { :space => :continue, :enter => :continue, :return => :continue}
   end
   
   def continue

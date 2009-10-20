@@ -1,7 +1,7 @@
 class Pause < Chingu::GameState
   def initialize(options = {})
     super
-    self.input = { :space => :unpause }
+    self.input = { :space => :unpause, :enter => :unpause, :return => :unpause }
      
     Text.create(:text => "PAUSED - Press Space to continue!", 
                 :x => 150, :y => 400, :size => 20, :zorder => 999, :font => media_path("texasled.ttf") )
