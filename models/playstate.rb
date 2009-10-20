@@ -313,9 +313,8 @@ class PlayState < Chingu::GameState
       end
     end
     
-    # Is the player alive?
-    players = game_objects_of_class( Player )
-    @player = nil if players.count == 0
+
+    @player = nil if @player.dead?  # if player is dead, remove the last reference to it.    
     if !@player and @lives > 0
       @lives -= 1
       #puts "Player lives left: #{@lives}"
@@ -384,7 +383,6 @@ class PlayState < Chingu::GameState
   end
   
   def draw
-    
     @background.draw( 25,25,0, 2.5, 2.5 ) if @background
     super
     draw_hud
