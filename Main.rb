@@ -22,6 +22,9 @@ class Game < Chingu::Window
     @current_word = nil
     @sample_speed = 1.0
     
+    Song.autoload_dirs = [".", File.join(ROOT, "sounds")]
+    Sample.autoload_dirs = [".", File.join(ROOT, "sounds")]
+    
     @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy  
     @directions_to_xy = { :north => [0, -1], :east => [1, 0], :south => [0, 1], :west => [-1, 0] }
     @font_letters = ('A'..'Z').to_a + [' ','.'] + ('0'..'9').to_a + ['!','(',')',',','"','?','*','-']
