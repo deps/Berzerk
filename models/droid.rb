@@ -181,7 +181,7 @@ class Droid < Chingu::GameObject
     
     px = player.x
     py = player.y
-    dist = distance(@x,@y, px,py)
+    #dist = distance(@x,@y, px,py)
     angle_deg = Gosu::angle(@x, @y, px, py)
     angle = case angle_deg
       when (350..360),(0..10) then :north; @velocity = [0, -1]
@@ -211,7 +211,7 @@ class Droid < Chingu::GameObject
         end
         @status = :idle
         after(500+rand(500)) { @status = :scan }
-      elsif dist < 300 and rand(4) == 0
+      elsif rand(4) == 0
         walk_towards(px,py)
         @status = :walk
       end
