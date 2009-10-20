@@ -28,6 +28,9 @@ Don't dwell too long in a room. If you do you will be hunted down by Evil Otto. 
 people dwelling in his rooms. He cannot die either, so don't try and shoot him. Robots that get
 in Evil Ottos way will be crushed, so use that to your advantage as well.
 
+Oh, and stay away from explosions. Robots explode when they die. It's not healthy for you, 
+or other robots.
+
 You will die. You cannot avoid that. Mistakes will be made, you will fail to dodge that laser,
 or you took that turn to sharp and touched the wall. It's part of the fun. 
 
