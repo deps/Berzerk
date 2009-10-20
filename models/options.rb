@@ -21,7 +21,9 @@ class OptionState < Chingu::GameState
       :down => :move_down,
       :left => :dec_volume,
       :right => :inc_volume,
-      :space => :activate
+      :space => :activate,
+      :return => :activate,
+      :enter => :activate
     }
     
   end
