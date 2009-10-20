@@ -187,7 +187,7 @@ class MenuDroidImage < Chingu::GameObject
   def initialize(options)
     super
     
-    Sound["droid_appear.wav"].play(0.3)
+    Sample["droid_appear.wav"].play(0.3)
     
     @color = Gosu::Color.new(0xFF0000FF)
     
