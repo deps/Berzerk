@@ -9,7 +9,7 @@ class TileObject < Chingu::GameObject
 
     raise "Wrong dir: '#{@dir}'" unless @dir or ( @dir != :north and @dir != :south and @dir != :west and @dir != :east)
 
-    @anim = Animation.new(:file => 'wall.png', :size => [122,10], :bounce => true, :delay => 50)
+    @anim = Animation.new(:file => 'wall.png', :size => [122,10], :delay => 50)
     @image = @anim.next!
     self.rotation_center( :center_left )
     
@@ -74,7 +74,7 @@ class TileObject < Chingu::GameObject
       @y2 = bh
     end
     
-    @color = Gosu::Color.new(255,0,0,255)
+    @color = Gosu::Color.new(255,96,96,255)
 
     @bounding_box = Chingu::Rect.new([@x, @y, bw, bh])
     @bounding_box.move!(@xoff,@yoff)
