@@ -28,7 +28,7 @@ class Bullet < Chingu::GameObject
     @velocity_x *= @speed
     @velocity_y *= @speed
     
-    @anim = Chingu::Animation.new( :file => "laser.png", :size=>[3,8]).retrofy
+    @anim = Chingu::Animation.new( :file => "laser.png", :size=>[2,8], :delay => 10).retrofy
     @image = @anim.next!
     self.factor = $window.factor
     
