@@ -128,6 +128,7 @@ class PlayState < Chingu::GameState
       get_score bonus
       #show_message("#{bonus} points for clearing room")
     end
+    $window.clear_speech
     droid_speech(msg)    
     
     game_objects.pause!
