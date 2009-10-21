@@ -10,7 +10,7 @@ require_all('models')
 class Game < Chingu::Window
   attr_reader :factor, :font, :metalfont
   
-  def initialize
+  def initialize(width = 800, height = 600, fullscreen = false, update_interval = 16.666666)
     super
     
     load_settings
@@ -110,7 +110,14 @@ class Game < Chingu::Window
     
   end  
   
+  def clear_speech
+    @current_word.stop if @current_word
+    @current_word = nil
+    @current_samples = []
+    @sample_queye = []
+  end
+  
 end
 
-g = Game.new
+g = Game.new( 800,600, false )
 g.show

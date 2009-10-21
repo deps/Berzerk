@@ -22,8 +22,8 @@ class PlayState < Chingu::GameState
     @font = Gosu::Font.new($window, default_font_name, 20)
         
     # Original screenshot, used to compare with my walls
-    @background = nil
-    
+    #@background = Image["floor.png"]
+        
     @hud_overlay = Image["overlay.png"]
     @life_icon = Image["life_icon.png"]
     
@@ -40,6 +40,8 @@ class PlayState < Chingu::GameState
     
     @scroll = nil
     @scroll_steps = 0
+    @scroll_x = 0
+    @scroll_y = 0
     
     #set_otto_timer
     
@@ -103,6 +105,10 @@ class PlayState < Chingu::GameState
     @scroll = dir
     @scroll_steps = 60
     @player.input = {}
+    vel = @direction_to_velocity[dir]
+    @scroll_x = vel[0]
+    @scroll_y = vel[1]
+    
     
     @room_x = rx
     @room_y = ry
@@ -130,6 +136,8 @@ class PlayState < Chingu::GameState
   def show_new_room
     game_objects.remove_all
     close_door = false
+    
+    GameObject.create( :image => 'floor.png', :x => 30, :y => 30, :zorder => 0, :center => 0)
     
     if @player
       # Player only switched rooms
@@ -169,31 +177,33 @@ class PlayState < Chingu::GameState
       color = Gosu::Color.new(0xFF7777FF)      
       bullets = 2
       @pitch = 1.0
+      speed = 0.5
     when (3001..4500)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 3
       @pitch = 1.1
+      speed = 0.5
     when (4501..6000)
       color = Gosu::Color.new(0xFFFF00FF)
       bullets = 4
-      speed = 0.5
+      speed = 0.75
       @pitch = 1.2
     when (6001..8000)
       color = Gosu::Color.new(0xFFFFFF00)
       bullets = 5
-      speed = 0.5
+      speed = 0.75
       @pitch = 1.3
     when (8001..10000)
       color = Gosu::Color.new(0xFFFFFFFF)
       bullets = 1
       supershot = true
-      speed = 0.5
+      speed = 1.0
       @pitch = 1.4
     when (10001..12000)
       color = Gosu::Color.new(0xFF77FF00)
       bullets = 2
       supershot = true
-      speed = 0.5
+      speed = 1.0
       @pitch = 1.5
       
     # Color cycle repeats
@@ -283,13 +293,15 @@ class PlayState < Chingu::GameState
       if @scroll_steps <= 0
         show_new_room
         @scroll = nil
+        @scroll_x = 0
+        @scroll_y = 0
         return
       end
       
       # Depending on direction i @scroll, move all game objects in a certain direction
       game_objects.each do |game_object| 
-        game_object.x += @direction_to_velocity[@scroll][0]
-        game_object.y += @direction_to_velocity[@scroll][1]
+        game_object.x += @scroll_x
+        game_object.y += @scroll_y
       end
     end
       
@@ -400,7 +412,8 @@ class PlayState < Chingu::GameState
   end
   
   def draw
-    @background.draw( 25,25,0, 2.5, 2.5 ) if @background
+    #@background.draw( 25+@direction_to_velocity[@scroll][0],25+@direction_to_velocity[@scroll][1],0 ) 
+    #@background.draw(30+@scroll_x*(60-@scroll_steps),30+@scroll_y*(60-@scroll_steps),0)
     super
     draw_hud
   end

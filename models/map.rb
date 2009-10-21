@@ -9,54 +9,107 @@ class TileObject < Chingu::GameObject
 
     raise "Wrong dir: '#{@dir}'" unless @dir or ( @dir != :north and @dir != :south and @dir != :west and @dir != :east)
 
-    # This is UGLY! But it works. If cleaning up this mess: swap the comments in setup_room so
-    # it doesn't use random walls, and use the media/debug.png as a background (PlayState#setup)
-    # then make sure it lines up with the yellow walls. (lower alpha to 128 or something here below)
+    @anim = Animation.new(:file => 'wall.png', :size => [122,10], :bounce => true, :delay => 50)
+    @image = @anim.next!
+    self.rotation_center( :center_left )
+    
+    @generator = Image["generator.png"]
 
-    @scale = 2.5
+
+    # @scale = 2.5
+    # if @dir == :north or @dir == :south
+    #   @scale = 3.5
+    # end
+    # 
+    # @width = 48*@scale
+    # @height = 10
+    # if @dir == :north or @dir == :south
+    #   @width,@height = @height,@width
+    # end
+    # 
+    # yoff = 0
+    # if @dir == :north
+    #   @height += 2
+    #   @height += 10 if @x == 275 and @y == 195
+    #   @y -= @height - 10
+    # elsif @dir == :south
+    #   @height += 10 if @x == 275 and @y == 365
+    #   @height -= 10 if @walltype == 2
+    #   @height += 2
+    # elsif @dir == :west
+    #   if @x == 155
+    #     @width += 10
+    #   end
+    #   @x -= @width - 10
+    # elsif @dir == :east and (@y == 25 or @y == 535) and (@x == 145 or @x == 515)
+    #   @width += 10
+    # end
+    # 
+    # alpha = 255 # When debugging, I lower this one to see if walls overlap
+    # if options[:color]
+    #   # TODO: door color based on color of the droids
+    #   @c = options[:color]
+    # else # Normal wall
+    #   @c = Gosu::Color.new(alpha,0,0,255)
+    # end
+    # @bounding_box = Chingu::Rect.new([@x, @y, @width, @height])
+
+
+    @factor_x = 1.0
+    bw = 122
+    bh = 10
+    @xoff = 0
+    @yoff = -5
+    @y2 = 0
+    @x2 = 122
     if @dir == :north or @dir == :south
-      @scale = 3.5
+      @factor_x = 1.4
+      @angle = (@dir == :north ? 270 : 90)
+      bw = 10
+      bh = 170
+      bh = -bh if @dir == :north
+      @xoff = -5
+      @yoff = 0
+      @x2 = 0
+      @y2 = bh
     end
+    
+    @color = Gosu::Color.new(255,0,0,255)
 
-    @width = 48*@scale
-    @height = 10
-    if @dir == :north or @dir == :south
-      @width,@height = @height,@width
-    end
-
-    yoff = 0
-    if @dir == :north
-      @height += 2
-      @height += 10 if @x == 275 and @y == 195
-      @y -= @height - 10
-    elsif @dir == :south
-      @height += 10 if @x == 275 and @y == 365
-      @height -= 10 if @walltype == 2
-      @height += 2
-    elsif @dir == :west
-      if @x == 155
-        @width += 10
-      end
-      @x -= @width - 10
-    elsif @dir == :east and (@y == 25 or @y == 535) and (@x == 145 or @x == 515)
-      @width += 10
-    end
-
-    alpha = 255 # When debugging, I lower this one to see if walls overlap
-    if options[:color]
-      # TODO: door color based on color of the droids
-      @c = options[:color]
-    else # Normal wall
-      @c = Gosu::Color.new(alpha,0,0,255)
-    end
-    @bounding_box = Chingu::Rect.new([@x, @y, @width, @height])
-
+    @bounding_box = Chingu::Rect.new([@x, @y, bw, bh])
+    @bounding_box.move!(@xoff,@yoff)
+    
   end
-
+  
+  def update
+    super
+    @bounding_box.move!(@xoff,@yoff)
+    @image = @anim.next!
+  end
+  
   def draw
-    $window.draw_quad(@x, @y, @c, @x+@width, @y, @c, @x+@width, @y+@height, @c, @x, @y+@height, @c)
+    super
+    @generator.draw(@x-7,@y-7,200)
+    @generator.draw((@x + @x2)-7,(@y + @y2)-7,200)
+    #$window.fill_rect(@bounding_box, Color.new(128,255,0,0))
+    #$window.draw_quad(@x, @y, @c, @x+@width, @y, @c, @x+@width, @y+@height, @c, @x, @y+@height, @c)
   end
 
+end
+
+
+class DoorObject < TileObject
+  def initialize( options = {} )
+    super
+    @anim = Animation.new(:file => 'door.png', :size => [122,10], :delay => 20)
+    @image = @anim.next!
+    @color = options[:color]
+  end
+  
+  def draw
+    @image.draw_rot(@x, @y, @zorder, @angle, @center_x, @center_y, @factor_x, @factor_y, @color, @mode)
+  end
+  
 end
 
 class Room 
@@ -87,13 +140,13 @@ class Room
     destroy
     create_border           
 
-    randomize_wall(13,17)
-    randomize_wall(25,17)
+    randomize_wall(12,17)
+    randomize_wall(24,17)
     randomize_wall(37,17)
     randomize_wall(49,17)
 
-    randomize_wall(13,34)
-    randomize_wall(25,34)
+    randomize_wall(12,34)
+    randomize_wall(24,34)
     randomize_wall(37,34)
     randomize_wall(49,34)
 
@@ -166,16 +219,19 @@ class Room
     create_wall(37,51, :east)
     create_wall(49,51, :east)
 
-    create_wall( 0,1 , :south )
+    create_wall( 0,0 , :south )
     create_wall( 0,34, :south )
-    create_wall( 61,1 ,:south )
+    create_wall( 61,0 ,:south )
     create_wall( 61,34,:south )
   end
 
   def create_wall( x,y, angle, color=nil )
-    w = TileObject.create(:color => color, :x => 25+x*10.0, :y => 25+y*10.0, :dir => angle )
-    #w.angle = angle
-    #w.factor_x = factor
+    w = nil
+    if color
+      w = DoorObject.create(:x => 30+x*10.0, :y => 30+y*10.0, :dir => angle, :color => color )
+    else
+      w = TileObject.create(:x => 30+x*10.0, :y => 30+y*10.0, :dir => angle )
+    end
     @tiles << w
   end
 

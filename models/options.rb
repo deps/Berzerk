@@ -80,6 +80,14 @@ class OptionState < Chingu::GameState
     #s.play
   end
   
+  def preview_robot
+    $window.clear_speech
+    $window.speak("coins detected in pocket")
+  end
+  
+  def update
+    $window.update_speech
+  end
   
 end
 
