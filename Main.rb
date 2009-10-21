@@ -110,10 +110,12 @@ class Game < Chingu::Window
     
   end  
   
-  def clear_speech
-    @current_word.stop if @current_word
-    @current_word = nil
-    @current_samples = []
+  def clear_speech( everything = true )
+    if everything
+      @current_word.stop if @current_word
+      @current_word = nil
+      @current_samples = []
+    end
     @sample_queye = []
   end
   
