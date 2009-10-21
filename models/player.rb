@@ -6,7 +6,7 @@ class Player < Chingu::GameObject
   def initialize( options = {} )
     super 
     
-    @speed = options[:speed] || 1.5    
+    @speed = options[:speed] || 2    
     @x = options[:x] || 90
     @y = options[:y] || 255
 
@@ -120,11 +120,12 @@ class Player < Chingu::GameObject
     @image = @animation.next
     return if dying?
     
-    move_left if $window.button_down?(KbLeft)
-    move_right if $window.button_down?(KbRight)
-    move_up if $window.button_down?(KbUp)
-    move_down if $window.button_down?(KbDown)
-    if $window.button_down?(KbSpace)
+    move_left if $window.button_down?(KbLeft) or $window.button_down?(GpLeft)
+    move_right if $window.button_down?(KbRight) or $window.button_down?(GpRight)
+    move_up if $window.button_down?(KbUp) or $window.button_down?(GpUp)
+    move_down if $window.button_down?(KbDown) or $window.button_down?(GpDown)
+    
+    if $window.button_down?(KbSpace) or $window.button_down?(GpButton0)
       shoot
     else
       stop_shooting
