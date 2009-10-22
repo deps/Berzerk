@@ -8,12 +8,20 @@ include Chingu
 require_all('models')
 
 class Game < Chingu::Window
-  attr_reader :factor, :font, :metalfont
+  attr_reader :factor, :font, :metalfont, :scores
   
   def initialize(width = 800, height = 600, fullscreen = false, update_interval = 16.666666)
     super
     
     load_settings
+    
+    @scores = HighScoreList.load(:size => 10)
+    # Make sure we have 10 scores to begin with (if the score file was missing or similar)
+    while @scores[9] == nil
+      @scores << { :name => "BZR", :score => 1000}
+    end
+    $last_score = 0
+    $player_name = nil
     
     @factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
     
@@ -123,3 +131,4 @@ end
 
 g = Game.new( 800,600, false )
 g.show
+

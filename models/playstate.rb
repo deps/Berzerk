@@ -421,7 +421,7 @@ class PlayState < Chingu::GameState
   
   def draw_hud
     @hud_overlay.draw(0,0,200)
-    
+  
     # Scrolling messages
     if @current_message
       #@message_img.draw( @message_x, 550, 200 )
