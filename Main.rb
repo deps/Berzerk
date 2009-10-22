@@ -17,8 +17,10 @@ class Game < Chingu::Window
     
     @scores = HighScoreList.load(:size => 10)
     # Make sure we have 10 scores to begin with (if the score file was missing or similar)
-    while @scores[9] == nil
-      @scores << { :name => "BZR", :score => 1000}
+    if @scores[0] == nil
+      10.times do |i|
+        @scores << { :name => "BZR", :score => (i+1)*50}
+      end
     end
     $last_score = 0
     $player_name = nil
