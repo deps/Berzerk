@@ -34,7 +34,7 @@ class MainMenuState < Chingu::GameState
   def initialize(options = {})
     super
 
-    @options = [ :start, :credits, :options, :quit ]
+    @options = [ :start, :highscores, :credits, :options, :quit ]
     @current = 0
     @selected = Color.new(255,0,0,128)
     
@@ -118,7 +118,7 @@ class MainMenuState < Chingu::GameState
     super
         
     @options.each_with_index do |option, i|
-      y = 380+(i*50)
+      y = 380+(i*40)
       if i == @current
         $window.draw_quad( 0,y,@selected, 800,y,@selected, 800,y+30,@selected, 0,y+30,@selected )
       end
@@ -143,6 +143,10 @@ class MainMenuState < Chingu::GameState
   
   def on_options
     push_game_state( OptionState)
+  end
+  
+  def on_highscores
+    push_game_state( HighScoreState )
   end
   
 end
