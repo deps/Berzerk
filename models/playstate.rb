@@ -434,9 +434,14 @@ class PlayState < Chingu::GameState
     #$window.string_to_index(@score.to_s.rjust(6,"0")).each_with_index do |num, i|
       #$window.metalfont[num].draw( 670, 80+(i*60), 220, 2,2)
     #end
+    # Player score
     @score_counter.to_s.rjust(6,"0").split("").each_with_index do |num, i|
-      @font.draw( num, 680, 80+(i*70),200, 10,5)
+      @font.draw( num, 670, 80+(i*70),200, 5,5)
     end
+    $window.scores[0][:score].to_s.rjust(6,"0").split("").each_with_index do |num, i|
+      @font.draw( num, 740, 80+(i*70),200, 5,5)
+    end
+    
     
     # Lifes
     @lives.times do |i|
