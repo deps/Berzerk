@@ -4,10 +4,9 @@ class HighScoreState < GameState
   def initialize( options = {} )
     super
     
-    
     pos = $window.scores.position_by_score( $last_score )
     
-    if pos
+    if pos and $player_name and $last_score
        $window.scores.add :name => $player_name, :score => $last_score
        $window.scores.save
        mark_name = $player_name

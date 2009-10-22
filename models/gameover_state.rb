@@ -8,7 +8,8 @@ class GameOver < Chingu::GameState
           
   def replay
     Song["clapping.ogg"].stop
-    pop_game_state
+    pop_game_state( :setup => false )
+    push_game_state( EnterNameState )
   end
   
 end
