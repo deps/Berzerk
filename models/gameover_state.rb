@@ -9,7 +9,11 @@ class GameOver < Chingu::GameState
   def replay
     Song["clapping.ogg"].stop
     pop_game_state( :setup => false )
-    push_game_state( EnterNameState )
+    if $window.scores.position_by_score($last_score)
+      push_game_state( EnterNameState )
+    else
+      push_game_state( HighScoreState )
+    end
   end
   
 end
