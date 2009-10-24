@@ -39,8 +39,8 @@ class Game < Chingu::Window
     # Normal font used elsewhere
     @font = Font.new($window, default_font_name, 30)
 
-
     push_game_state( ScamState )
+    push_game_state( IntroState )
   end
   
   #
