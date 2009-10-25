@@ -8,7 +8,7 @@ class HighScoreState < GameState
     
     if pos and $player_name and $last_score
        $window.scores.add :name => $player_name, :score => $last_score
-       $window.scores.save
+       # $window.scores.save
        mark_name = $player_name
        mark_score = $last_score
        $player_name = nil

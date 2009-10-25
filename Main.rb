@@ -15,7 +15,14 @@ class Game < Chingu::Window
     
     load_settings
     
-    @scores = HighScoreList.load(:size => 10)
+    #
+    # TODO: Put user / password in a .gitignored file
+    #
+    @scores = HighScoreList.load_remote(:game_id => 2, 
+                                        :user => "berzerk", 
+                                        :password => "droidlove", 
+                                        :size => 10)
+                                        
     # Make sure we have 10 scores to begin with (if the score file was missing or similar)
     if @scores[0] == nil
       10.times do |i|
