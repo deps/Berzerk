@@ -7,8 +7,8 @@ class IntroState < Chingu::GameState
     @gradient = GameObject.create(:image => "gradient.png", :rotation_center => :top_left, :color => 0x00FFFFFF, :zorder => 1)
     
     # remove when new chingu comes out
-    @skull.rotation_center(:top_left)
-    @gradient.rotation_center(:top_left)
+    #@skull.rotation_center(:top_left)
+    #@gradient.rotation_center(:top_left)
     
     @sweep = Song["intro.ogg"]
     @sweep.play

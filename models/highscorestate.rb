@@ -17,10 +17,7 @@ class HighScoreState < GameState
     
     marked = false # Will be true if an entry matches the values in $player_name and $last_score
 
-
-
     MenuTitleImage.create(:x => 400, :y => 50, :factor => 0.5, :silent => true)
-
 
     $window.scores.each_with_index do |high_score, index|
       y = index * 40 + 150
@@ -30,10 +27,8 @@ class HighScoreState < GameState
         PulsatingText.create(high_score[:score], :x => 500, :y => y, :size => 40)
         marked = true # Do not make any other entry flash, if it would look similar to this one
       else
-        t = Text.create(high_score[:name], :x => 300, :y => y, :size => 40)
-        t.rotation_center( :center_center )
-        t = Text.create(high_score[:score], :x => 500, :y => y, :size => 40)
-        t.rotation_center( :center_center )
+        t = Text.create(high_score[:name], :x => 300, :y => y, :size => 40, :rotation_center => :center_center)
+        t = Text.create(high_score[:score], :x => 500, :y => y, :size => 40, :rotation_center => :center_center)
       end
       
     end    
