@@ -19,19 +19,33 @@ class Player < Chingu::GameObject
     #   :released_space => :stop_shooting
     # }
     
-    @full_animation = Chingu::Animation.new(:file => "player.png", :width=>8, :height=>16, :bounce => true ).retrofy
+    #@full_animation = Chingu::Animation.new(:file => "player.png", :width=>8, :height=>16, :bounce => true ).retrofy
+    #@animations = {}
+    #@animations[:idle] = @full_animation[0..0]
+    #@animations[:left] = @full_animation[3..4]
+    #@animations[:right] = @full_animation[1..2]
+    #@animations[:die] = @full_animation[7..8]
+    #@animations[:die].delay = 25
+    #use_animation(:idle)
     
+    @full_animation = Chingu::Animation.new(:file => "player.bmp", :size=>[8,16]).retrofy
     @animations = {}
     @animations[:idle] = @full_animation[0..0]
-    @animations[:left] = @full_animation[3..4]
-    @animations[:right] = @full_animation[1..2]
-    @animations[:die] = @full_animation[7..8]
-    @animations[:die].delay = 25
+    @animations[:horizontal] = @full_animation[1..2]
+    @animations[:vertical] = @full_animation[3..7]
+    @animations[:die] = @full_animation[8..9]
+    @animations[:coal] = @full_animation[10..18]
+    @animations[:coal].delay = 300
+    @animations[:coal].loop = false
     use_animation(:idle)
     
     self.factor = $window.factor        
-    self.rotation_center(:top_left)
-    @bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    
+    #self.rotation_center(:top_left)
+    #@bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
+    
+    self.rotation_center(:center)
+    @bounding_box = Chingu::Rect.new([@x-4*$window.factor, @y-8*$window.factor, 8*$window.factor, 16*$window.factor])
     
     @lives = 3
     @shooting = false
@@ -51,28 +65,42 @@ class Player < Chingu::GameObject
   
     
   
-  def on_collision
+  def on_collision(object = nil)
+    
     return if dying?
     self.input = {}
-    use_animation(:die)
-    @die_sound = Sound["electrocute.wav"].play($settings['sound'],1,true)
     
-    @velocity_x, @velocity_y = 0, 0
-    
-    after(1000) do 
-      @die_sound.stop()
-      Sound["explosion.wav"].play($settings['sound'])
-      hide!
-      10.times { Blood.create(:x => @x+5, :y => @y+8, :color => Gosu::Color.new(255,128+rand(127),0,0) ) } 
-      $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])
-    end.then do
-      after(3000) { @status = :dead; destroy;  }
+    if object
+      #
+      # Collision with electric walls?
+      #
+      if object.is_a? Bullet
+        use_animation(:coal)
+        @die_sound = Sound["shatter.wav"].play($settings['sound'],1,true)
+        after(1000) {
+          @die_sound.stop()
+          $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])
+        } 
+      else
+        use_animation(:die)
+        @die_sound = Sound["electrocute.wav"].play($settings['sound'],1,true)
+        after(1000) {
+          @die_sound.stop()
+          $window.current_game_state.droid_speech(["got the humanoid","got the intruder"][rand(2)])
+          
+          Sound["explosion.wav"].play($settings['sound'])
+          hide!
+          10.times { Blood.create(:x => @x+5, :y => @y+8, :color => Gosu::Color.new(255,128+rand(127),0,0) ) } 
+        }
+      end
     end
     
+    @velocity_x, @velocity_y = 0, 0
+    after(3000) { @status = :dead; destroy;  }
   end
   
   def dying?
-    @current_animation == :die
+    @current_animation == :die || @current_animation == :coal
   end
   
   def dead?
@@ -81,19 +109,21 @@ class Player < Chingu::GameObject
   
   def move_left
     @movement[:west] = true
-    use_animation(:left)
+    use_animation(:vertical)
   end
   
   def move_right
     @movement[:east] = true
-    use_animation(:right)
+    use_animation(:vertical)
   end
   
   def move_up
+    use_animation(:horizontal)
     @movement[:north] = true
   end
   
   def move_down
+    use_animation(:horizontal)
     @movement[:south] = true
   end
   
@@ -102,7 +132,8 @@ class Player < Chingu::GameObject
     
     @shooting = true
     @cooling_down = true
-    Bullet.create( :x => @x+8, :y => @y+16, :directions => @movement, :owner => self )
+    #Bullet.create( :x => @x+8, :y => @y+16, :directions => @movement, :owner => self )
+    Bullet.create( :x => @x, :y => @y, :directions => @movement, :owner => self )
     after(400) { @cooling_down = false }
   end
   
@@ -116,6 +147,9 @@ class Player < Chingu::GameObject
   # end
   
   def update
+    
+    @bounding_box.x = @x-4*$window.factor
+    @bounding_box.y = @y-8*$window.factor
     
     @image = @animation.next
     return if dying?
@@ -131,7 +165,9 @@ class Player < Chingu::GameObject
       stop_shooting
     end
     
-    each_collision([TileObject, Droid, Otto]) { |me, obj| on_collision }
+    @factor_x = @movement[:east] ? -$window.factor : $window.factor
+    
+    each_collision([TileObject, Droid, Otto]) { |me, obj| on_collision(obj) }
     return if dying?
 
     @velocity_x, @velocity_y = 0, 0
