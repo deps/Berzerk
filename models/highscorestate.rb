@@ -23,12 +23,12 @@ class HighScoreState < GameState
       y = index * 40 + 150
       
       if high_score[:name] == mark_name and high_score[:score] == mark_score and !marked
-        PulsatingText.create(high_score[:name], :x => 300, :y => y, :size => 40)
-        PulsatingText.create(high_score[:score], :x => 500, :y => y, :size => 40)
+        PulsatingText.create(high_score[:name], :x => 300, :y => y, :size => 40, :rotation_center => :center)
+        PulsatingText.create(high_score[:score], :x => 500, :y => y, :size => 40, :rotation_center => :center)
         marked = true # Do not make any other entry flash, if it would look similar to this one
       else
-        t = Text.create(high_score[:name], :x => 300, :y => y, :size => 40, :rotation_center => :center_center)
-        t = Text.create(high_score[:score], :x => 500, :y => y, :size => 40, :rotation_center => :center_center)
+        t = Text.create(high_score[:name], :x => 300, :y => y, :size => 40, :rotation_center => :center)
+        t = Text.create(high_score[:score], :x => 500, :y => y, :size => 40, :rotation_center => :center)
       end
       
     end    
@@ -51,7 +51,7 @@ class PulsatingText < Text
     
     options = text  if text.is_a? Hash
     @pulse = options[:pulse] || false
-    self.rotation_center(:center_center)
+    self.rotation_center(:center)
     every(20) { create_pulse }   if @pulse == false
   end
   

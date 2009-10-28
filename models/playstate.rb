@@ -91,7 +91,7 @@ class PlayState < Chingu::GameState
         ey = 480-10
         ry-=1
       when :south
-        ey = 40+10
+        ey = 40+20
         ex = 325-10
         ry+=1
       when :west

@@ -31,8 +31,8 @@ class Player < Chingu::GameObject
     @full_animation = Chingu::Animation.new(:file => "player.bmp", :size=>[8,16]).retrofy
     @animations = {}
     @animations[:idle] = @full_animation[0..0]
-    @animations[:horizontal] = @full_animation[1..2]
-    @animations[:vertical] = @full_animation[3..7]
+    @animations[:vertical] = @full_animation[1..2]
+    @animations[:horizontal] = @full_animation[3..7]
     @animations[:die] = @full_animation[8..9]
     @animations[:coal] = @full_animation[10..18]
     @animations[:coal].delay = 300
@@ -109,22 +109,22 @@ class Player < Chingu::GameObject
   
   def move_left
     @movement[:west] = true
-    use_animation(:vertical)
+    #use_animation(:vertical)
   end
   
   def move_right
     @movement[:east] = true
-    use_animation(:vertical)
+    #use_animation(:vertical)
   end
   
   def move_up
-    use_animation(:horizontal)
     @movement[:north] = true
+    #use_animation(:horizontal)
   end
   
   def move_down
-    use_animation(:horizontal)
     @movement[:south] = true
+    #use_animation(:horizontal)
   end
   
   def shoot
@@ -159,12 +159,19 @@ class Player < Chingu::GameObject
     move_up if $window.button_down?(KbUp) or $window.button_down?(GpUp)
     move_down if $window.button_down?(KbDown) or $window.button_down?(GpDown)
     
+    use_animation(:horizontal)  if  (@movement[:east] || @movement[:west]) && (!@movement[:south] && !@movement[:north])
+    use_animation(:vertical)    if  @movement[:south] || @movement[:north]
+    
     if $window.button_down?(KbSpace) or $window.button_down?(GpButton0)
       shoot
     else
       stop_shooting
     end
     
+    #
+    # With the use of factor_x we can turn the player right and left using the very same animation
+    # This requires rotation_center(:center) or the player will visually jump when going from left -> right and vice versa.
+    #
     @factor_x = @movement[:east] ? -$window.factor : $window.factor
     
     each_collision([TileObject, Droid, Otto]) { |me, obj| on_collision(obj) }
