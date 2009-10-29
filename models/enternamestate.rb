@@ -10,6 +10,10 @@ class EnterNameState < GameState
     self.input = { :left => :go_left, :right => :go_right, :space => :add, :backspace => :delete }
     @blip = false
     @blip_timer = 100
+    
+    @bg_music = Song["sad robot.ogg"]
+    @bg_music.volume = $settings['music']
+    @bg_music.play(true)
   end
   
   def go_left
