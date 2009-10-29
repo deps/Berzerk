@@ -438,7 +438,7 @@ class PlayState < Chingu::GameState
     @score_counter.to_s.rjust(6,"0").split("").each_with_index do |num, i|
       @font.draw( num, 670, 80+(i*70),200, 5,5)
     end
-    $window.scores[0][:score].to_s.rjust(6,"0").split("").each_with_index do |num, i|
+    [$window.scores[0][:score],@score_counter].max.to_s.rjust(6,"0").split("").each_with_index do |num, i|
       @font.draw( num, 740, 80+(i*70),200, 5,5)
     end
     
