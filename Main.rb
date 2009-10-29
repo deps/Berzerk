@@ -7,6 +7,15 @@ include Chingu
 
 require_all('models')
 
+#
+# Monkeypatch some in wait for new chingu
+#
+module Chingu
+  class Animation
+    attr_accessor :frames, :delay, :step, :loop, :bounce, :step
+  end
+end
+
 class Game < Chingu::Window
   attr_reader :factor, :font, :metalfont, :scores
   
@@ -48,6 +57,7 @@ class Game < Chingu::Window
 
     push_game_state( ScamState )
     push_game_state( IntroState )
+    #push_game_state( GameState )
   end
   
   #

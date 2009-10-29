@@ -35,7 +35,7 @@ class Bullet < Chingu::GameObject
     @angle = Gosu::angle(0,0,@velocity_x,@velocity_y)
   end
   
-  def on_collision
+  def on_collision(object = nil)
     # Spawn 5 white sparks and 5 red sparks ... maybe we should just go with red?
     5.times { Spark.create(:x => @x, :y => @y, :color => @@red.dup ) }
     5.times { Spark.create(:x => @x, :y => @y, :color => @@white.dup ) }
@@ -48,8 +48,8 @@ class Bullet < Chingu::GameObject
     @image = @anim.next!
     each_collision([TileObject, Otto, Bullet, Droid, Player]) do |me, obj|
       next if me == obj or me.owner == obj
-      on_collision
-      obj.on_collision if obj.respond_to? :on_collision
+      on_collision(obj)
+      obj.on_collision(me) if obj.respond_to? :on_collision
     end
     
     destroy   if outside_window?

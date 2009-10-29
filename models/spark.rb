@@ -43,7 +43,7 @@ class BigSpark < Spark
     @size = 1+rand(3)
   end
   
-  def on_collision
+  def on_collision(object = nil)
   end
   
   def draw

@@ -87,18 +87,18 @@ class PlayState < Chingu::GameState
 
     case dir
       when :north
-        ex = 325
-        ey = 480
+        ex = 325-10
+        ey = 480-10
         ry-=1
       when :south
-        ey = 40
-        ex = 325
+        ey = 40+20
+        ex = 325-10
         ry+=1
       when :west
-        ex = 610
+        ex = 610-10
         rx-=1
       when :east
-        ex = 50
+        ex = 50+10
         rx+=1
     end
     

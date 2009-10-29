@@ -7,7 +7,7 @@ class EnterNameState < GameState
     @selected = 0
     @name = ""
     
-    self.input = { :left => :go_left, :right => :go_right, :space => :add, :backspace => :delete }
+    self.input = { :left => :go_left, :right => :go_right, :space => :add, :enter => :add, :return => :add, :backspace => :delete }
     @blip = false
     @blip_timer = 100
     

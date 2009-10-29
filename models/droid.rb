@@ -51,7 +51,7 @@ class Droid < Chingu::GameObject
     @wall = {} # :left, :right, :up, :down. true or false if a wall is nearby
   end
   
-  def on_collision
+  def on_collision(object = nil)
     if @current_animation == :die 
       explode
       return
