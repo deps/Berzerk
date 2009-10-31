@@ -174,7 +174,7 @@ class Droid < Chingu::GameObject
 
     each_collision([TileObject, Droid, Otto]) do |me, obj|
       next if me == obj
-      on_collision
+      on_collision(obj)
     end
     
     use_animation(:left)  if @velocity_x < 0 and @velocity_y == 0

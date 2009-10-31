@@ -101,7 +101,7 @@ class Explosion < Chingu::GameObject
         dist = Gosu::distance(@x+11,@y+16, obj.x+11,obj.y+16)
         if dist < 35*$window.factor
           next if obj.class == Player and dist > 30*$window.factor # Player can take a beating
-          obj.on_collision if obj.status != :paused
+          obj.on_collision(self) if obj.status != :paused
         end
       end
     end

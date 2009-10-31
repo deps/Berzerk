@@ -65,7 +65,7 @@ class Player < Chingu::GameObject
   
     
   
-  def on_collision(object)
+  def on_collision(object = nil)
     
     return if dying?
     self.input = {}
