@@ -1,12 +1,103 @@
+
+class NotifyPopup < Chingu::GameObject
+  has_trait :timer
+  attr_reader :state
+
+  def initialize( options = {} )
+    super(options)
+    @destroyed = false
+    
+    @msg = options[:msg]
+    @y = 600
+    @target_y = options[:target_y] || 510
+    @w = $window.font.text_width(@msg)+10
+    @bgcol = Color.new(0x77000000)
+    @state = :show
+    
+  end
+  
+  
+  def draw
+    $window.draw_quad(0,@y,@bgcol, 50+@w,@y,@bgcol, 50+@w,@y+40,@bgcol, 0, @y+40,@bgcol, 200)
+    $window.font.draw(@msg, 55,@y,200)
+  end
+  
+  def update
+    super
+    
+    case @state
+    when :show
+      @y -= 5
+      if @y <= @target_y
+        @state = :idle 
+        @y = @target_y
+        after(3000) { @state = :hide }
+      end
+    when :hide
+      @y += 5
+      if @y > 600
+        @state = :done
+        destroy 
+      end
+    end
+  end
+  
+end
+
+
 class PlayState < Chingu::GameState
   
   attr_reader :player
+  attr_accessor :bodycount, :shots
   
   def initialize(options = {})
     super
     @pop_at = nil
     @room_x = 0
     @room_y = 0
+    
+    @visited_rooms = {}
+    @rooms_visited = 0
+    $reward_list = []
+    
+    @notify_queue = []
+    
+    # --- Create achievements
+    # Killing
+    create_reward("Droid hunter (killed 10 robots)", :bodycount, 10)    
+    create_reward("Robot exterminator (killed 50 robots)", :bodycount, 50)
+    create_reward("Don't mess with humans! (killed 100 robots)", :bodycount, 100)    
+    create_reward("Got anything against robots? (killed 500 robots)", :bodycount, 500)    
+    create_reward("A lot of scrap metal! (killed 1000 robots)", :bodycount, 1000)
+    
+    # Score
+    create_reward("Lots of points (5000 points collected)", :life_5k, 1)
+    create_reward("Even more points! (10000 points collected)", :life_10k, 1)
+    
+    # Shooting
+    create_reward("Pew pew (fired 10 shots)", :shots, 10)
+    create_reward("Ratatatata (fired 100 shots)", :shots, 100)
+    create_reward("Dangerous (fired 500 shots)", :shots, 500)
+    create_reward("Run for your life! (fired 1000 shots)", :shots, 1000)
+    
+    # Rooms
+    create_reward "Baby steps (visited 10 rooms)", :rooms, 10
+    create_reward "Topography mapper (visited 50 rooms)", :rooms, 50
+    create_reward "Marathon runner (visited 100 rooms)", :rooms, 100
+    create_reward "Marathon expert (visited 200 rooms)", :rooms, 200
+    create_reward "Are you still alive?! (visited 500 rooms)", :rooms, 500
+    create_reward "Unstoppable explorer! (visited 1000 rooms)", :rooms, 1000
+    
+    # Chicken
+    create_reward "Shoot them? (Left alive robots 10 times)", :chicken, 10
+    create_reward "Cluck cluck (Left alive robots 10 times)", :chicken, 50
+    create_reward "I'm covered with feathers (Left alive robots 10 times)", :chicken, 100
+    
+    # Otto
+    create_reward "Slow runner (Evil Otto appeared 10 times)", :otto, 10
+    create_reward "Loitering (Evil Otto appeared 50 times)", :otto, 50
+    create_reward "I love smileys! ^^ (Evil Otto appeared 100 times)", :otto, 100
+    
     
     @opposite_directions = {:north => :south, :south => :north, :west => :east, :east => :west}
     @direction_to_velocity = { :north => [0, 10], :south => [0, -10], :west => [10, 0], :east => [-10, 0] }
@@ -49,6 +140,8 @@ class PlayState < Chingu::GameState
     
     droid_speech("humanoid detected")
     
+    @rooms_visited = 0
+    
   end
   
   def setup
@@ -69,14 +162,41 @@ class PlayState < Chingu::GameState
       @award_5k = true
       @lives += 1 if @lives < 4
       show_message("1UP")
+      update_reward(:life_5k)
     end
 
     if @score >= 10000 and !@award_10k
       @award_10k = true
       @lives += 1 if @lives < 4
       show_message("1UP")
+      update_reward(:life_10k)
     end
     
+  end
+  
+  def update_popups
+    return if (@notify_queue.length == 0) 
+    
+    if !@popup or @popup.state == :done
+      @popup = NotifyPopup.create( :msg => @notify_queue.shift )
+    end
+  end
+  
+  def got_reward( reward )
+    #puts reward.msg
+    @notify_queue << reward.msg
+  end
+  
+  def create_reward( msg, var, limit )
+    $reward_list << Reward.new(msg,var,limit)
+  end
+  
+  def update_reward( var, amount=1 )
+    $reward_list.each do |r|
+      next if r.key != var or r.done?
+      r.update(amount)
+      got_reward(r) if r.done?
+    end
   end
   
   def change_room( dir )
@@ -120,6 +240,7 @@ class PlayState < Chingu::GameState
     @chicken_taunt_used = false
     if game_objects_of_class( Droid ).length > 0
       msg = "chicken fight like a robot"
+      update_reward :chicken
       @chicken_taunt_used = true
     else
       # Bonus time! :D
@@ -131,11 +252,16 @@ class PlayState < Chingu::GameState
     $window.clear_speech
     droid_speech(msg)    
     
-    game_objects.pause!
+    #game_objects.pause!
+    game_objects.each { |object| object.pause! if object.class != NotifyPopup }
   end
 
   def show_new_room
-    game_objects.remove_all
+    
+    game_objects.destroy_if { |gobj| gobj.class != NotifyPopup }
+    #game_objects.destroy_all
+    
+    
     close_door = false
     
     GameObject.create( :image => 'floor.png', :x => 30, :y => 30, :zorder => 0, :center => 0)
@@ -273,7 +399,12 @@ class PlayState < Chingu::GameState
     # Don't create a new seed if we just switched rooms. (@scroll is != :nil if we switch rooms)
     @room = Room.new(:room_x => @room_x, :room_y => @room_y, :create_seed => (@scroll == nil) )
     @room.close(@opposite_directions[@scroll], color) if close_door
-    
+
+    roomid = @room_x.to_s + ":" + @room_y.to_s
+    unless @visited_rooms[roomid]
+      @visited_rooms[roomid] = true
+      update_reward :rooms    
+    end
         
     set_otto_timer( @droids_in_room )
   end
@@ -289,6 +420,8 @@ class PlayState < Chingu::GameState
     
     @score_counter += 5 if @score_counter < @score
     
+    update_popups
+    
     if @scroll
       @scroll_steps -= 1
       if @scroll_steps <= 0
@@ -301,6 +434,7 @@ class PlayState < Chingu::GameState
       
       # Depending on direction i @scroll, move all game objects in a certain direction
       game_objects.each do |game_object| 
+        next if game_object.class == NotifyPopup
         game_object.x += @scroll_x
         game_object.y += @scroll_y
       end
@@ -310,6 +444,7 @@ class PlayState < Chingu::GameState
     
     @otto_timer -= $window.dt if @otto_timer
     if @otto_timer and @otto_timer <= 0
+      update_reward :otto
       droid_speech( "intruder alert intruder alert" )
       @otto_timer = nil
       Otto.create( :x => @entry_x, :y => @entry_y )
@@ -346,6 +481,7 @@ class PlayState < Chingu::GameState
 
     @player = nil if @player and @player.dead?  # if player is dead, remove the last reference to it.    
     if !@player and @lives > 0
+      @visited_rooms = {} # reset visited rooms, the rooms will look different now
       @lives -= 1
       #puts "Player lives left: #{@lives}"
       if @lives != 0
@@ -358,7 +494,7 @@ class PlayState < Chingu::GameState
       end
     end
   
-    # Update messages    
+    # Update messages
     if Time.now >= @chatter_time
       random_droid_chatter
       @chatter_time = Time.now + 5+rand(20)

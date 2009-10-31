@@ -13,7 +13,7 @@ require_all('models')
 module Chingu
   class Animation
     attr_accessor :frames, :delay, :step, :loop, :bounce, :step
-  end
+  end  
 end
 
 class Game < Chingu::Window
@@ -55,9 +55,9 @@ class Game < Chingu::Window
     # Normal font used elsewhere
     @font = Font.new($window, default_font_name, 30)
 
-    push_game_state( ScamState )
+    #push_game_state( HighScoreState )
+
     push_game_state( IntroState )
-    #push_game_state( GameState )
   end
   
   #

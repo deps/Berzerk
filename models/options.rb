@@ -33,6 +33,8 @@ class OptionState < Chingu::GameState
     @selected -= 1
     @selected = @widgets.length-1 if @selected < 0
     @widgets[@selected].select
+    Sound["menu_change.wav"].play($settings['sound'])
+    
   end
   
   def move_down
@@ -40,6 +42,8 @@ class OptionState < Chingu::GameState
     @selected += 1
     @selected = 0 if @selected >= @widgets.length
     @widgets[@selected].select
+    Sound["menu_change.wav"].play($settings['sound'])
+    
   end
   
   def dec_volume
@@ -82,7 +86,7 @@ class OptionState < Chingu::GameState
   
   def preview_robot
     $window.clear_speech
-    $window.speak("coins detected in pocket")
+    $window.speak("attack the humanoid")
   end
   
   def update

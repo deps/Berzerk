@@ -65,7 +65,7 @@ class Player < Chingu::GameObject
   
     
   
-  def on_collision(object = nil)
+  def on_collision(object)
     
     return if dying?
     self.input = {}
@@ -94,6 +94,8 @@ class Player < Chingu::GameObject
         }
       end
     end
+    
+    #puts "Collision with '#{object}'"
     
     @velocity_x, @velocity_y = 0, 0
     after(3000) { @status = :dead; destroy;  }
@@ -129,6 +131,8 @@ class Player < Chingu::GameObject
   
   def shoot
     return if @cooling_down or @movement.length == 0
+    
+    $window.current_game_state.update_reward(:shots)
     
     @shooting = true
     @cooling_down = true

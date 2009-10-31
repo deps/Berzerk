@@ -1,32 +1,5 @@
 
 
-class ScamState < Chingu::GameState
-  
-  
-  def initialize(options = {})
-    super
-    
-    
-    Chingu::Text.create(:text => "This game is free!", :x => 100, :y => 250, :factor_x => 2, :factor_y => 2)
-    Chingu::Text.create(:text => "If you paid for this game, you have been scammed!", :x => 100, :y => 300, :factor_x => 1.5, :factor_y => 1.5)
-    
-    @close_state = 5000
-    self.input = { :space => :continue, :enter => :continue, :return => :continue}
-  end
-  
-  def continue
-    pop_game_state
-    push_game_state MainMenuState
-  end
-  
-  def update
-    @close_state -= $window.dt
-    continue if @close_state <= 0
-  end
-  
-  
-  
-end
 
 
 class MainMenuState < Chingu::GameState
@@ -122,7 +95,7 @@ class MainMenuState < Chingu::GameState
       if i == @current
         $window.draw_quad( 0,y,@selected, 800,y,@selected, 800,y+30,@selected, 0,y+30,@selected )
       end
-      $window.font.draw(option.to_s.capitalize, 200, y,0)
+      $window.font.draw(option.to_s.capitalize, 400-$window.font.text_width(option.to_s.capitalize)/2, y,0)
     end
   end
   
