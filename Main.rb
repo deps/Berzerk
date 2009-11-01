@@ -1,11 +1,17 @@
-require 'rubygems'
-require 'opengl'
+GAMEROOT = File.dirname(File.expand_path($0))
+require 'rubygems' unless RUBY_VERSION =~ /1\.9/
+$: << File.join(GAMEROOT,"lib")
+ENV['PATH'] = File.join(GAMEROOT,"lib") + ";" + ENV['PATH']
 require 'chingu'
-#require '../chingu/lib/chingu'
+require 'opengl'
 include Gosu
 include Chingu
 
-require_all('models')
+require 'rest_client'
+require 'crack'
+require_all  File.join(GAMEROOT,"models")
+
+exit if defined?(Ocra)
 
 #
 # Monkeypatch some in wait for new chingu

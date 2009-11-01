@@ -47,7 +47,7 @@ class IntroState < Chingu::GameState
     @sweep.play
     
     Text.size = 120
-    Text.font = "media/game_over.ttf"
+    Text.font = media_path("game_over.ttf")
     @drop_text = Array.new
     @drop_text << Text.create("IPPA", :y => -600*4, :color => 0xFFFF0000, :stop_at => 100, :sound => "intro_1.wav", :falling => true)
     @drop_text << Text.create("& DEPS", :y => -700*4, :color => 0xFF00FF00, :stop_at => 200, :sound => "intro_2.wav", :falling => true)
