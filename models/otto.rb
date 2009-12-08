@@ -11,7 +11,7 @@ end
 
 
 class Otto < Chingu::GameObject
-  has_trait :collision_detection  
+  has_traits :collision_detection  
 
   def initialize( options )
     super

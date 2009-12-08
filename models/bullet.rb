@@ -3,7 +3,7 @@ class Bullet < Chingu::GameObject
   @@red = Gosu::Color.new(255, 255, 0, 0)
   @@white = Gosu::Color.new(255, 255, 255, 255)
   
-  has_trait :collision_detection, :velocity
+  has_traits :collision_detection, :velocity
   attr_reader :owner
   
   def initialize( options )

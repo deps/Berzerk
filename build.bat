@@ -1,1 +1,1 @@
-ocra Main.rb --no-autodll media\** sounds\** models\** lib\**\**\**
+ocra Main.rb --windows media\** sounds\** models\** lib\**\**

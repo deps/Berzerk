@@ -1,6 +1,6 @@
 
 class Player < Chingu::GameObject
-  has_trait :collision_detection, :timer, :velocity
+  has_traits :collision_detection, :timer, :velocity
   attr_reader :status, :die_sound
   
   def initialize( options = {} )

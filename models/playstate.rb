@@ -250,17 +250,14 @@ class PlayState < Chingu::GameState
       #show_message("#{bonus} points for clearing room")
     end
     $window.clear_speech
-    droid_speech(msg)    
+    droid_speech(msg)
     
-    #game_objects.pause!
     game_objects.each { |object| object.pause! if object.class != NotifyPopup }
   end
 
   def show_new_room
     
-    game_objects.destroy_if { |gobj| gobj.class != NotifyPopup }
-    #game_objects.destroy_all
-    
+    game_objects.destroy_if { |gobj| gobj.class != NotifyPopup }  
     
     close_door = false
     
@@ -416,7 +413,7 @@ class PlayState < Chingu::GameState
   end
   
   def update
-    $window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
+    #$window.caption = "FPS:#{$window.fps} - dt:#{$window.milliseconds_since_last_tick} - objects:#{current_game_state.game_objects.size}"
     
     @score_counter += 5 if @score_counter < @score
     
@@ -450,9 +447,6 @@ class PlayState < Chingu::GameState
       Otto.create( :x => @entry_x, :y => @entry_y )
       #puts "Otto spawned"
     end
-        
-    #return if @scroll # Don't 
-    
     
     # Change room if player walked outside map
     if @player and !@scroll
@@ -472,7 +466,6 @@ class PlayState < Chingu::GameState
     if @pop_at
       if Time.now >= @pop_at
         $last_score = @score # TODO: check if this is high enough to be added on highscore list
-        #pop_game_state( :setup => false )
         pop_game_state( :setup => false )
         push_game_state( GameOver )
       end
@@ -485,8 +478,6 @@ class PlayState < Chingu::GameState
       @lives -= 1
       #puts "Player lives left: #{@lives}"
       if @lives != 0
-        #puts "Player is alive again"
-        #create_player
         show_new_room
       else
         @pop_at = Time.now + 3
@@ -519,32 +510,9 @@ class PlayState < Chingu::GameState
         @typed_timer = 50
 
         # media/texasled.ttf does not work on OSX
-        #@message_img = Gosu::Image.from_text($window,@current_message,default_font_name(),50) 
         @message_remove_pos = -@current_message.length*32
       end
     end
-    
-    
-    # if @player
-    #   #
-    #   # Let's have some droids walking towards the player
-    #   # The more droids the lazier
-    #   #
-    #   if rand(Droid.size * 10) == 0
-    #     # Fins first scanning robot and have it walk!
-    #     scanning_droids = Droid.all.select { |droid| droid.current_animation == :scan }
-    #     if (droid = scanning_droids.first)
-    #       droid.walk_towards(@player.x, @player.y)  
-    #     end
-    #   end
-    # end
-    
-    #Bullet.each_bounding_box_collision([Droid, Player]) do |bullet, target|
-    #  next if bullet.owner == target
-    #  bullet.on_collision
-    #  target.on_collision
-    #end
-    
     
   end
   

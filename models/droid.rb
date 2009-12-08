@@ -4,7 +4,7 @@
 # See Playstate#update for overall movement / collision logic
 #
 class Droid < Chingu::GameObject
-  has_trait :timer, :velocity, :collision_detection
+  has_traits :timer, :velocity, :collision_detection
   attr_reader :current_animation, :status
   
   @@red = Gosu::Color.new(255, 255, 0, 0)

@@ -13,15 +13,6 @@ require_all  File.join(GAMEROOT,"models")
 
 exit if defined?(Ocra)
 
-#
-# Monkeypatch some in wait for new chingu
-#
-module Chingu
-  class Animation
-    attr_accessor :frames, :delay, :step, :loop, :bounce, :step
-  end  
-end
-
 class Game < Chingu::Window
   attr_reader :factor, :font, :metalfont, :scores
   
@@ -30,10 +21,12 @@ class Game < Chingu::Window
     
     load_settings
     
+    $window.caption = "Berzerk! By deps & ippa. [ #gosu @ freenode IRC ]"
+    
     #
     # TODO: Put user / password in a .gitignored file
     #
-    @scores = HighScoreList.load_remote(:game_id => 2, 
+    @scores = OnlineHighScoreList.load(:game_id => 2, 
                                         :user => "berzerk", 
                                         :password => "droidlove", 
                                         :size => 10)
@@ -60,9 +53,7 @@ class Game < Chingu::Window
 
     # Normal font used elsewhere
     @font = Font.new($window, default_font_name, 30)
-
-    #push_game_state( HighScoreState )
-
+    
     push_game_state( IntroState )
   end
   

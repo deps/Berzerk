@@ -53,7 +53,7 @@ class IntroState < Chingu::GameState
     @drop_text << Text.create("& DEPS", :y => -700*4, :color => 0xFF00FF00, :stop_at => 200, :sound => "intro_2.wav", :falling => true)
     @drop_text << Text.create("GAMING", :y => -800*4, :color => 0xFF0000FF, :stop_at => 300, :sound => "intro_3.wav", :falling => true)
   end
-  
+    
   def finalize
     @sweep.stop if @sweep
   end
