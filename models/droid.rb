@@ -5,7 +5,7 @@
 #
 class Droid < Chingu::GameObject
   has_traits :timer, :velocity, :collision_detection
-  attr_reader :current_animation, :status
+  attr_reader :current_animation, :status, :bounding_box
   
   @@red = Gosu::Color.new(255, 255, 0, 0)
   @@blue = Gosu::Color.new(255, 0, 255, 0)
@@ -154,7 +154,10 @@ class Droid < Chingu::GameObject
   end
   
   def update    
-    @image = @animation.next!
+    @bounding_box.x = self.x
+    @bounding_box.y = self.y
+    
+    @image = @animation.next
     player = $window.current_game_state.player
     if @status == :paused or !player or @current_animation == :die
       @velocity_x, @velocity_y = 0,0
@@ -172,7 +175,7 @@ class Droid < Chingu::GameObject
       #stop
     end
 
-    each_collision([TileObject, Droid, Otto]) do |me, obj|
+    self.each_collision(TileObject, Droid, Otto) do |me, obj|
       next if me == obj
       on_collision(obj)
     end

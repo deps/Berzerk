@@ -2,6 +2,7 @@
 class Player < Chingu::GameObject
   has_traits :collision_detection, :timer, :velocity
   attr_reader :status, :die_sound
+  has_trait :bounding_box
   
   def initialize( options = {} )
     super 
@@ -18,16 +19,7 @@ class Player < Chingu::GameObject
     #   :holding_space => :shoot,
     #   :released_space => :stop_shooting
     # }
-    
-    #@full_animation = Chingu::Animation.new(:file => "player.png", :width=>8, :height=>16, :bounce => true ).retrofy
-    #@animations = {}
-    #@animations[:idle] = @full_animation[0..0]
-    #@animations[:left] = @full_animation[3..4]
-    #@animations[:right] = @full_animation[1..2]
-    #@animations[:die] = @full_animation[7..8]
-    #@animations[:die].delay = 25
-    #use_animation(:idle)
-    
+        
     @full_animation = Chingu::Animation.new(:file => "player.bmp", :size=>[8,16]).retrofy
     @animations = {}
     @animations[:idle] = @full_animation[0..0]
@@ -39,13 +31,11 @@ class Player < Chingu::GameObject
     @animations[:coal].loop = false
     use_animation(:idle)
     
-    self.factor = $window.factor        
-    
-    #self.rotation_center(:top_left)
-    #@bounding_box = Chingu::Rect.new([@x, @y, 8*@factor_x, 16*@factor_y])
-    
+    self.factor = $window.factor            
     self.rotation_center(:center)
-    @bounding_box = Chingu::Rect.new([@x-4*$window.factor, @y-8*$window.factor, 8*$window.factor, 16*$window.factor])
+    
+    # Trait takes care of this
+    # @bounding_box = Chingu::Rect.new([@x-4*$window.factor, @y-8*$window.factor, 8*$window.factor, 16*$window.factor])
     
     @lives = 3
     @shooting = false
@@ -66,6 +56,9 @@ class Player < Chingu::GameObject
     
   
   def on_collision(object = nil)
+    puts "#{object.class} #{object.x}/#{object.y}"
+    puts "#{self.class} #{self.x}/#{self.y}"
+    
     
     return if dying?
     self.input = {}
@@ -144,16 +137,8 @@ class Player < Chingu::GameObject
   def stop_shooting
     @shooting = false
   end
-  
-  # def draw
-  #   super
-  #   $window.fill_rect(@bounding_box, Color.new(128,255,0,0))
-  # end
-  
-  def update
     
-    @bounding_box.x = @x-4*$window.factor
-    @bounding_box.y = @y-8*$window.factor
+  def update
     
     @image = @animation.next
     return if dying?
@@ -178,7 +163,7 @@ class Player < Chingu::GameObject
     #
     @factor_x = @movement[:east] ? -$window.factor : $window.factor
     
-    each_collision([TileObject, Droid, Otto]) { |me, obj| on_collision(obj) }
+    self.each_collision(TileObject, Droid, Otto) { |me, obj| on_collision(obj) }
     return if dying?
 
     @velocity_x, @velocity_y = 0, 0

@@ -11,7 +11,8 @@ end
 
 
 class Otto < Chingu::GameObject
-  has_traits :collision_detection  
+  has_trait :collision_detection  
+  attr_reader :bounding_box
 
   def initialize( options )
     super
@@ -30,6 +31,9 @@ class Otto < Chingu::GameObject
   end
 
   def update
+    @bounding_box.x = @x
+    @bounding_box.y = @y
+    
     @image = @animation.next
     player = $window.current_game_state.player
     return if @status == :paused or !player

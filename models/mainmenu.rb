@@ -161,7 +161,7 @@ module Chingu
 end
 
 class MenuDroidImage < Chingu::GameObject
-  has_trait :effect, :timer
+  has_traits :effect, :timer
   
   
   def initialize(options)

@@ -2,7 +2,8 @@ GAMEROOT = File.dirname(File.expand_path($0))
 require 'rubygems' unless RUBY_VERSION =~ /1\.9/
 $: << File.join(GAMEROOT,"lib")
 ENV['PATH'] = File.join(GAMEROOT,"lib") + ";" + ENV['PATH']
-require 'chingu'
+#require 'chingu'
+require '../chingu/lib/chingu'
 require 'opengl'
 include Gosu
 include Chingu
@@ -29,7 +30,7 @@ class Game < Chingu::Window
     @scores = OnlineHighScoreList.load(:game_id => 2, 
                                         :user => "berzerk", 
                                         :password => "droidlove", 
-                                        :size => 10)
+                                        :limit => 10)
                                         
     # Make sure we have 10 scores to begin with (if the score file was missing or similar)
     if @scores[0] == nil
@@ -100,7 +101,7 @@ class Game < Chingu::Window
   
   def update
     super
-    close if current_parent == self
+    close if current_scope == self
   end
   
   def speak( message, pitch = 1.0 )

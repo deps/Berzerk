@@ -4,7 +4,7 @@ class Bullet < Chingu::GameObject
   @@white = Gosu::Color.new(255, 255, 255, 255)
   
   has_traits :collision_detection, :velocity
-  attr_reader :owner
+  attr_reader :owner, :bounding_box
   
   def initialize( options )
     super
@@ -29,7 +29,7 @@ class Bullet < Chingu::GameObject
     @velocity_y *= @speed
     
     @anim = Chingu::Animation.new( :file => "laser.png", :size=>[2,8], :delay => 10).retrofy
-    @image = @anim.next!
+    @image = @anim.next
     self.factor = $window.factor
     
     @angle = Gosu::angle(0,0,@velocity_x,@velocity_y)
@@ -45,8 +45,11 @@ class Bullet < Chingu::GameObject
   end
   
   def update    
-    @image = @anim.next!
-    each_collision([TileObject, Otto, Bullet, Droid, Player]) do |me, obj|
+    @bounding_box.x = @x
+    @bounding_box.y = @y
+    
+    @image = @anim.next
+    self.each_bounding_box_collision(TileObject, Otto, Bullet, Droid, Player) do |me, obj|
       next if me == obj or me.owner == obj
       on_collision(obj)
       obj.on_collision(me) if obj.respond_to? :on_collision

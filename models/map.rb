@@ -1,6 +1,6 @@
 class TileObject < Chingu::GameObject
-
   has_trait :collision_detection
+  attr_reader :bounding_box
 
   def initialize( options = {} )
     super
@@ -10,7 +10,7 @@ class TileObject < Chingu::GameObject
     raise "Wrong dir: '#{@dir}'" unless @dir or ( @dir != :north and @dir != :south and @dir != :west and @dir != :east)
 
     @anim = Animation.new(:file => 'wall.png', :size => [122,10], :delay => 50)
-    @image = @anim.next!
+    @image = @anim.next
     self.rotation_center( :center_left )
     
     @generator = Image["generator.png"]
@@ -82,9 +82,9 @@ class TileObject < Chingu::GameObject
   end
   
   def update
+    #@bounding_box.move!(@xoff,@yoff)
     super
-    @bounding_box.move!(@xoff,@yoff)
-    @image = @anim.next!
+    @image = @anim.next
   end
   
   def draw
@@ -102,7 +102,7 @@ class DoorObject < TileObject
   def initialize( options = {} )
     super
     @anim = Animation.new(:file => 'door.png', :size => [122,10], :delay => 20)
-    @image = @anim.next!
+    @image = @anim.next
     @color = options[:color]
   end
   
