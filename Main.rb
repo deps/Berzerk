@@ -2,8 +2,8 @@ GAMEROOT = File.dirname(File.expand_path($0))
 require 'rubygems' unless RUBY_VERSION =~ /1\.9/
 $: << File.join(GAMEROOT,"lib")
 ENV['PATH'] = File.join(GAMEROOT,"lib") + ";" + ENV['PATH']
-#require 'chingu'
-require '../chingu/lib/chingu'
+require 'chingu'
+#require '../chingu/lib/chingu'
 require 'opengl'
 include Gosu
 include Chingu
