@@ -22,7 +22,7 @@ class Game < Chingu::Window
     
     load_settings
     
-    $window.caption = "Berzerk! By deps & ippa. [ #gosu @ freenode IRC ]"
+    $window.caption = "Berzerk! By deps & ippa. [ #gosu @ freenode IRC ] ver. 1.01"
     
     #
     # TODO: Put user / password in a .gitignored file
