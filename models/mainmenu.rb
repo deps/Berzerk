@@ -137,7 +137,7 @@ class MenuDroid < Chingu::GameObject
     
     @full_animation = Chingu::Animation.new(:file => "droid.bmp", :size => [11,16], :delay => 300).retrofy
     @animation = @full_animation[0..5]  # Pick out the scanning-frames
-    self.factor = $window.factor * 2 
+    self.factor = $window.object_factor * 2 
     @rotation_rate = (rand-0.5)/2
     self.velocity_y = 0.5 + rand*2
     self.factor += self.velocity_y*2
@@ -176,12 +176,10 @@ class MenuDroidImage < Chingu::GameObject
     @animation = @full_animation[0..10]  # Pick out the scanning-frames
     
     @image = @animation.next
-    self.factor = $window.factor * 15
+    self.factor = $window.object_factor * 15
     
     @shake_amount = 0
     @rotation_center = :center_center
-    
-    @factor 
     
     @color.alpha = 0
     @fade_rate = 4

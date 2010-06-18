@@ -37,8 +37,8 @@ class Droid < Chingu::GameObject
     
     self.rotation_center(:top_left)
     
-    self.factor = $window.factor
-    @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.factor, @height*$window.factor)
+    self.factor = $window.object_factor
+    @bounding_box = Chingu::Rect.new(@x, @y, @width*$window.object_factor, @height*$window.object_factor)
   
     @max_speed = options[:speed] || 0.25
     

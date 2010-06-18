@@ -30,7 +30,7 @@ class Bullet < Chingu::GameObject
     
     @anim = Chingu::Animation.new( :file => "laser.png", :size=>[2,8], :delay => 10).retrofy
     @image = @anim.next
-    self.factor = $window.factor
+    self.factor = $window.object_factor
     
     @angle = Gosu::angle(0,0,@velocity_x,@velocity_y)
   end

@@ -102,7 +102,7 @@ class Option < Chingu::GameObject
   
   def initialize( options = {} )
     super
-    self.factor = $window.factor
+    self.factor = $window.object_factor
     @text = options[:text]
     rotation_center(:top_left)
     @selected = false

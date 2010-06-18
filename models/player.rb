@@ -31,7 +31,7 @@ class Player < Chingu::GameObject
     @animations[:coal].loop = false
     use_animation(:idle)
     
-    self.factor = $window.factor            
+    self.factor = $window.object_factor
     self.rotation_center(:center)
     
     # Trait takes care of this
@@ -161,7 +161,7 @@ class Player < Chingu::GameObject
     # With the use of factor_x we can turn the player right and left using the very same animation
     # This requires rotation_center(:center) or the player will visually jump when going from left -> right and vice versa.
     #
-    @factor_x = @movement[:east] ? -$window.factor : $window.factor
+    @factor_x = @movement[:east] ? -$window.object_factor : $window.object_factor
     
     self.each_collision(TileObject, Droid, Otto) { |me, obj| on_collision(obj) }
     return if dying?

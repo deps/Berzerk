@@ -3,8 +3,6 @@ require 'rubygems' unless RUBY_VERSION =~ /1\.9/
 $: << File.join(GAMEROOT,"lib")
 ENV['PATH'] = File.join(GAMEROOT,"lib") + ";" + ENV['PATH']
 require 'chingu'
-#require '../chingu/lib/chingu'
-require 'opengl'
 include Gosu
 include Chingu
 
@@ -15,12 +13,16 @@ require_all  File.join(GAMEROOT,"models")
 exit if defined?(Ocra)
 
 class Game < Chingu::Window
-  attr_reader :factor, :font, :metalfont, :scores
+  attr_reader :object_factor, :font, :metalfont, :scores
   
   def initialize(width = 800, height = 600, fullscreen = false, update_interval = 16.666666)
     super
     
     load_settings
+    
+    retrofy
+    
+    @object_factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
     
     $window.caption = "Berzerk! By deps & ippa. [ #gosu @ freenode IRC ] ver. 1.01"
     
@@ -41,14 +43,12 @@ class Game < Chingu::Window
     $last_score = 0
     $player_name = nil
     
-    @factor = 2.5   # set new objects factor to $window.factor when they initialize, see droid.rb
-    
     @sample_queue = []
     @current_samples = []
     @current_word = nil
     @sample_speed = 1.0
         
-    @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32]).retrofy  
+    @metalfont = Chingu::Animation.new(:file => "metalfont.png", :size => [32,32])
     @directions_to_xy = { :north => [0, -1], :east => [1, 0], :south => [0, 1], :west => [-1, 0] }
     @font_letters = ('A'..'Z').to_a + [' ','.'] + ('0'..'9').to_a + ['!','(',')',',','"','?','*','-']
 

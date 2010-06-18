@@ -32,17 +32,13 @@ end
 
 
 class IntroState < Chingu::GameState
-  #has_trait :timer, :effect
+
   def initialize(options = {})
     super
     self.input = { :space => :continue, :enter => :continue, :return => :continue}
     @skull = GameObject.create(:image => "skull.png", :rotation_center => :top_left, :color => 0x00FFFFFF, :zorder => 2)
     @gradient = GameObject.create(:image => "gradient.png", :rotation_center => :top_left, :color => 0x00FFFFFF, :zorder => 1)
-    
-    # remove when new chingu comes out
-    #@skull.rotation_center(:top_left)
-    #@gradient.rotation_center(:top_left)
-    
+        
     @sweep = Song["intro.ogg"]
     @sweep.play
     
@@ -64,6 +60,7 @@ class IntroState < Chingu::GameState
   end
   
   def update
+    return
     @skull.alpha += 1
     @gradient.alpha += 1
     
